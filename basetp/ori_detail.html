@@ -13,20 +13,23 @@
   <meta name="author" content="xiaobulv">
 
 
-  <title>题目</title>
+  <title>{{blog.title}}</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="../static/images/favicon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="../static/images/favicon/apple-touch-icon.png">
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="../../static/images/favicon/apple-touch-icon.png">
 
   <!-- All CSS Plugins -->
-  <link rel="stylesheet" type="text/css" href="../static/css/plugin.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
 
   <!-- Main CSS Stylesheet -->
-  <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
 
   <!-- Google Web Fonts  -->
-  <link rel="stylesheet" href="../static/css/ft.css">
+  <link rel="stylesheet" href="../../static/css/ft.css">
 
 
 </head>
@@ -55,7 +58,7 @@
           <div class="about-fixed">
 
             <div class="my-pic">
-              <img src="../static/images/top/270-229.png" alt="">
+              <img src="../../static/images/top/270-229.png" alt="">
               <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
                   class="icon-menu menu"></i></a> -->
               <!-- <div id="menu" class="collapse">
@@ -100,52 +103,32 @@
 
 
               <div class="sub-title">
-                <h1>Alex Blog</h1>
-                <a href="#"><i class="icon-list"></i></a>
+                <a href="index.html" title="Go to Home Page"><h1>Back Home</h1></a>
+                 <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
               </div>
-
 
               <div class="col-md-12 content-page">
 
 
                 <!-- Blog Post Start -->
-                <div class="col-md-12 blog-post">
-                  <!-- 预留图片展示位置 -->
-                  <!-- <div class="post-image">
-                    <img src="images/blog/1.jpg" alt="">
-                  </div> -->
-                  <div class="post-title">
-                    <a href="single.html">
-                      <h2>Make mailchimp singup form working with ajax using jquery plugin</h2>
-                    </a>
-                  </div>
+                <!-- <div class="col-md-12 blog-post">
                   <div class="post-info">
-                    <span>2022年9月26日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>test</a></span>
                   </div>
-                  <!-- <p>描述预留位置</p> -->
-                  <a href="single.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>{{blog.date}}</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;{% for tag in blog.tags %}<span><a>{{tag}}</a></span>{% endfor %}
+
+                  {{blog.content}}
+
                 </div>
                 <!-- Blog Post End -->
-
-
-
-                <div class="text-center">
-                  <ul class="pagination pagination-lg">
-                    <li><a href="#">&laquo;</a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                  </ul>
-                </div>
-
               </div>
 
-            </div>
 
+            </div>
 
           </div>
 
@@ -164,7 +147,7 @@
               <p>
                 <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
                   target="_blank">辽ICP备2021000509号-1</a>
-                <img src="../static/images/top/beian.png"
+                <img src="../../static/images/top/beian.png"
                   style="display: inline-block;vertical-align: sub;margin-left: 10px;">
                 <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
                   21032302210389号</a>
@@ -196,11 +179,11 @@
 
 
   <!-- All Javascript Plugins  -->
-  <script type="text/javascript" src="../static/js/jquery.min.js"></script>
-  <script type="text/javascript" src="../static/js/plugin.js"></script>
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
 
   <!-- Main Javascript File  -->
-  <script type="text/javascript" src="../static/js/scripts.js"></script>
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
 
 
 </body>

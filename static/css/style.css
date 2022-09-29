@@ -599,6 +599,12 @@ div.blog-post {
     margin-bottom: 50px;
 }
 
+div.blog-cc {
+    margin-bottom: 50px;
+    /* text-align: justify; */
+    word-break: break-all;
+}
+
 .blog-post .post-image img {
     width: 100%;
 }
@@ -636,7 +642,7 @@ div.blog-post {
     color: #8c8c8c;
 }
 
-.blog-post p {
+.blog-post p{
     font-size: 16px;
     line-height: 30px;
     color: #696868;

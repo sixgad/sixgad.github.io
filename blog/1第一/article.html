@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="this is blog">
+  <meta name="author" content="xiaobulv">
+
+
+  <title>测试文章</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span>Alex Parker</span>
+                <span class="my-sub-title">Web Developer</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="index.html" title="Go to Home Page"><h1>Back Home</h1></a>
+                 <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2022年9月29日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>blog markdown</a></span>
+
+                  <h1 id="inotify">inotify的使用教程</h1>
+<h2 id="_1">安装和基本使用</h2>
+<p>https://blog.csdn.net/qq_37788558
+/article/details/104985262</p>
+<p>参数重点：</p>
+<ul>
+<li><code>-m</code> 默认情况下inotifywait发现一个事件就退出了。m可以持续观测并输出</li>
+<li><code>-r</code> 递归观测目录</li>
+<li><code>-q</code> 不输出乱七八糟的提示信息，这个在使用linux管道时候需要加上，否则管道后面会受到格式不可预测的文本输出</li>
+<li><code>-d</code>, <code>-o</code> 作为后台进程运行，并且输出到一个文件里</li>
+<li><code>-c</code> 输出格式为csv</li>
+<li><code>-e</code> 对哪些事件感兴趣，列在后面，用逗号隔开。事件是预定义的。有哪些查一下本文后面的手册。</li>
+<li><code>--timefmt</code> 定义一下命令最终输出内容里的时间格式</li>
+<li><code>--format</code>这个地方定义了输出的格式，可以把 <code>--timefmt</code>里定义的时间使用<code>%T</code>包含进来输出。 <strong>和-c参数为互斥</strong></li>
+<li><code>%w</code>  发生事件的目录</li>
+<li><code>%f</code> 触发事件的文件</li>
+<li><code>%e</code> 发生的事件</li>
+<li><code>%T</code> 发生的时间</li>
+<li><code>%Xe</code> 如果多个事件发生，用<code>X</code>分割</li>
+</ul>
+<h3 id="_2">示例</h3>
+<div class="codehilite"><pre><span></span><code>inotifywait -m /path -e create -e moved_to <span class="p">|</span>
+    <span class="k">while</span> <span class="nb">read</span> directory action file<span class="p">;</span> <span class="k">do</span>
+        <span class="k">if</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="nv">$file</span><span class="s2">&quot;</span> <span class="o">=</span>~ .*xml$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span> <span class="c1"># Does the file end with .xml?</span>
+            <span class="nb">echo</span> <span class="s2">&quot;xml file&quot;</span> <span class="c1"># If so, do your thing here!</span>
+        <span class="k">fi</span>
+    <span class="k">done</span>
+</code></pre></div>
+
+<h2 id="_3">笔记</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">$</span> <span class="n">inotifywait</span> <span class="o">-</span><span class="n">mrq</span> <span class="o">--</span><span class="n">timefmt</span> <span class="s2">&quot;%y-%m-</span><span class="si">%d</span><span class="s2">/%H:%M:%S&quot;</span> <span class="o">--</span><span class="nb">format</span> <span class="s2">&quot;%T &#39;%w</span><span class="si">%f</span><span class="s2">&#39; </span><span class="si">%e</span><span class="s2">&quot;</span> <span class="o">-</span><span class="n">e</span>  <span class="n">CLOSE_WRITE</span>   <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfile</span><span class="o">/</span><span class="n">monitor_dir</span><span class="o">/</span>
+</code></pre></div>
+
+<p>上述命令 <code>-m</code>让命令一直监控，除非被强制退出</p>
+<p><code>r</code> 监控子目录</p>
+<p><code>q</code> 不要输出无关提示信息，可以参考下面两段命令做个对比。</p>
+<p>没有使用<code>-q</code>的时候：</p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>~smallfile<span class="o">]</span>$ inotifywait -mr --timefmt <span class="s2">&quot;%y-%m-%d/%H:%M&quot;</span> --format <span class="s2">&quot;%T &#39;%w%f&#39; %e&quot;</span> -e  CLOSE_WRITE   /home/smallfile/monitor_dir/
+Setting up watches.  Beware: since -r was given, this may take a <span class="k">while</span>!
+Watches established.
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a.txt&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/b&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/c&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/d&#39;</span> CLOSE_WRITE,CLOS
+</code></pre></div>
+
+<p>使用了<code>-q</code>之后</p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>~smallfile<span class="o">]</span>$ inotifywait -mr --timefmt <span class="s2">&quot;%y-%m-%d/%H:%M&quot;</span> --format <span class="s2">&quot;%T &#39;%w%f&#39; %e&quot;</span> -e  CLOSE_WRITE   /home/smallfile/monitor_dir/
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a.txt&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/b&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/c&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/d&#39;</span> CLOSE_WRITE,CLOS
+</code></pre></div>
+
+<h3 id="_4">示例</h3>
+<div class="codehilite"><pre><span></span><code>inotifywait -mrqc   -e  CLOSE_WRITE   /home/smallfile/monitor_dir/ <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> info<span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="si">${</span><span class="nv">info</span><span class="si">}</span><span class="p">;</span><span class="k">done</span>
+
+<span class="c1">#最后我用了一个方法，可以控制并发：</span>
+inotifywait -mrqc   -e  CLOSE_WRITE   /home/smallfile/monitor_dir/  <span class="p">|</span> xargs -I% -P5 ./exe.sh %   <span class="c1">#其中exe.sh是一个脚本，执行文件的copy的工作。</span>
+
+inotifywait -mrqc   -e  CLOSE_WRITE   /home/smallfile/monitor_dir/  <span class="p">|</span> parallel --jobs <span class="m">3</span> ./exe.sh <span class="o">{</span>%<span class="o">}</span>  <span class="o">{</span><span class="m">1</span><span class="o">}</span>
+</code></pre></div>
+
+<h2 id="_5">参考</h2>
+<ul>
+<li>很短小清晰的一个文章 https://wangchujiang.com/linux-command/c/inotifywait.html</li>
+<li>
+<p>参考文章也不错 https://blog.csdn.net/qq_37788558/article/details/104985262</p>
+</li>
+<li>
+<p>命令手册 https://linux.die.net/man/1/inotifywait</p>
+</li>
+<li>观察一个文件创建，并设置一个写入超时时间，返回这个文件 
+https://stackoverflow.com/questions/70132359/how-t
+o-use-inotifywait-to-wait-till-a-file-is-created-and-is-written-content-wit</li>
+<li>观测文件/目录并根据后缀等包含特定文件、排除特定文件 
+https://unix.stackexchange.com/questions/
+323901/how-
+to-use-inotifywait-to-watch-a-directory-for-crea
+tion-of-files-of-a-specific</li>
+</ul>
+<h2 id="inotifywait">inotifywait替代品</h2>
+<ul>
+<li>JAVA 实现 http://jnotify.sourceforge.net/  定义的事件非常有限，只有 create\modify\rename\delete</li>
+<li>python实现 https://github.com/dsoprea/PyInotify</li>
+</ul>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>
