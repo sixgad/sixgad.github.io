@@ -4,8 +4,6 @@
 # @Time:        2022/9/28 15:00
 
 import os
-import math
-from re import T
 import markdown
 from lxml import etree
 from lxml import html as lxhtml
@@ -15,11 +13,11 @@ default_config = {
     # index页展示文章数
     "page_size": 10,
     # 模版文件夹
-    "base_template": "./basetp",
+    "base_template": "basetp",
     # 博客文件夹
-    "blog_dir": "./blog",
+    "blog_dir": "blog",
     # 生成列表页文件夹
-    "index_dir": "./index",
+    "index_dir": "index",
     # markdown插件配置,
     "md_ext": ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.tables',
                'markdown.extensions.toc', "markdown.extensions.meta"],
@@ -93,7 +91,7 @@ def deal_blogs():
                             "tags": tags,
                             "date": date,
                             "title": title,
-                            "href": f'{default_config["blog_dir"]}/{blog}/article.html'
+                            "href": f'../{default_config["blog_dir"]}/{blog}/article.html'
                         }
                     )
 
@@ -121,15 +119,15 @@ def deal_index():
             for pad in range(start, end+1):
                 one = {
                     "num": pad,
-                    "url": f'{default_config["index_dir"]}/index{pad}.html'
+                    "url": f'index{pad}.html'
                 }
                 if pad == current_page:
                     one["current"] = True
                 padding.append(one)
             return padding
         res = {
-            "first":  f'{default_config["index_dir"]}/index1.html',
-            "last": f'{default_config["index_dir"]}/index{len(index_list)}.html',
+            "first":  'index1.html',
+            "last": 'index{len(index_list)}.html',
             "padding": make_fenye()               
         }
 
