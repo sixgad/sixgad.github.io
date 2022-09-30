@@ -4,7 +4,11 @@
 # @Time:        2022/9/28 15:00
 
 import os
+import math
+from re import T
 import markdown
+from lxml import etree
+from lxml import html as lxhtml
 from jinja2 import Environment, FileSystemLoader
 
 default_config = {
@@ -22,6 +26,8 @@ default_config = {
     # 每构建是否重新生成历史所有的“文章.html”
     "clear_history": True
 }
+
+collect_list = []
 
 
 def clear_index():
@@ -57,17 +63,80 @@ def deal_blogs():
                 tags = mdobj.Meta.get('tags')
                 date = mdobj.Meta.get('date')[0]
                 title = mdobj.Meta.get('title')[0]
+                private = mdobj.Meta.get('private', ['False'])[0]
+                # 私有博客不生成html展示(只能说相对私有...)
+                if 'no' in private.lower() or 'false' in private.lower():
+                    # 图片路径处理
+                    shtml = etree.HTML(html)
+                    # img src不包含http说明为本地图片
+                    if len(shtml.xpath('//img[not(contains(@src, "http"))]')):
+                        for src in shtml.xpath('//img[not(contains(@src, "http"))]'):
+                            old_src = src.xpath('./@src')[0]
+                            new_src = f'{default_config["blog_dir"]}/{blog}/{old_src}'
+                            src.attrib['src'] = new_src
+                        html = lxhtml.tostring(
+                            shtml, encoding='utf-8').decode('utf-8')
 
-                # 图片路径处理
-                b_data = {
-                    "tags": tags,
-                    "date": date,
-                    "title": title,
-                    "content": html
+                    b_data = {
+                        "tags": tags,
+                        "date": date,
+                        "title": title,
+                        "content": html
+                    }
+                    detail_template.stream(blog=b_data).dump(
+                        f'{default_config["blog_dir"]}/{blog}/article.html', encoding='utf-8')
+                    print(
+                        f'deal_blogs {default_config["blog_dir"]}/{blog}/{article}')
+                    # 为列表页收集每篇博客文章
+                    collect_list.append(
+                        {
+                            "tags": tags,
+                            "date": date,
+                            "title": title,
+                            "href": f'{default_config["blog_dir"]}/{blog}/article.html'
+                        }
+                    )
+
+
+def deal_index():
+    env = Environment(loader=FileSystemLoader("basetp"))
+    index_template = env.get_template('ori_index.html')
+    def split_list_by_n(list_collection, n):
+        for i in range(0, len(list_collection), n):
+            yield list_collection[i: i + n]
+    index_list = []
+    for i in split_list_by_n(collect_list, default_config["page_size"]):
+        index_list.append(i)
+    for i in range(len(index_list)):
+        current_page = i + 1
+        def make_fenye():
+            # current_page居中,前后各展示2页,总共展示5页
+            start = current_page - 2
+            end = current_page + 2
+            if start < 0:
+                start = 1
+            if end > len(index_list):
+                end = len(index_list)
+            padding = []
+            for pad in range(start, end+1):
+                one = {
+                    "num": pad,
+                    "url": f'{default_config["index_dir"]}/index{pad}.html'
                 }
-                detail_template.stream(blog=b_data).dump(f'{default_config["blog_dir"]}/{blog}/article.html', encoding='utf-8')
-                print(f'deal_blogs {default_config["blog_dir"]}/{blog}/{article}')
+                if pad == current_page:
+                    one["current"] = True
+                padding.append(one)
+            return padding
+        res = {
+            "first":  f'{default_config["index_dir"]}/index1.html',
+            "last": f'{default_config["index_dir"]}/index{len(index_list)}.html',
+            "padding": make_fenye()               
+        }
 
+        index_template.stream(blogs=index_list[i], pagedata=res).dump(
+            f'{default_config["index_dir"]}/index{current_page}.html', encoding='utf-8')
+        print(f'deal_index {current_page}')
+    
 
 if __name__ == "__main__":
     print('start generate')
@@ -75,3 +144,5 @@ if __name__ == "__main__":
     clear_index()
     # step2 读取blog_dir下所有blog、收集构建blog_list信息、由.md生成article.html
     deal_blogs()
+    # step3 生成index页
+    deal_index()

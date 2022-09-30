@@ -20,7 +20,8 @@
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="../../static/images/favicon/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
 
   <!-- All CSS Plugins -->
   <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
@@ -103,8 +104,10 @@
 
 
               <div class="sub-title">
-                <a href="index.html" title="Go to Home Page"><h1>Back Home</h1></a>
-                 <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+                <a href="index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
               </div>
 
               <div class="col-md-12 content-page">
@@ -119,7 +122,8 @@
                 </div> -->
 
                 <div class="blog-cc">
-                  <span>{{blog.date}}</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;{% for tag in blog.tags %}<span><a>{{tag}}</a></span>{% endfor %}
+                  <span>{{blog.date}}</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;{% for tag in blog.tags
+                  %}<span><a>{{tag}}</a></span>{% endfor %}
 
                   {{blog.content}}
 

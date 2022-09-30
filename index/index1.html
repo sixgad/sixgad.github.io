@@ -107,7 +107,7 @@
 
               <div class="col-md-12 content-page">
 
-                {% for blog in blogs %}
+                
                 <!-- Blog Post Start -->
                 <div class="col-md-12 blog-post">
                   <!-- 预留图片展示位置 -->
@@ -115,30 +115,29 @@
                       <img src="images/blog/1.jpg" alt="">
                     </div> -->
                   <div class="post-title">
-                    <a href={{blog.href}}>
-                      <h2>{{blog.title}}</h2>
+                    <a href=./blog/1第一/article.html>
+                      <h2>测试文章</h2>
                     </a>
                   </div>
                   <div class="post-info">
-                    <span>{{blog.date}}</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;{% for tag in blog.tags
-                    %}<span><a>{{tag}}</a></span>{% endfor %}
+                    <span>2022年9月29日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>blog markdown</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href={{blog.href}} class="button button-style button-anim fa fa-long-arrow-right"><span>Read
+                  <a href=./blog/1第一/article.html class="button button-style button-anim fa fa-long-arrow-right"><span>Read
                       More</span></a>
                 </div>
                 <!-- Blog Post End -->
-                {% endfor %}
+                
 
 
 
                 <div class="text-center">
                   <ul class="pagination pagination-lg">
-                    <li><a href={{pagedata.first}}>&laquo;</a></li>
-                    {% for paged in pagedata.padding %}
-                    <li><a href={{paged.url}} {% if paged.current %} class="active" {% endif %}>{{paged.num}}</a></li>
-                    {% endfor %}
-                    <li><a href={{pagedata.last}}>&raquo;</a></li>
+                    <li><a href=./index/index1.html>&laquo;</a></li>
+                    
+                    <li><a href=./index/index1.html  class="active" >1</a></li>
+                    
+                    <li><a href=./index/index1.html>&raquo;</a></li>
                   </ul>
                 </div>
 
