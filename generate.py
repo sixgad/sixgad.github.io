@@ -16,8 +16,8 @@ default_config = {
     "base_template": "basetp",
     # 博客文件夹
     "blog_dir": "blog",
-    # 生成列表页文件夹
-    "index_dir": "index",
+    # 生成列表页文件夹, 只能放最外层, 不能修改
+    "index_dir": "./",
     # markdown插件配置,
     "md_ext": ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.tables',
                'markdown.extensions.toc', "markdown.extensions.meta"],
@@ -132,7 +132,7 @@ def deal_index():
         }
 
         index_template.stream(blogs=index_list[i], pagedata=res).dump(
-            f'{default_config["index_dir"]}/index{current_page}.html', encoding='utf-8')
+            f'{default_config["index_dir"]}index{current_page}.html', encoding='utf-8')
         print(f'deal_index {current_page}')
     
 
