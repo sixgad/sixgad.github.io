@@ -132,7 +132,7 @@ def deal_index():
             return padding
         res = {
             "first":  'index.html',
-            "last": 'index{len(index_list)}.html',
+            "last": f'index{len(index_list)}.html' if len(index_list) > 1 else 'index.html',
             "padding": make_fenye()
         }
         index_html = f'index{current_page}.html'
