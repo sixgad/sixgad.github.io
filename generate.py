@@ -5,8 +5,8 @@
 
 import os
 import markdown
-from lxml import etree
-from lxml import html as lxhtml
+# from lxml import etree
+# from lxml import html as lxhtml
 from jinja2 import Environment, FileSystemLoader
 
 default_config = {
@@ -17,7 +17,7 @@ default_config = {
     # 博客文件夹
     "blog_dir": "blog",
     # 生成列表页文件夹, 只能放最外层, 不能修改
-    "index_dir": "docs",
+    "index_dir": ".",
     # markdown插件配置,
     "md_ext": ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.tables',
                'markdown.extensions.toc', "markdown.extensions.meta"],
@@ -64,16 +64,16 @@ def deal_blogs():
                 private = mdobj.Meta.get('private', ['False'])[0]
                 # 私有博客不生成html展示(只能说相对私有...)
                 if 'no' in private.lower() or 'false' in private.lower():
-                    # 图片路径处理
-                    shtml = etree.HTML(html)
-                    # img src不包含http说明为本地图片
-                    if len(shtml.xpath('//img[not(contains(@src, "http"))]')):
-                        for src in shtml.xpath('//img[not(contains(@src, "http"))]'):
-                            old_src = src.xpath('./@src')[0]
-                            new_src = f'{default_config["blog_dir"]}/{blog}/{old_src}'
-                            src.attrib['src'] = new_src
-                        html = lxhtml.tostring(
-                            shtml, encoding='utf-8').decode('utf-8')
+                    # # 图片路径处理
+                    # shtml = etree.HTML(html)
+                    # # img src不包含http说明为本地图片
+                    # if len(shtml.xpath('//img[not(contains(@src, "http"))]')):
+                    #     for src in shtml.xpath('//img[not(contains(@src, "http"))]'):
+                    #         old_src = src.xpath('./@src')[0]
+                    #         # 因为img和html在同一目录下 不需要调整url
+                    #         new_src = f'{default_config["blog_dir"]}/{blog}/{old_src}'
+                    #         src.attrib['src'] = new_src
+                    #         html = lxhtml.tostring(shtml, encoding='utf-8').decode('utf-8')
 
                     b_data = {
                         "tags": tags,
@@ -99,6 +99,7 @@ def deal_blogs():
 def deal_index():
     env = Environment(loader=FileSystemLoader("basetp"))
     index_template = env.get_template('ori_index.html')
+
     def split_list_by_n(list_collection, n):
         for i in range(0, len(list_collection), n):
             yield list_collection[i: i + n]
@@ -107,6 +108,7 @@ def deal_index():
         index_list.append(i)
     for i in range(len(index_list)):
         current_page = i + 1
+
         def make_fenye():
             # current_page居中,前后各展示2页,总共展示5页
             start = current_page - 2
@@ -117,24 +119,30 @@ def deal_index():
                 end = len(index_list)
             padding = []
             for pad in range(start, end+1):
+                pad_html = f'index{pad}.html'
+                if pad == 1:
+                    pad_html = "index.html"
                 one = {
                     "num": pad,
-                    "url": f'index{pad}.html'
+                    "url": pad_html
                 }
                 if pad == current_page:
                     one["current"] = True
                 padding.append(one)
             return padding
         res = {
-            "first":  'index1.html',
+            "first":  'index.html',
             "last": 'index{len(index_list)}.html',
-            "padding": make_fenye()               
+            "padding": make_fenye()
         }
+        index_html = f'index{current_page}.html'
+        if current_page == 1:
+            index_html = "index.html"
 
         index_template.stream(blogs=index_list[i], pagedata=res).dump(
-            f'{default_config["index_dir"]}/index{current_page}.html', encoding='utf-8')
+            f'{default_config["index_dir"]}/{index_html}', encoding='utf-8')
         print(f'deal_index {current_page}')
-    
+
 
 if __name__ == "__main__":
     print('start generate')

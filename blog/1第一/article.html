@@ -104,7 +104,7 @@
 
 
               <div class="sub-title">
-                <a href="../index/index1.html" title="Go to Home Page">
+                <a href="../../index.html" title="Go to Home Page">
                   <h1>Back Home</h1>
                 </a>
                 <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
@@ -124,11 +124,11 @@
                 <div class="blog-cc">
                   <span>2022年9月29日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>blog markdown</a></span>
 
-                  <html><body><h1 id="inotify">inotify的使用教程</h1>
+                  <h1 id="inotify">inotify的使用教程</h1>
 <h2 id="_1">安装和基本使用</h2>
 <p>https://blog.csdn.net/qq_37788558/article/details/104985262</p>
-<p><img alt="apple-touch-icon" src="blog/1%E7%AC%AC%E4%B8%80/apple-touch-icon.png"></p>
-<p><img alt="image-20220930105032755" src="blog/1%E7%AC%AC%E4%B8%80/image-20220930105032755.png"></p>
+<p><img alt="apple-touch-icon" src="apple-touch-icon.png" /></p>
+<p><img alt="image-20220930105032755" src="image-20220930105032755.png" /></p>
 <p>参数</p>
 <table>
 <thead>
@@ -175,37 +175,37 @@
 <h3 id="_2">示例</h3>
 <div class="codehilite"><pre><span></span><code>inotifywait -m /path -e create -e moved_to <span class="p">|</span>
     <span class="k">while</span> <span class="nb">read</span> directory action file<span class="p">;</span> <span class="k">do</span>
-        <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">=</span>~ .*xml$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span> <span class="c1"># Does the file end with .xml?</span>
-            <span class="nb">echo</span> <span class="s2">"xml file"</span> <span class="c1"># If so, do your thing here!</span>
+        <span class="k">if</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="nv">$file</span><span class="s2">&quot;</span> <span class="o">=</span>~ .*xml$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span> <span class="c1"># Does the file end with .xml?</span>
+            <span class="nb">echo</span> <span class="s2">&quot;xml file&quot;</span> <span class="c1"># If so, do your thing here!</span>
         <span class="k">fi</span>
     <span class="k">done</span>
 </code></pre></div>
 
 <h2 id="_3">笔记</h2>
-<div class="codehilite"><pre><span></span><code><span class="err">$</span> <span class="n">inotifywait</span> <span class="o">-</span><span class="n">mrq</span> <span class="o">--</span><span class="n">timefmt</span> <span class="s2">"%y-%m-</span><span class="si">%d</span><span class="s2">/%H:%M:%S"</span> <span class="o">--</span><span class="nb">format</span> <span class="s2">"%T '%w</span><span class="si">%f</span><span class="s2">' </span><span class="si">%e</span><span class="s2">"</span> <span class="o">-</span><span class="n">e</span>  <span class="n">CLOSE_WRITE</span>   <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfile</span><span class="o">/</span><span class="n">monitor_dir</span><span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="err">$</span> <span class="n">inotifywait</span> <span class="o">-</span><span class="n">mrq</span> <span class="o">--</span><span class="n">timefmt</span> <span class="s2">&quot;%y-%m-</span><span class="si">%d</span><span class="s2">/%H:%M:%S&quot;</span> <span class="o">--</span><span class="nb">format</span> <span class="s2">&quot;%T &#39;%w</span><span class="si">%f</span><span class="s2">&#39; </span><span class="si">%e</span><span class="s2">&quot;</span> <span class="o">-</span><span class="n">e</span>  <span class="n">CLOSE_WRITE</span>   <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfile</span><span class="o">/</span><span class="n">monitor_dir</span><span class="o">/</span>
 </code></pre></div>
 
 <p>上述命令 <code>-m</code>让命令一直监控，除非被强制退出</p>
 <p><code>r</code> 监控子目录</p>
 <p><code>q</code> 不要输出无关提示信息，可以参考下面两段命令做个对比。</p>
 <p>没有使用<code>-q</code>的时候：</p>
-<div class="codehilite"><pre><span></span><code><span class="o">[</span>~smallfile<span class="o">]</span>$ inotifywait -mr --timefmt <span class="s2">"%y-%m-%d/%H:%M"</span> --format <span class="s2">"%T '%w%f' %e"</span> -e  CLOSE_WRITE   /home/smallfile/monitor_dir/
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>~smallfile<span class="o">]</span>$ inotifywait -mr --timefmt <span class="s2">&quot;%y-%m-%d/%H:%M&quot;</span> --format <span class="s2">&quot;%T &#39;%w%f&#39; %e&quot;</span> -e  CLOSE_WRITE   /home/smallfile/monitor_dir/
 Setting up watches.  Beware: since -r was given, this may take a <span class="k">while</span>!
 Watches established.
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/a.txt'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/a'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/b'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/c'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/d'</span> CLOSE_WRITE,CLOS
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a.txt&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/b&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/c&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/d&#39;</span> CLOSE_WRITE,CLOS
 </code></pre></div>
 
 <p>使用了<code>-q</code>之后</p>
-<div class="codehilite"><pre><span></span><code><span class="o">[</span>~smallfile<span class="o">]</span>$ inotifywait -mr --timefmt <span class="s2">"%y-%m-%d/%H:%M"</span> --format <span class="s2">"%T '%w%f' %e"</span> -e  CLOSE_WRITE   /home/smallfile/monitor_dir/
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/a.txt'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/a'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/b'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/c'</span> CLOSE_WRITE,CLOSE
-<span class="m">22</span>-08-06/14:51 <span class="s1">'/home/smallfile/monitor_dir/d'</span> CLOSE_WRITE,CLOS
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>~smallfile<span class="o">]</span>$ inotifywait -mr --timefmt <span class="s2">&quot;%y-%m-%d/%H:%M&quot;</span> --format <span class="s2">&quot;%T &#39;%w%f&#39; %e&quot;</span> -e  CLOSE_WRITE   /home/smallfile/monitor_dir/
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a.txt&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/a&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/b&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/c&#39;</span> CLOSE_WRITE,CLOSE
+<span class="m">22</span>-08-06/14:51 <span class="s1">&#39;/home/smallfile/monitor_dir/d&#39;</span> CLOSE_WRITE,CLOS
 </code></pre></div>
 
 <h3 id="_4">示例</h3>
@@ -239,7 +239,7 @@ tion-of-files-of-a-specific</li>
 <ul>
 <li>JAVA 实现 http://jnotify.sourceforge.net/  定义的事件非常有限，只有 create\modify\rename\delete</li>
 <li>python实现 https://github.com/dsoprea/PyInotify</li>
-</ul></body></html>
+</ul>
 
                 </div>
                 <!-- Blog Post End -->
