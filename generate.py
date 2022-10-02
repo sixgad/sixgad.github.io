@@ -32,7 +32,6 @@ def clear_index():
     for ht in os.listdir(default_config["index_dir"]):
         if ht.endswith(".html"):
             os.remove(f'{default_config["index_dir"]}/{ht}')
-            print(f'clear {ht}')
 
 
 def deal_blogs():
@@ -50,7 +49,6 @@ def deal_blogs():
 
         if default_config["clear_history"] and os.path.exists(f'{default_config["blog_dir"]}/{blog}/article.html'):
             os.remove(f'{default_config["blog_dir"]}/{blog}/article.html')
-            print(f'clear {default_config["blog_dir"]}/{blog}/article.html')
 
         # 当article.html不存在时，启动md->html
         if not os.path.exists(f'{default_config["blog_dir"]}/{blog}/article.html') and flag:
@@ -83,8 +81,6 @@ def deal_blogs():
                     }
                     detail_template.stream(blog=b_data).dump(
                         f'{default_config["blog_dir"]}/{blog}/article.html', encoding='utf-8')
-                    print(
-                        f'deal_blogs {default_config["blog_dir"]}/{blog}/{article}')
                     # 为列表页收集每篇博客文章
                     collect_list.append(
                         {
@@ -141,7 +137,18 @@ def deal_index():
 
         index_template.stream(blogs=index_list[i], pagedata=res).dump(
             f'{default_config["index_dir"]}/{index_html}', encoding='utf-8')
-        print(f'deal_index {current_page}')
+
+
+def deal_search():
+    env = Environment(loader=FileSystemLoader("basetp"))
+    search_template = env.get_template('ori_list.html')
+    tmp_collect_list = []
+    for idx, article in enumerate(reversed(collect_list)):
+        article["id"] = idx+1
+        article["tags"] = " ".join(article["tags"])
+        tmp_collect_list.append(article)
+    search_template.stream(blogs=tmp_collect_list).dump(
+        f'{default_config["index_dir"]}/index-list.html', encoding='utf-8')
 
 
 if __name__ == "__main__":
@@ -152,3 +159,6 @@ if __name__ == "__main__":
     deal_blogs()
     # step3 生成index页
     deal_index()
+    # step4 生成索引页
+    deal_search()
+    print("success generate")
