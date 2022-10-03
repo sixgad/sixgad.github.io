@@ -143,12 +143,13 @@ def deal_search():
     env = Environment(loader=FileSystemLoader("basetp"))
     search_template = env.get_template('ori_list.html')
     tmp_collect_list = []
-    for idx, article in enumerate(reversed(collect_list)):
-        article["id"] = idx+1
-        article["tags"] = " ".join(article["tags"])
-        tmp_collect_list.append(article)
-    search_template.stream(blogs=tmp_collect_list).dump(
-        f'{default_config["index_dir"]}/index-list.html', encoding='utf-8')
+    if collect_list:
+        for idx, article in enumerate(reversed(collect_list)):
+            article["id"] = idx+1
+            article["tags"] = " ".join(article["tags"])
+            tmp_collect_list.append(article)
+        search_template.stream(blogs=tmp_collect_list).dump(
+            f'{default_config["index_dir"]}/index-list.html', encoding='utf-8')
 
 
 if __name__ == "__main__":
