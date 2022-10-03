@@ -58,7 +58,8 @@ h6 tt, h6 code {
 
 h1 {
   font-size: 28px;
-  color: black; }
+  color: black; 
+  text-align: center;}
 
 h2 {
   font-size: 24px;
@@ -177,7 +178,9 @@ table {
       margin-bottom: 0; }
 
 img {
-  max-width: 100%; }
+  max-width: 100%; 
+  display: block;
+  margin: auto auto;}
 
 span.frame {
   display: block;
