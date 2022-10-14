@@ -4,6 +4,8 @@
 # @Time:        2022/9/28 15:00
 
 import os
+import json
+import random
 import markdown
 # from lxml import etree
 # from lxml import html as lxhtml
@@ -21,8 +23,6 @@ default_config = {
     # markdown插件配置,
     "md_ext": ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.tables',
                'markdown.extensions.toc', "markdown.extensions.meta"],
-    # 每构建是否重新生成历史所有的“文章.html”
-    "clear_history": True
 }
 
 collect_list = []
@@ -30,7 +30,7 @@ collect_list = []
 
 def clear_index():
     for ht in os.listdir(default_config["index_dir"]):
-        if ht.endswith(".html"):
+        if ht.endswith(".html") and ht.startswith("index"):
             os.remove(f'{default_config["index_dir"]}/{ht}')
 
 
@@ -47,11 +47,10 @@ def deal_blogs():
                 flag = True
                 break
 
-        if default_config["clear_history"] and os.path.exists(f'{default_config["blog_dir"]}/{blog}/article.html'):
+        if os.path.exists(f'{default_config["blog_dir"]}/{blog}/article.html'):
             os.remove(f'{default_config["blog_dir"]}/{blog}/article.html')
 
-        # 当article.html不存在时，启动md->html
-        if not os.path.exists(f'{default_config["blog_dir"]}/{blog}/article.html') and flag:
+        if flag:
             # 读取.md
             with open(f'{default_config["blog_dir"]}/{blog}/{article}', 'r', encoding='utf-8') as f:
                 mdobj = markdown.Markdown(extensions=default_config["md_ext"])
@@ -152,6 +151,19 @@ def deal_search():
             f'{default_config["index_dir"]}/index-list.html', encoding='utf-8')
 
 
+def deal_acg():
+    env = Environment(loader=FileSystemLoader("basetp"))
+    acg_template = env.get_template('ori_acg.html')
+    with open(f'{default_config["blog_dir"]}/0demo/acg.json', 'r', encoding='utf-8') as f:
+        acg_data = json.load(f)
+    corlors = ["table-active", "table-success",
+               "table-warning", "table-danger"]
+    for i in acg_data:
+        i["corlor"] = corlors[random.randint(0, 3)]
+    acg_template.stream(acg=acg_data).dump(
+        f'{default_config["index_dir"]}/index-acg.html', encoding='utf-8')
+
+
 if __name__ == "__main__":
     print('start generate')
     # step1 清空index_dir下的.html文件
@@ -163,3 +175,5 @@ if __name__ == "__main__":
     # step4 生成索引页
     deal_search()
     print("success generate")
+    # 其他-动漫、音乐、小说推荐
+    deal_acg()
