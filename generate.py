@@ -100,7 +100,8 @@ def deal_index():
         for i in range(0, len(list_collection), n):
             yield list_collection[i: i + n]
     index_list = []
-    for i in split_list_by_n(collect_list, default_config["page_size"]):
+    # 列表页倒序展示文章
+    for i in split_list_by_n(list(reversed(collect_list)), default_config["page_size"]):
         index_list.append(i)
     for i in range(len(index_list)):
         current_page = i + 1

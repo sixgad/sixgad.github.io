@@ -621,7 +621,7 @@ div.blog-cc {
 
 .blog-post .post-title h2 {
     color: #333333;
-    font-size: 35px;
+    font-size: 20px;
     line-height: 45px;
     font-weight: 700;
     margin-top: 24px;
@@ -1332,7 +1332,7 @@ blockquote {
     }
 	
     .blog-post .post-title h2 {
-       font-size: 22px;
+       font-size: 20px;
        line-height: 32px;
        font-weight: 600;
     }
