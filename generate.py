@@ -53,6 +53,7 @@ def deal_blogs():
         if flag:
             # 读取.md
             with open(f'{default_config["blog_dir"]}/{blog}/{article}', 'r', encoding='utf-8') as f:
+                print("deal", blog)
                 mdobj = markdown.Markdown(extensions=default_config["md_ext"])
                 html = mdobj.convert(f.read())
                 tags = mdobj.Meta.get('tags')

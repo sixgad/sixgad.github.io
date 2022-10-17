@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>入门-python实现某道翻译sign和bv</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2021年7月30日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider js逆向</a></span>
+
+                  <h1 id="-pythonsignbv">入门-python实现某道翻译sign和bv</h1>
+<p>本文介绍如何通过python实现某道翻译的js生成的sign和bv，某道翻译地址(base64)：aHR0cHM6Ly9mYW55aS55b3VkYW8uY29tLw==</p>
+<h2 id="1chrome">1.chrome抓包分析</h2>
+<p>获取数据的接口https://*.*dao.com/translate_o?smartresult=dict&amp;smartresult=rule</p>
+<p>请求方式POST</p>
+<p>请求参数：其中sign bv这俩个参数一坨，应该是加密过后生成</p>
+<p><img src="image-20210710130432382.png" alt="image-20210710130432382"  /></p>
+<h2 id="2">2.定位加密参数位置</h2>
+<p>在chrome控制台设置XHR断点或者全局搜索sign,最终定位到参数加密生成位置，这段js代码未混淆，逻辑非常清晰</p>
+<p><img src="image-20210710131144187.png" alt="image-20210710131144187"  /></p>
+<h2 id="3python">3.python实现</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># @Time   : 2021/7/10 13:16</span>
+<span class="c1"># @Author : zp</span>
+<span class="c1"># @Python3.7</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">kwd</span> <span class="o">=</span> <span class="s1">&#39;你好&#39;</span>
+<span class="n">appversion</span> <span class="o">=</span> <span class="s1">&#39;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36&#39;</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">appversion</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+<span class="n">bv</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">lts</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">salt</span> <span class="o">=</span> <span class="n">lts</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">sign</span> <span class="o">=</span> <span class="s2">&quot;fanyideskweb&quot;</span> <span class="o">+</span> <span class="n">kwd</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">salt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Y2FYu%TNSbMCxc3t2u^XT&quot;</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sign</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+<span class="n">sign</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="n">kwd</span><span class="p">,</span>
+  <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="s1">&#39;AUTO&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="s1">&#39;AUTO&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;smartresult&#39;</span><span class="p">:</span> <span class="s1">&#39;dict&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;client&#39;</span><span class="p">:</span> <span class="s1">&#39;fanyideskweb&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;salt&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">salt</span><span class="p">),</span>
+  <span class="s1">&#39;sign&#39;</span><span class="p">:</span> <span class="n">sign</span><span class="p">,</span>
+  <span class="s1">&#39;lts&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">lts</span><span class="p">),</span>
+  <span class="s1">&#39;bv&#39;</span><span class="p">:</span> <span class="n">bv</span><span class="p">,</span>
+  <span class="s1">&#39;doctype&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;2.1&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;keyfrom&#39;</span><span class="p">:</span> <span class="s1">&#39;fanyi.web&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;FY_BY_REALTlME&#39;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>最后使用requests发送请求返回结果{"translateResult":[[{"tgt":"hello","src":"你好"}]],"errorCode":0,"type":"zh-CHS2en"}</p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>
