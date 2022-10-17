@@ -110,9 +110,9 @@ def deal_index():
             # current_page居中,前后各展示2页,总共展示5页
             start = current_page - 2
             end = current_page + 2
-            if start < 0:
+            if start <= 0:
                 start = 1
-            if end > len(index_list):
+            if end >= len(index_list):
                 end = len(index_list)
             padding = []
             for pad in range(start, end+1):
