@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>微信小程序逆向(一)解包反编译</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2021年8月19日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider 小程序逆向</a></span>
+
+                  <h1 id="_1">微信小程序逆向(一)解包反编译</h1>
+<p>小程序抓到包，发现加密参数，无从下手怎么办？以xhs为例，学习下如何搞定一个小程序的加密参数。首先我们需要看到代码逻辑，不能凭空想象。</p>
+<h2 id="1">1.手机小程序文件位置</h2>
+<p>手机连接电脑，进入adb shell su，手机需要root(也可以使用模拟器)</p>
+<blockquote>
+<p>/data/data/com.tencent.mm/MicroMsg/{这是一串hash，每个人不一样}/appbrand/pkg</p>
+</blockquote>
+<p>在pkg文件夹下，我们可能发现多个.wxapkg文件，如果你是刚点开过微信小程序，那么就选择时间最近的那个文件（大小一般在1-2M）</p>
+<p><img alt="image-20210819214912070" src="image-20210819214912070.png" /></p>
+<p>可以运行adb命令，将整个pkg文件夹拷贝到电脑上来</p>
+<blockquote>
+<p>adb pull /data/data/com.tencent.mm/MicroMsg/{这是一串hash，每个人不一样}/appbrand/pkg ./</p>
+</blockquote>
+<h2 id="2pc">2.PC小程序文件位置</h2>
+<p>获取手机小程序文件步骤比较繁琐，下面介绍另一种方式，frida hook pc微信，直接找到小程序文件位置</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="c1"># @Time : 2021/3/2 17:56</span>
+
+<span class="kn">import</span> <span class="nn">frida</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># 生成文件路径 C:\Users\{User}\Documents\WeChat Files\Applet\...</span>
+
+<span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">target_process</span><span class="p">):</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">frida</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">target_process</span><span class="p">)</span>
+    <span class="n">script</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">create_script</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">var baseAddr = Module.findBaseAddress(&#39;WeChatAppHost.dll&#39;);</span>
+<span class="s2">console.log(&#39;WeChatAppHost.dll baseAddr: &#39; + baseAddr);</span>
+
+
+<span class="s2">var EncryptBufToFile = Module.findExportByName(&#39;WeChatAppHost.dll&#39;, &#39;EncryptBufToFile&#39;);</span>
+
+<span class="s2">if (EncryptBufToFile) {</span>
+
+<span class="s2">    console.log(&#39;EncryptBufToFile 函数地址: &#39; + EncryptBufToFile);</span>
+
+<span class="s2">    // HOOK函数, 监听参数</span>
+<span class="s2">    Interceptor.attach(EncryptBufToFile, {</span>
+<span class="s2">        onEnter: function (args) {</span>
+<span class="s2">            // console.log(`$</span><span class="si">{args[0]}</span><span class="s2">,$</span><span class="si">{args[1]}</span><span class="s2">,$</span><span class="si">{args[2]}</span><span class="s2">,$</span><span class="si">{args[3]}</span><span class="s2">`);</span>
+<span class="s2">            // 微信小程序AppId</span>
+<span class="s2">            this.appId = ptr(args[0]).readPointer().readAnsiString();</span>
+<span class="s2">            // 微信小程序本地缓存文件路径</span>
+<span class="s2">            this.apkgFilePath = ptr(args[1]).readPointer().readAnsiString();</span>
+<span class="s2">            // 小程序代码原始内容(未加密)</span>
+<span class="s2">            this.originalData = Memory.readByteArray(args[2], args[3].toInt32());</span>
+<span class="s2">        },</span>
+<span class="s2">        onLeave: function (retval) {</span>
+<span class="s2">            console.log(&#39;文件解密成功&#39;, this.apkgFilePath);</span>
+
+<span class="s2">            // 将文件替换为未加密的wxapkg包</span>
+<span class="s2">            var f = new File(this.apkgFilePath, &#39;wb&#39;);</span>
+<span class="s2">            f.write(this.originalData);</span>
+<span class="s2">            f.flush();</span>
+<span class="s2">            f.close();</span>
+
+<span class="s2">            // 释放内存</span>
+<span class="s2">            delete this.appId;</span>
+<span class="s2">            delete this.apkgFilePath;</span>
+<span class="s2">            delete this.originalData;</span>
+<span class="s2">        }</span>
+<span class="s2">    });</span>
+
+<span class="s2">} else {</span>
+<span class="s2">    console.log(&#39;WeChatAppHost.dll 模块未加载, 请先打开界面中的小程序面板&#39;);</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="n">on_message</span><span class="p">)</span>
+    <span class="n">script</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[!] Ctrl+D on UNIX, Ctrl+Z on Windows/cmd.exe to detach from instrumented program.</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">(</span><span class="s1">&#39;wechat.exe&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>使用方法：</p>
+<ul>
+<li>
+<p>pc微信运行状态</p>
+</li>
+<li>
+<p>运行以上脚本</p>
+</li>
+<li>
+<p>点击目标小程序，查看输出结果，大功告成</p>
+<p><img alt="image-20210819215926160" src="image-20210819215926160.png" /></p>
+</li>
+</ul>
+<p>注意，可能有多个.wxapkg文件，主要关注__APP__.wxapkg文件即可</p>
+<h2 id="3">3.解包反编译</h2>
+<p>用到的工具，<strong>wxappUnpacker</strong>，这个教程太多了，不多赘述</p>
+<blockquote>
+<p>运行命令 node wuWxapkg.js  ./xhs.wxapkg</p>
+</blockquote>
+<p>就会在当前文件夹生成解包后的文件夹 xhs</p>
+<p><img alt="image-20210819220402038" src="image-20210819220402038.png" /></p>
+<p><strong>可能遇到的坑</strong><strong>，</strong><strong>因为反编译的问题，有时解析失败，比如文件夹名plugin变为plugin:，导致解包失败</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nt">D</span><span class="o">:</span><span class="err">\</span><span class="nt">worksoft</span><span class="err">\</span><span class="nt">nodeworkspace</span><span class="err">\</span><span class="nt">wxappunpacker</span><span class="err">\</span><span class="nt">wuLib</span><span class="p">.</span><span class="nc">js</span><span class="p">:</span><span class="nd">91</span><span class="w"></span>
+<span class="w">        </span><span class="nt">if</span><span class="w"> </span><span class="o">(</span><span class="nt">err</span><span class="o">)</span><span class="w"> </span><span class="nt">throw</span><span class="w"> </span><span class="nt">Error</span><span class="o">(</span><span class="s2">&quot;Save file error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nt">err</span><span class="o">);</span><span class="w"></span>
+<span class="w">                 </span><span class="o">^</span><span class="w"></span>
+
+<span class="nt">Error</span><span class="o">:</span><span class="w"> </span><span class="nt">Save</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">error</span><span class="o">:</span><span class="w"> </span><span class="nt">Error</span><span class="o">:</span><span class="w"> </span><span class="nt">ENOENT</span><span class="o">:</span><span class="w"> </span><span class="nt">no</span><span class="w"> </span><span class="nt">such</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">or</span><span class="w"> </span><span class="nt">directory</span><span class="o">,</span><span class="w"> </span><span class="nt">open</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>根据报错信息修改wuLib.js这个文件即可，比如这样</strong></p>
+<p><img alt="image-20210819220838517" src="image-20210819220838517.png" /></p>
+<h2 id="4">4.静态查看</h2>
+<p>可以用vscode打开解包反编译后的文件夹，已知xhs小程序header里有X-sign参数加密，我们先全局搜索定位</p>
+<blockquote>
+<p>exports.DEFAULT_SIGN_HEADER = "X-Sign";</p>
+</blockquote>
+<p>接着搜搜DEFAULT_SIGN_HEADER </p>
+<blockquote>
+<p>t.header[u.DEFAULT_SIGN_HEADER] = (0, u.encryptFeApiToken)(g);</p>
+</blockquote>
+<p>encryptFeApiToken方法看起来就是加密函数了，ctrl+左键跳转过去</p>
+<p><img alt="image-20210819221521363" src="image-20210819221521363.png" /></p>
+<p>到此结束，静态分析我们猜测不到传入的参数和加密逻辑，下一篇我们把它运行起来，动态调试看看</p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>2021某音_signature Need Verifying</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2021年9月28日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider js逆向</a></span>
+
+                  <h1 id="2021_signature-need-verifying">2021某音_signature Need Verifying</h1>
+<p>2021年6月某音上线了web版，上班摸鱼更加方便了。本着学习的态度，各个板块数据接口只有_signature一个加密参数，因为都属于字节系，搞过头条的话上手更加容易些。</p>
+<blockquote>
+<p>推荐首页，个人主页对于_signature校验不严格，搜索接口对signature校验很严格，加密参数稍有不对就会返回Need Verifying，本文就讨论某音搜索接口</p>
+</blockquote>
+<h2 id="1">1.跳过抓包分析，不会的可以看上一篇某日头条，基本差不多</h2>
+<p>很熟悉的acrawler.js</p>
+<p><img alt="image-20210719224717497" src="image-20210719224717497.png" /></p>
+<p>搞过头条的都知道，要找到 window.byted_acrawler.init，全局搜索在indexjs中找到，其中变量可以打断点调试</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">window</span><span class="p">.</span><span class="nx">byted_acrawler</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="w"></span>
+<span class="w">    </span><span class="nx">aid</span><span class="o">:</span><span class="w"> </span><span class="nx">U</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">dfp</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="mf">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">boe</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="mf">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">intercept</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">enablePathList</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/aweme/v1/*&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/aweme/v2/*&quot;</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">L</span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">[]))</span><span class="w"></span>
+<span class="p">})</span><span class="w"></span>
+</code></pre></div>
+
+<p>按照套路，全局搜索_signature ，结果是<strong>找不到！！！</strong>，设置个XHR断点看看</p>
+<p><img alt="image-20210719225239741" src="image-20210719225239741.png" /></p>
+<p>重写了XMLHttpRequest的一些方法，此时t=this里面的_url已经有了signature参数了，顺着Call Stack往回找找看看,在acrawler.js中调用了e()函数</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="nx">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">e</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">arguments</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//此处可本地替换js代码 或者使用chrome的logpoint打印</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//console.log(argumentsthis)</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nx">K</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">z</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">y</span><span class="o">++</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">K</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">z</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">))</span><span class="w"></span>
+<span class="p">})</span><span class="w"></span>
+</code></pre></div>
+
+<p>在控制台上会看到如下输出</p>
+<p><img alt="image-20210719230744626" src="image-20210719230744626.png" /></p>
+<p>熟悉的朋友应该知道，这不就是构造XMLHttpRequest请求的过程吗,在arguments为null的时候，XMLHttpRequest里已经有_signature参数了。把头条的那套环境拿过来用一下代码如下：</p>
+<p><img alt="image-20210719231012409" src="image-20210719231012409.png" /></p>
+<p>结果：Need Verifying，虽然程序不报错，但是没通过人家的后端校验啊，就是说我们模拟的环境被检测或者不够全，与真实浏览器相差很多。由于字节系列使用了jsvm技术，硬刚跟代码不太可能。应对方法就是插桩：代码里的这个String.fromCharCode字符串生成的地方 都插个桩，eg.</p>
+<p><img alt="image-20210719231724985" src="image-20210719231724985.png" /></p>
+<h2 id="2">2.补环境，更深，更隐蔽</h2>
+<p>当插完桩后，node douyin.js &gt; a.txt，在这个文件中我们会看到，类似箭头所指的这行都是环境检测，如webdriver，phantom，hook等等，也会发现很多我们之前没补过的环境PluginArray，toString等等。这里我就是从头对比本地执行和浏览器执行输出的日志差异一点一点补全的。</p>
+<p><img alt="image-20210719233012787" src="image-20210719233012787.png" /></p>
+<h2 id="3">3.需要注意的检测点(部分)</h2>
+<p>canvas</p>
+<p><img alt="image-20210719233652069" src="image-20210719233652069.png" /></p>
+<p>浏览器插件</p>
+<p><img alt="image-20210719233731956" src="image-20210719233731956.png" /></p>
+<p>XMLHttpRequest</p>
+<p><img alt="image-20210719233759408" src="image-20210719233759408.png" /></p>
+<p>toString</p>
+<p><img alt="image-20210719233838795" src="image-20210719233838795.png" /></p>
+<h2 id="4">4.看下效果</h2>
+<p><img alt="image-20210719234133939" src="image-20210719234133939.png" /></p>
+<p><img alt="image-20210719234109420" src="image-20210719234109420.png" /></p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>
