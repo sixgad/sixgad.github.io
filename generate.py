@@ -39,6 +39,7 @@ def deal_blogs():
     detail_template = env.get_template('ori_detail.html')
     # 获取blog_dir下每篇文章的文件夹
     blogs = os.listdir(default_config["blog_dir"])
+    blogs.sort(key=lambda x: int(x.split("-")[0]))
     for blog in blogs:
         # 遍历文章文件夹，找到.md文件
         flag = False
@@ -156,7 +157,7 @@ def deal_search():
 def deal_acg():
     env = Environment(loader=FileSystemLoader("basetp"))
     acg_template = env.get_template('ori_acg.html')
-    with open(f'{default_config["blog_dir"]}/0demo/acg.json', 'r', encoding='utf-8') as f:
+    with open(f'{default_config["blog_dir"]}/0-demo/acg.json', 'r', encoding='utf-8') as f:
         acg_data = json.load(f)
     corlors = ["table-active", "table-success",
                "table-warning", "table-danger"]
