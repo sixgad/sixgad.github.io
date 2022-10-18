@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>python hook实现loguru逗号拼接打印</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2021年9月20日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>python</a></span>
+
+                  <h1 id="python-hookloguru">python hook实现loguru逗号拼接打印</h1>
+<p>在python中使用loguru打印时，无法像print(a,b,c)那样输出一行a b c，本文对loguru进行hook修改来实现同样的语法。</p>
+<h2 id="1printloguru">1.print与loguru对比</h2>
+<p><strong>print打印“a” "b" "c"</strong></p>
+<blockquote>
+<p>print("a","b","c")</p>
+</blockquote>
+<p>输出</p>
+<p><img alt="image-20210920220224942" src="image-20210920220224942.png" /></p>
+<p><strong>loguru能不能使用同样的方式打印呢？</strong></p>
+<blockquote>
+<p>from loguru import logger</p>
+<p>logger.info("a","b","c")</p>
+</blockquote>
+<p>输出</p>
+<p><img src="image-20210920220358120.png" alt="image-20210920220358120" style="zoom:80%;" /></p>
+<p><strong>只能输出a,b和c不见了</strong>，说明logger.info不支持逗号分隔最后拼接成一行输出</p>
+<h2 id="2hookloguru">2.hook方式修改loguru</h2>
+<p>首先要定位修改的方法位置</p>
+<p>通过logger.info定位到loguru/_logger.py下的info方法，最终调用了__self._log方法</p>
+<p><img src="image-20210920220841982.png" alt="image-20210920220841982" style="zoom:80%;" /></p>
+<p>查看__self._log方法做了什么</p>
+<blockquote>
+<p>def _log(self, level_id, static_level_no, from_decorator, options, message, args, kwargs):</p>
+<p>​ ...</p>
+<p>​ ...</p>
+<p>​ "message": str(message)</p>
+<p>​ args = [arg() for arg in args]</p>
+<p>​ kwargs = {key: value() for key, value in kwargs.items()}</p>
+<p>​ elif args or kwargs:</p>
+<p>​     log_record["message"] = message.format(<em>args, </em>*kwargs)</p>
+</blockquote>
+<p>从这行args or kwargs，分析args和kwargs只要有一个存在就行</p>
+<p>改写思路是，忽略args的作用，默认只使用kwargs来做一些设置，将args转成str拼接成message打印</p>
+<p>稍微封装了一下的代码如下：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="c1"># @Time : 2021/9/18 10:22</span>
+<span class="c1"># @Author : zp</span>
+
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span> <span class="k">as</span> <span class="n">logclass</span>
+
+<span class="k">class</span> <span class="nc">Logging</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logtool</span> <span class="o">=</span> <span class="n">logclass</span>
+        <span class="c1"># 这是hook啊</span>
+        <span class="n">ori_log</span> <span class="o">=</span> <span class="n">logclass</span><span class="o">.</span><span class="n">_log</span>
+        <span class="k">def</span> <span class="nf">selflog</span><span class="p">(</span><span class="n">level_id</span><span class="p">,</span> <span class="n">static_level_no</span><span class="p">,</span> <span class="n">from_decorator</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="n">ori_log</span><span class="p">(</span><span class="n">level_id</span><span class="p">,</span> <span class="n">static_level_no</span><span class="p">,</span> <span class="n">from_decorator</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logtool</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">selflog</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">Logging</span><span class="p">()</span><span class="o">.</span><span class="n">logtool</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;test2.log&#39;</span><span class="p">)</span>
+    <span class="c1"># print可以逗号输出</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+    <span class="c1"># logger不可以逗号输出,只会输出第一个</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s2">&quot;adasda&quot;</span><span class="p">},</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;你好啊&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;this is test&quot;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+</code></pre></div>
+
+<p>输出如下：</p>
+<p><img alt="image-20210920221929690" src="image-20210920221929690.png" /></p>
+<p><strong>注意！！！纯属个人娱乐，未经过生产验证！！！</strong></p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

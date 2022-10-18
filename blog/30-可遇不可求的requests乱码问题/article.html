@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>可遇不可求的requests乱码问题</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2022年2月22日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider</a></span>
+
+                  <h1 id="requests">可遇不可求的requests乱码问题</h1>
+<p>偶尔遇到requests请求响应结果是乱码的问题，回头再想找这类网站时却怎么也找不到。本文例举一些常见情况，并通过查看requests源码，乱码问题迎刃而解、豁然开朗。</p>
+<h2 id="1encodingapparent_encoding">1.encoding&amp;apparent_encoding</h2>
+<p>别人家的网址：https://www.kanunu8.com/</p>
+<p>python请求代码如下</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.kanunu8.com/&quot;</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>打印结果，啥呀这是</p>
+<p><img src="image-20220222210501658.png" alt="image-20220222210501658" style="zoom:80%;" /></p>
+<p>首先想到encoding设置是否正确，原网页html源码</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;text/html; charset=gb2312&quot;</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>python requests包获取的encoding为</p>
+<ul>
+<li>res.encoding  ISO-8859-1</li>
+<li>res.apparent_encoding  GB2312</li>
+</ul>
+<p>encoding是ISO-8859-1</p>
+<p><strong>解决方案</strong>，既然requests默认识别的编码错误，我们手动指定</p>
+<div class="codehilite"><pre><span></span><code><span class="n">res</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;GB2312&#39;</span>
+<span class="c1"># 或</span>
+<span class="n">res</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span>
+</code></pre></div>
+
+<p><img src="image-20220222213141286.png" alt="image-20220222213141286" style="zoom:80%;" /></p>
+<p>看看代码为什么默认res.encoding这么重要的设置，还能识别错误</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># package requests utils</span>
+<span class="k">def</span> <span class="nf">get_encoding_from_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns encodings from given HTTP Header Dict.</span>
+
+<span class="sd">    :param headers: dictionary to extract encoding from.</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">content_type</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">_parse_content_type_header</span><span class="p">(</span><span class="n">content_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;charset&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;charset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;ISO-8859-1&#39;</span>
+
+    <span class="k">if</span> <span class="s1">&#39;application/json&#39;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="c1"># Assume UTF-8 based on RFC 4627: https://www.ietf.org/rfc/rfc4627.txt since the charset was unset</span>
+        <span class="k">return</span> <span class="s1">&#39;utf-8&#39;</span>
+</code></pre></div>
+
+<p>原来是人家网站返回的response headers没有设置charset</p>
+<p><img src="image-20220222212300912.png" alt="image-20220222212300912" style="zoom:80%;" /></p>
+<p><strong>为什么apparent_encoding能正确识别网页编码？</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># package requests models</span>
+<span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">apparent_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The apparent encoding, provided by the chardet library.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">chardet</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s1">&#39;encoding&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>chardet是python的一个第三方编码检测模块，通过它对网页编码进行检测</p>
+<h2 id="2gb2312gb18030">2.GB2312&amp;GB18030</h2>
+<p>在（一）中通过设置res.encoding = 'GB2312'已经解决部分问题，实际上还有部分乱码，比如网页中的“ –”显示为乱码了</p>
+<p><img alt="image-20220222212911654" src="image-20220222212911654.png" /></p>
+<p>原因</p>
+<ul>
+<li>GB2312：基本满足了汉字的计算机处理需要，对于人名、古汉语等方面出现的罕用字，GB 2312不能处理。</li>
+<li>GB2312：由中国国家标准总局1980年发布，1981年5月1日开始实施。</li>
+<li>GB2312：基本集共收入汉字6763个和非汉字图形字符682个。</li>
+</ul>
+<p><strong>总之，GB18030更新、更全、更兼容，建议以后代码这样写</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;gbk&#39;</span> <span class="ow">or</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;gb2312&#39;</span><span class="p">:</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;GB18030&#39;</span>
+</code></pre></div>
+
+<p><img src="image-20220222214010191.png" alt="image-20220222214010191" style="zoom:80%;" /></p>
+<h2 id="3gzip-deflate-br">3.gzip, deflate, br压缩</h2>
+<p>基本遇不到，因为requests使用的urllib3已经处理了服务端返回压缩文本</p>
+<p><img src="image-20220222214336183.png" alt="image-20220222214336183" style="zoom:80%;" /></p>
+<p>其他的一些库，如urllib就没有处理</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://paker.net.cn/anti/charset&#39;</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;*/*&#39;</span><span class="p">)</span>
+<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept-Encoding&#39;</span><span class="p">,</span> <span class="s1">&#39;gzip, deflate, br&#39;</span><span class="p">)</span>
+<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept-Language&#39;</span><span class="p">,</span> <span class="s1">&#39;zh-CN,zh;q=0.8,en;q=0.6&#39;</span><span class="p">)</span>
+<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cache-Control&#39;</span><span class="p">,</span> <span class="s1">&#39;max-age=0&#39;</span><span class="p">)</span>
+<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Connection&#39;</span><span class="p">,</span> <span class="s1">&#39;keep-alive&#39;</span><span class="p">)</span>
+<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">,</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+
+<p><img alt="image-20220222214537112" src="image-20220222214537112.png" /></p>
+<p><strong>可能会遇到，requests请求不能处自动解压的情况，如</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://paker.net.cn/anti/charset&#39;</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Accept-Encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;gzip, deflate, br&#39;</span><span class="p">,</span>
+    <span class="c1"># &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36&#39;,</span>
+    <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;</span><span class="p">,</span>
+    <span class="c1"># &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,</span>
+<span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+
+<p><img src="image-20220222214812534.png" alt="image-20220222214812534" style="zoom:80%;" /></p>
+<p><strong>解决方案：</strong></p>
+<p>方法一、headers里的Accept-Encoding告诉服务端我支持这几种压缩，把它去掉就好了，浏览器是默认支持的</p>
+<p>方法二、通过阅读代码我们知道是根据urllib3是根据response headers里的<strong>content-encoding</strong>来选择对应的解压方法</p>
+<p><img src="image-20220222215217189.png" alt="image-20220222215217189" style="zoom:80%;" /></p>
+<p>如果服务端识别出你是一个爬虫请求，比如UA不是正常的浏览器，服务端不设置response headers里的<strong>content-encoding</strong>，</p>
+<p>这样requests就没办法自己解压了，可以自己调用gzip解压，或者模拟请求更加真实一点</p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

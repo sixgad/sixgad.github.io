@@ -54,7 +54,6 @@ def deal_blogs():
         if flag:
             # 读取.md
             with open(f'{default_config["blog_dir"]}/{blog}/{article}', 'r', encoding='utf-8') as f:
-                print("deal", blog)
                 mdobj = markdown.Markdown(extensions=default_config["md_ext"])
                 html = mdobj.convert(f.read())
                 tags = mdobj.Meta.get('tags')
@@ -63,6 +62,7 @@ def deal_blogs():
                 private = mdobj.Meta.get('private', ['False'])[0]
                 # 私有博客不生成html展示(只能说相对私有...)
                 if 'no' in private.lower() or 'false' in private.lower():
+                    print("deal", blog)
                     # # 图片路径处理
                     # shtml = etree.HTML(html)
                     # # img src不包含http说明为本地图片
@@ -91,6 +91,8 @@ def deal_blogs():
                             "href": f'../{default_config["blog_dir"]}/{blog}/article.html'
                         }
                     )
+                else:
+                    print("私密文章", blog)
 
 
 def deal_index():

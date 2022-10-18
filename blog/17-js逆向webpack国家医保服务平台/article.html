@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>js逆向webpack国家医保服务平台</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2021年8月29日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider js逆向</a></span>
+
+                  <h1 id="jswebpack">js逆向webpack国家医保服务平台</h1>
+<p>遇到webpack别懵，一般来说难度低于其他的js加密，了解了webpack的结构样式，扣起来就是缺啥方法直接复制粘贴即可。</p>
+<p>本文以国家医保服务平台为例，记录下js webpack的逆向思路与方法。网站地址(base64)：</p>
+<blockquote>
+<p>aHR0cHM6Ly9mdXd1Lm5oc2EuZ292LmNuL25hdGlvbmFsSGFsbFN0LyMvc2VhcmNoL21lZGljYWw=</p>
+</blockquote>
+<h2 id="1">1.抓包&amp;定位</h2>
+<p><img src="image-20210828215120605.png" alt="image-20210828215120605" style="zoom:80%;" /></p>
+<p>好家伙，header，post data里面均有加密的参数，如<strong>x-tif-nonce</strong>，<strong>x-tif-signature</strong>，<strong>signData</strong>等</p>
+<p>看signData顺眼，全局搜索一下。很快，一下子定位到app js中，header和post data参数加密逻辑在一起，幸福啊！</p>
+<p><img alt="image-20210828215608939" src="image-20210828215608939.png" /></p>
+<h2 id="2webpack">2.先了解下webpack的基本结构</h2>
+<p>Webpack 是一个前端资源加载/<strong>打包</strong>工具。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。</p>
+<p>整体上看是一个自执行函数，传入的参数一般为object或者数组（内容都是function定义的一个一个方法）</p>
+<p><img alt="image-20210828220027316" src="image-20210828220027316.png" /></p>
+<p>必不可少的加载器，关键字exports，一般长这样</p>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="kd">function</span><span class="w"> </span><span class="nx">o</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">])</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">].</span><span class="nx">exports</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">i</span><span class="o">:</span><span class="w"> </span><span class="nx">t</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">l</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="mf">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">exports</span><span class="o">:</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="nx">t</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">o</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="nx">i</span><span class="p">.</span><span class="nx">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="3webpack">3.webpack扣取技巧</h2>
+<p>可以看下我们第一步定位的加密参数生成的app js有多大，7万多行，到时候比较一下抠出来后会有多少行（结论8千多行）</p>
+<p><img alt="image-20210828220639295" src="image-20210828220639295.png" /></p>
+<p>先去掉这个自执行函数的参数，复制到本地，大概这样</p>
+<p><img src="image-20210828221259855.png" alt="image-20210828221259855" style="zoom:80%;" /></p>
+<p>第一步定位到的加密参数生成位置 e.data.signData = p(e)，是在7d923方法里</p>
+<p><img alt="image-20210828221414794" src="image-20210828221414794.png" /></p>
+<p>把7d923复制到自执行方法的参数中去</p>
+<p><img src="image-20210828222002973.png" alt="image-20210828222002973" style="zoom:80%;" /></p>
+<p>不可能就这么简单，运行会报错，Cannot read property 'call' of undefined</p>
+<p><img alt="image-20210828222051265" src="image-20210828222051265.png" /></p>
+<p>我们在报错那行，打印下</p>
+<p><img src="image-20210828222134530.png" alt="image-20210828222134530" style="zoom:80%;" /></p>
+<p>输出b639，也就是这个方法为undefined，去app js里面复制下来</p>
+<p><img alt="image-20210828222313238" src="image-20210828222313238.png" /></p>
+<p>添加到自执行方法的参数里</p>
+<p><img alt="image-20210828222520508" src="image-20210828222520508.png" /></p>
+<p>重复操作即可，最后把自执行方法里，我们要调用的方法暴露给全局即可</p>
+<p><img alt="image-20210828222916301" src="image-20210828222916301.png" /></p>
+<p>这里的window.aaa和window.bbb分别为</p>
+<blockquote>
+<p>请求参数加密 ：</p>
+<p>根据请求参数signData去全局搜索，发现是webpack打包的js</p>
+<p>请求返回的结果需要解密：</p>
+<p>根据响应返回的数据，全局搜索 encData 定位到 var n = e.from(t.data.data.encData, "hex")</p>
+</blockquote>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

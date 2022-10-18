@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>Docker常用命令</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2021年8月25日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>docker linux</a></span>
+
+                  <h1 id="docker">Docker常用命令</h1>
+<p>整理了Docker常用命令，记不住的方便查找</p>
+<h2 id="_1">安装卸载</h2>
+<p><strong>卸载旧版Docker</strong></p>
+<p>较旧的 Docker 版本称为 docker 或 docker-engine 。如果已安装这些程序，请卸载它们以及相关的依赖项。</p>
+<div class="codehilite"><pre><span></span><code>sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+</code></pre></div>
+
+<p><strong>安装Docker</strong></p>
+<p>首次安装 Docker 之前，需要添加 Docker 安装源</p>
+<div class="codehilite"><pre><span></span><code>sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+</code></pre></div>
+
+<p>安装最新版本的 Docker</p>
+<div class="codehilite"><pre><span></span><code>sudo yum install -y docker-ce docker-ce-cli containerd.io
+</code></pre></div>
+
+<p><strong>启动docker</strong>，类似还有<strong>status</strong> <strong>stop restart</strong></p>
+<div class="codehilite"><pre><span></span><code>sudo systemctl start docker
+</code></pre></div>
+
+<h2 id="hello-world">国际惯例，hello world</h2>
+<blockquote>
+<p>docker run hello-world</p>
+</blockquote>
+<p>运行上述命令，Docker 首先会检查本地是否有<code>hello-world</code>这个镜像，如果发现本地没有这个镜像，Docker 就会去 Docker Hub 官方仓库下载此镜像，然后运行它。最后我们看到该镜像输出 "Hello from Docker!" 并退出。</p>
+<p><img alt="image-20210824205220837" src="image-20210824205220837.png" /></p>
+<h2 id="_2">常用命令</h2>
+<p><strong>docker版本</strong></p>
+<blockquote>
+<p>docker -v</p>
+</blockquote>
+<p><strong>查看本地镜像</strong></p>
+<blockquote>
+<p>docker images</p>
+</blockquote>
+<p><img alt="image-20210824205753292" src="image-20210824205753292.png" /></p>
+<p><strong>查看运行中的容器</strong></p>
+<blockquote>
+<p>docker ps</p>
+</blockquote>
+<p><img alt="image-20210824205922005" src="image-20210824205922005.png" /></p>
+<p><strong>查看所有容器</strong></p>
+<blockquote>
+<p>docker ps -a</p>
+</blockquote>
+<p><img alt="image-20210824210012710" src="image-20210824210012710.png" /></p>
+<p><strong>删除镜像</strong></p>
+<blockquote>
+<p>docker rmi centos          # 根据 REPOSITORY 来删除镜像</p>
+<p>docker rmi centos:v1       # 根据 REPOSITORY:TAG 来删除镜像</p>
+<p>docker rmi 1e1148e4cc2c    # 根据 IMAGE ID 来删除镜像，同时会删除所有该镜像的TAG镜像</p>
+<p>docker rmi -f 1e1148e42c   # 强制删除</p>
+</blockquote>
+<p><strong>删除容器</strong></p>
+<blockquote>
+<p>docker rm hopeful_hypatia    # 根据NAMES来删除容器</p>
+<p>docker rm 467259cfb10a       # 根据CONTAINER ID来删除镜像</p>
+<p>docker rm -f 强制删除</p>
+</blockquote>
+<p><strong>拉取镜像</strong></p>
+<blockquote>
+<p>docker pull busybox</p>
+</blockquote>
+<p>命令格式一般为 docker pull [Registry]/[Repository]/[Image]:[Tag]</p>
+<ul>
+<li>Registry 为注册服务器，Docker 默认会从 docker.io 拉取镜像，如果你有自己的镜像仓库，可以把 Registry 替换为自己的注册服务器。</li>
+<li>Repository 为镜像仓库，通常把一组相关联的镜像归为一个镜像仓库，<code>library</code>为 Docker 默认的镜像仓库。</li>
+<li>Image 为镜像名称。</li>
+<li>Tag 为镜像的标签，如果你不指定拉取镜像的标签，默认为<code>latest</code>。</li>
+</ul>
+<p>可自行去dockerhub寻找镜像，<a href="https://hub.docker.com/">dockerhub</a></p>
+<p><strong>重命名镜像</strong></p>
+<blockquote>
+<p>docker tag busybox:latest mybusybox:latest</p>
+</blockquote>
+<p><strong>构建镜像</strong></p>
+<p>构建镜像主要有两种方式：</p>
+<ol>
+<li>使用<code>docker commit</code>命令从运行中的容器提交为镜像；</li>
+<li>使用<code>docker build</code>命令从 Dockerfile 构建镜像。</li>
+</ol>
+<p>方法一</p>
+<blockquote>
+<p>docker run --rm --name=busybox -it busybox sh</p>
+<p>另开一个窗口执行</p>
+<p>docker commit busybox busybox:hello</p>
+<p>此时已经生成了busybox:hello这个新的镜像</p>
+</blockquote>
+<p>方法二，最重要也是最常用的镜像构建方式：Dockerfile</p>
+<p>Dockerfile文件这样写</p>
+<div class="codehilite"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.8-slim-buster</span>
+<span class="k">COPY</span><span class="w"> </span>. /root/smallpy/
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/root/smallpy/</span>
+<span class="k">RUN</span><span class="w"> </span>pip3 install -r requirements.txt <span class="o">&amp;&amp;</span> ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;Asia/Shanghai&quot;</span> &gt;&gt; /etc/timezone
+<span class="k">CMD</span><span class="w"> </span>python3 test.py
+</code></pre></div>
+
+<p>我们来逐行看一下</p>
+<blockquote>
+<p>FROM python:3.8-slim-buster   #要基于python:3.8-slim-buster这个镜像来构建自定义镜像，slim更轻更小</p>
+<p>COPY . /root/smallpy/                 #拷贝本地当前文件夹内容  到容器内/root/smallpy/ 目录下</p>
+<p>WORKDIR /root/smallpy/           #定容器的一个目录， 容器启动时执行的命令（RUN，CMD等）会在该目录下执行</p>
+<p>RUN pip3 install -r requirements.txt   #build时，容器内运行 pip3 install -r requirements.txt命令与时区设置</p>
+<p>CMD python3 test.py   #run时运行python3 test.py命令</p>
+</blockquote>
+<p>执行</p>
+<blockquote>
+<p>docker build -t smallpyenv .</p>
+</blockquote>
+<p>就会生成smallpyenv:latest，这样一个镜像了</p>
+<p><strong>Dockerfile正确设置时区</strong></p>
+<p>我们从 Docker Hub 拉取的官方操作系统镜像大多数都是 UTC 时间（世界标准时间）。如果你想要在容器中使用中国区标准时间（东八区），请根据使用的操作系统修改相应的时区信息，下面我介绍几种常用操作系统的修改方式：</p>
+<p>镜像<strong>Ubuntu 和Debian</strong> 系统可以向 Dockerfile 中添加以下指令：</p>
+<blockquote>
+<p>RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; echo "Asia/Shanghai" &gt;&gt; /etc/timezone</p>
+</blockquote>
+<p>镜像<strong>CentOS</strong> 系统则向 Dockerfile 中添加以下指令：</p>
+<blockquote>
+<p>RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</p>
+</blockquote>
+<p><strong>启动容器</strong></p>
+<ol>
+<li>使用<code>docker start</code>命令基于已经创建好的容器直接启动 。</li>
+<li>使用<code>docker run</code>命令直接基于镜像新建一个容器并启动，相当于先执行<code>docker create</code>命令从镜像创建容器，然后再执行<code>docker start</code>命令启动容器。</li>
+</ol>
+<p>使用start启动</p>
+<p><img alt="image-20210824212253375" src="image-20210824212253375.png" /></p>
+<p>使用run命令</p>
+<blockquote>
+<p>OPTIONS说明：</p>
+<ul>
+<li><strong>-d:</strong> 后台运行容器，并返回容器ID</li>
+<li><strong>--name=test1:</strong> 为容器指定一个名称</li>
+<li><strong>-p:</strong> 指定端口映射，格式为：<strong>主机(宿主)端口:容器端口</strong></li>
+<li><strong>-i:</strong> 以交互模式运行容器，通常与 -t 同时使用</li>
+<li><strong>-v:</strong>持久化，宿主机上的目录挂载到镜像里,冒号前为宿主机目录，必须为绝对路径，冒号后为镜像内挂载的路径</li>
+<li><strong>--rm:</strong>容器退出后自动清理删除，方便在临时测试使用</li>
+</ul>
+</blockquote>
+<p>示例：</p>
+<blockquote>
+<p>docker run --name=sm1 -d smallpyenv       #设置容器名sm1，并后台运行容器</p>
+<p>docker run --name=sm2 --rm -it smallpyenv sh   #设置容器名sm2，进入shell运行容器，退出后自动清理删除</p>
+</blockquote>
+<p><strong>停止容器</strong></p>
+<blockquote>
+<p>docker stop sm1        #停止</p>
+<p>docker restart sm1    #重启</p>
+</blockquote>
+<p><strong>进入容器</strong></p>
+<p>处于运行状态的容器可以通过`docker exec进入容器内部</p>
+<blockquote>
+<p>docker exec -it busybox sh</p>
+</blockquote>
+<p><strong>获取容器的日志</strong></p>
+<blockquote>
+<p><code>docker logs -f mypyenv</code></p>
+</blockquote>
+<p><strong>导出容器</strong></p>
+<p>我们可以使用<code>docker export CONTAINER</code>命令导出一个容器到文件，不管此时该容器是否处于运行中的状态</p>
+<blockquote>
+<p>docker export sm1 &gt; small.tar</p>
+</blockquote>
+<p><img alt="image-20210824220041056" src="image-20210824220041056.png" /></p>
+<p><strong>导入容器</strong></p>
+<p>通过<code>docker export</code>命令导出的文件，可以使用<code>docker import</code>命令导入，执行完<code>docker import</code>后会变为本地镜像，最后再使用<code>docker run</code>命令启动该镜像，这样我们就实现了容器的迁移</p>
+<blockquote>
+<p>docker import small.tar smallenv:test</p>
+</blockquote>
+<p><strong>使用公共镜像仓库分发和存储镜像</strong></p>
+<p>登录dockerhub，<a href="https://hub.docker.com/">dockerhu </a></p>
+<p>创建仓库</p>
+<p><img src="image-20210824222723119.png" alt="image-20210824222723119" style="zoom:80%;" /></p>
+<p>在推送镜像仓库前，我们需要使用<code>docker login</code>命令先登录一下镜像服务器，因为只有已经登录的用户才可以推送镜像到仓库。</p>
+<p><strong>在本地镜像推送到自定义仓库前，我们需要先把镜像“重命名”一下，才能正确推送到自己创建的镜像仓库中，使用<code>docker tag</code>命令将镜像“重命名”：</strong></p>
+<blockquote>
+<p>docker tag smallpyenv testuser/smallpyenv</p>
+</blockquote>
+<p><strong>镜像“重命名”后使用<code>docker push</code>命令就可以推送镜像到自己创建的仓库中了</strong></p>
+<blockquote>
+<p>docker push testuser/smallpyenv</p>
+</blockquote>
+<p><strong>从镜像仓库拉取镜像</strong></p>
+<blockquote>
+<p>docker pull testuser/smallpyenv</p>
+</blockquote>
+<h2 id="_3">容器编排</h2>
+<p><strong>Docker Compose</strong></p>
+<p>Docker Compose 是 Docker 官方的单机多容器管理系统，它本质是一个 Python 脚本，它通过解析用户编写的 yaml 文件，调用 Docker API 实现动态的创建和管理多个容器</p>
+<p><strong>安装 Docker Compose</strong></p>
+<blockquote>
+<p>curl -O "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"</p>
+<p>chmod -R 777 docker-compose-Linux-x86_64</p>
+<p>mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose</p>
+<p>docker-compose --version</p>
+</blockquote>
+<p><strong>编写 Docker Compose 模板文件</strong></p>
+<p>编写docker-compose.yml</p>
+<blockquote>
+<p>version: '3'
+services:
+  spider:
+    image: smallpyenv</p>
+</blockquote>
+<p><strong>启动&amp;停止</strong></p>
+<blockquote>
+<p>docker-compose up -d</p>
+<p>docker-compose stop</p>
+</blockquote>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>
