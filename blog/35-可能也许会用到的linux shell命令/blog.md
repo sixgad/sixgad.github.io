@@ -28,7 +28,7 @@ awk 'END{print NR}' *.json
 **进阶：结合xargs，统计22年10月所有json文件行数**
 
 ```shell
-ls -al | grep '202210*'| awk '{print $9}'  | xargs -I {} awk 'END{print NR}' {} | awk '{sum+=$1} END{print "sum="sum}'
+ls -al | grep '202210'| awk '{print $9}'  | xargs -I {} awk 'END{print NR}' {} | awk '{sum+=$1} END{print "sum="sum}'
 ```
 
 

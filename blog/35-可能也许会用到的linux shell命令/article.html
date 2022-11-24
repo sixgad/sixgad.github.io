@@ -136,7 +136,7 @@
 </code></pre></div>
 
 <p><strong>进阶：结合xargs，统计22年10月所有json文件行数</strong></p>
-<div class="codehilite"><pre><span></span><code>ls -al <span class="p">|</span> grep <span class="s1">&#39;202210*&#39;</span><span class="p">|</span> awk <span class="s1">&#39;{print $9}&#39;</span>  <span class="p">|</span> xargs -I <span class="o">{}</span> awk <span class="s1">&#39;END{print NR}&#39;</span> <span class="o">{}</span> <span class="p">|</span> awk <span class="s1">&#39;{sum+=$1} END{print &quot;sum=&quot;sum}&#39;</span>
+<div class="codehilite"><pre><span></span><code>ls -al <span class="p">|</span> grep <span class="s1">&#39;202210&#39;</span><span class="p">|</span> awk <span class="s1">&#39;{print $9}&#39;</span>  <span class="p">|</span> xargs -I <span class="o">{}</span> awk <span class="s1">&#39;END{print NR}&#39;</span> <span class="o">{}</span> <span class="p">|</span> awk <span class="s1">&#39;{sum+=$1} END{print &quot;sum=&quot;sum}&#39;</span>
 </code></pre></div>
 
 <p><strong>批量kill程序</strong></p>
