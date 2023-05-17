@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -140,29 +140,29 @@
 <p>按照正常的逻辑分析，接口响应的密文数据肯定会被前端js再处理解密，最终渲染到网页上显示出正常数据</p>
 <p>随便找了一段正向开发的js请求代码，先学习一下：</p>
 <p>XMLHttpRequest.onreadystatechange = callback；当 readyState 的值改变的时候，callback 函数会被调用。</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">xhr</span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">(),</span><span class="w"></span>
-<span class="w"> </span><span class="nx">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://developer.mozilla.org/&quot;</span><span class="p">;</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="kd">var</span> <span class="nx">xhr</span><span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">(),</span>
+ <span class="nx">method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+ <span class="nx">url</span> <span class="o">=</span> <span class="s2">&quot;https://developer.mozilla.org/&quot;</span><span class="p">;</span>
 
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span><span class="w"> </span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span><span class="w"></span>
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="k">if</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">.</span><span class="nx">DONE</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span><span class="w"> </span><span class="c1">//打印响应内容</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span><span class="w"></span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="nx">XMLHttpRequest</span><span class="p">.</span><span class="nx">DONE</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span> <span class="c1">//打印响应内容</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
 </code></pre></div>
 
 <p>按照这个思路，我们在xhr断点断住的时候去寻找 onreadystatechange</p>
-<div class="codehilite"><pre><span></span><code><span class="nx">d</span><span class="p">.</span><span class="nx">onreadystatechange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                 </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">d</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">readyState</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="mf">0</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">status</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="nx">d</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                 <span class="k">if</span> <span class="p">(</span><span class="nx">d</span> <span class="o">&amp;&amp;</span> <span class="mi">4</span> <span class="o">===</span> <span class="nx">d</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!==</span> <span class="nx">d</span><span class="p">.</span><span class="nx">status</span>
 </code></pre></div>
 
 <p>跟进，最终定位到解密函数的位置</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">h</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Base64</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">AES</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="kd">function</span> <span class="nx">h</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+ <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+   <span class="p">,</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Base64</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+   <span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">AES</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">f</span><span class="p">,</span> <span class="p">{</span>
 </code></pre></div>
 
 <p>采用AES解密，可以用python实现，或者使用今天推荐的crypto-js这个js加密算法库</p>
@@ -173,9 +173,9 @@
 <p><code>npm install crypto-js</code></p>
 </blockquote>
 <p><em>典型API调用签名用例的ES6导入：</em></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">sha256</span> <span class="kn">from</span> <span class="s1">&#39;crypto-js/sha256&#39;</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">hmacSHA512</span> <span class="kn">from</span> <span class="s1">&#39;crypto-js/hmac-sha512&#39;</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">Base64</span> <span class="kn">from</span> <span class="s1">&#39;crypto-js/enc-base64&#39;</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">sha256</span> <span class="nn">from</span> <span class="s1">&#39;crypto-js/sha256&#39;</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">hmacSHA512</span> <span class="nn">from</span> <span class="s1">&#39;crypto-js/hmac-sha512&#39;</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">Base64</span> <span class="nn">from</span> <span class="s1">&#39;crypto-js/enc-base64&#39;</span><span class="p">;</span>
 
 <span class="n">const</span> <span class="n">message</span><span class="p">,</span> <span class="n">nonce</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">privateKey</span><span class="p">;</span> <span class="o">//</span> <span class="o">...</span>
 <span class="n">const</span> <span class="n">hashDigest</span> <span class="o">=</span> <span class="n">sha256</span><span class="p">(</span><span class="n">nonce</span> <span class="o">+</span> <span class="n">message</span><span class="p">);</span>
@@ -183,69 +183,69 @@
 </code></pre></div>
 
 <p><em>模块化包括：</em></p>
-<div class="codehilite"><pre><span></span><code><span class="k">var</span><span class="w"> </span><span class="n">AES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">require</span><span class="p">(</span><span class="s2">&quot;crypto-js/aes&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="k">var</span><span class="w"> </span><span class="n">SHA256</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">require</span><span class="p">(</span><span class="s2">&quot;crypto-js/sha256&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="o">...</span><span class="w"></span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">SHA256</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="p">));</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="err">var AES = require(&quot;crypto-js/aes&quot;);</span>
+<span class="err">var SHA256 = require(&quot;crypto-js/sha256&quot;);</span>
+<span class="err">...</span>
+<span class="err">console.log(SHA256(&quot;Message&quot;));</span>
 </code></pre></div>
 
 <p><em>包括所有库，用于访问其他方法</em>：(就是全部加密算法一起引入)</p>
-<div class="codehilite"><pre><span></span><code><span class="k">var</span><span class="w"> </span><span class="n">CryptoJS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">require</span><span class="p">(</span><span class="s2">&quot;crypto-js&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">CryptoJS</span><span class="o">.</span><span class="n">HmacSHA1</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Key&quot;</span><span class="p">));</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="err">var CryptoJS = require(&quot;crypto-js&quot;);</span>
+<span class="err">console.log(CryptoJS.HmacSHA1(&quot;Message&quot;, &quot;Key&quot;));</span>
 </code></pre></div>
 
 <p><strong>方式二、直接导出文件使用</strong></p>
 <p>在官方项目地址里，下载：https://github.com/brix/crypto-js/releases</p>
 <p><img alt="image-20210903225508567" src="image-20210903225508567.png" /></p>
 <p>把crypto-js.js，稍作修改(就是把原代码的头部稍微修改了下)，就可以直接使用了，代码如下</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">();</span><span class="w"></span>
-<span class="kd">function</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">(){</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="kd">var</span> <span class="nx">CryptoJS</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CryptoJS</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nx">CryptoJS</span><span class="p">(){</span>
 
-<span class="w">    </span><span class="cm">/*globals window, global, require*/</span><span class="w"></span>
+    <span class="cm">/*globals window, global, require*/</span>
 
-<span class="w">    </span><span class="cm">/**</span>
+    <span class="cm">/**</span>
 <span class="cm">     * CryptoJS core components.</span>
-<span class="cm">     */</span><span class="w"></span>
+<span class="cm">     */</span>
 
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nb">Math</span><span class="p">,</span><span class="w"> </span><span class="kc">undefined</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">省略</span><span class="err">。。。</span><span class="w"></span>
-<span class="w">    </span><span class="nx">省略</span><span class="err">。。。</span><span class="w"></span>
-<span class="w">    </span><span class="nx">省略</span><span class="err">。。。</span><span class="w"></span>
-<span class="w">    </span><span class="nx">C</span><span class="p">.</span><span class="nx">RabbitLegacy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">StreamCipher</span><span class="p">.</span><span class="nx">_createHelper</span><span class="p">(</span><span class="nx">RabbitLegacy</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}());</span><span class="w"></span>
+    <span class="kd">var</span> <span class="nx">CryptoJS</span> <span class="o">=</span> <span class="nx">CryptoJS</span> <span class="o">||</span> <span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nb">Math</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">省略</span><span class="err">。。。</span>
+    <span class="nx">省略</span><span class="err">。。。</span>
+    <span class="nx">省略</span><span class="err">。。。</span>
+    <span class="nx">C</span><span class="p">.</span><span class="nx">RabbitLegacy</span> <span class="o">=</span> <span class="nx">StreamCipher</span><span class="p">.</span><span class="nx">_createHelper</span><span class="p">(</span><span class="nx">RabbitLegacy</span><span class="p">);</span>
+    <span class="p">}());</span>
 
 
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">;</span><span class="w"></span>
+    <span class="k">return</span> <span class="nx">CryptoJS</span><span class="p">;</span>
 
-<span class="p">};</span><span class="w"></span>
+<span class="p">};</span>
 </code></pre></div>
 
 <h2 id="3web">3.web端解密实现</h2>
-<div class="codehilite"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">mainfunc</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;jo8j9wGw%6H***&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;0123456789****&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Base64</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">AES</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">iv</span><span class="o">:</span><span class="w"> </span><span class="nx">m</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">mode</span><span class="p">.</span><span class="nx">CBC</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">padding</span><span class="o">:</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">pad</span><span class="p">.</span><span class="nx">Pkcs7</span><span class="w"></span>
-<span class="w">    </span><span class="p">})</span><span class="w"></span>
-<span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="kd">function</span> <span class="nx">mainfunc</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;jo8j9wGw%6H***&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;0123456789****&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+      <span class="p">,</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Base64</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+      <span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">AES</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">f</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">iv</span><span class="o">:</span> <span class="nx">m</span><span class="p">,</span>
+        <span class="nx">mode</span><span class="o">:</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">mode</span><span class="p">.</span><span class="nx">CBC</span><span class="p">,</span>
+        <span class="nx">padding</span><span class="o">:</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">pad</span><span class="p">.</span><span class="nx">Pkcs7</span>
+    <span class="p">})</span>
+      <span class="p">,</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+<span class="p">}</span>
 </code></pre></div>
 
 <h2 id="4">4.小程序端解密实现</h2>
 <p>当你以为小程序和web端用了一套加解密方法时，你就错了，需要反编译小程序，直接搜索.pad.Pkcs7定位，最终的解密方法为</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;cd3b2e6d63473c******&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="kd">function</span><span class="w"> </span><span class="nx">deCrypt</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">AES</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">mode</span><span class="p">.</span><span class="nx">ECB</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">padding</span><span class="o">:</span><span class="w"> </span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">pad</span><span class="p">.</span><span class="nx">Pkcs7</span><span class="w"></span>
-<span class="w">    </span><span class="p">});</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">d</span><span class="p">));</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;cd3b2e6d63473c******&quot;</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">deCrypt</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">AES</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">mode</span><span class="o">:</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">mode</span><span class="p">.</span><span class="nx">ECB</span><span class="p">,</span>
+        <span class="nx">padding</span><span class="o">:</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">pad</span><span class="p">.</span><span class="nx">Pkcs7</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">d</span><span class="p">));</span>
+<span class="p">};</span>
 </code></pre></div>
 
                 </div>

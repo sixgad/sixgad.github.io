@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -151,23 +151,23 @@
 <p>使用rpc调用+<a href="https://github.com/sixgad/py-jsrpc">py-jsrpc</a>，只能说不要太简单，具体操作如下：</p>
 <p><strong>1.修改client.js</strong></p>
 <p>直接拉倒底部，注册action “encry”</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">//demo</span><span class="w"></span>
-<span class="c1">//group很重要，每个项目应该有一个独立的group，比如爬百度时group=baidu-group，爬抖音时group=dy-group,</span><span class="w"></span>
-<span class="c1">//可以同时存在多个group，互不影响</span><span class="w"></span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">JsClient</span><span class="p">(</span><span class="s2">&quot;ws://localhost:6789/register?group=ws-group&amp;clientId=&quot;</span><span class="o">+</span><span class="nx">guid</span><span class="p">());</span><span class="w"></span>
-<span class="c1">//获取服务器时间</span><span class="w"></span>
-<span class="nx">client</span><span class="p">.</span><span class="nx">registerAction</span><span class="p">(</span><span class="s2">&quot;clientTime&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">resolve</span><span class="p">,</span><span class="nx">reject</span><span class="w"> </span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">());</span><span class="w"></span>
-<span class="p">})</span><span class="w"></span>
-<span class="c1">//encry</span><span class="w"></span>
-<span class="nx">client</span><span class="p">.</span><span class="nx">registerAction</span><span class="p">(</span><span class="s2">&quot;encry&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="nx">resolve</span><span class="p">,</span><span class="nx">reject</span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//num 是调用http接口时我们传递过来的参数</span><span class="w"></span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">request</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//直接抄原网页上的调用</span><span class="w"></span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">encry</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//返回数据</span><span class="w"></span>
-<span class="w">    </span><span class="nx">resolve</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span><span class="w"></span>
-<span class="p">})</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="c1">//demo</span>
+<span class="c1">//group很重要，每个项目应该有一个独立的group，比如爬百度时group=baidu-group，爬抖音时group=dy-group,</span>
+<span class="c1">//可以同时存在多个group，互不影响</span>
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JsClient</span><span class="p">(</span><span class="s2">&quot;ws://localhost:6789/register?group=ws-group&amp;clientId=&quot;</span><span class="o">+</span><span class="nx">guid</span><span class="p">());</span>
+<span class="c1">//获取服务器时间</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">registerAction</span><span class="p">(</span><span class="s2">&quot;clientTime&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">resolve</span><span class="p">,</span><span class="nx">reject</span> <span class="p">){</span>
+    <span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span><span class="p">());</span>
+<span class="p">})</span>
+<span class="c1">//encry</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">registerAction</span><span class="p">(</span><span class="s2">&quot;encry&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="nx">resolve</span><span class="p">,</span><span class="nx">reject</span><span class="p">){</span>
+    <span class="c1">//num 是调用http接口时我们传递过来的参数</span>
+    <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="nx">request</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">];</span>
+    <span class="c1">//直接抄原网页上的调用</span>
+    <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">encry</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span>
+    <span class="c1">//返回数据</span>
+    <span class="nx">resolve</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span>
+<span class="p">})</span>
 </code></pre></div>
 
 <p><strong>2.启动web_server.py &amp; 浏览器注入js</strong></p>

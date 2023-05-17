@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -216,11 +216,11 @@
 </blockquote>
 <p>方法二，最重要也是最常用的镜像构建方式：Dockerfile</p>
 <p>Dockerfile文件这样写</p>
-<div class="codehilite"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.8-slim-buster</span>
-<span class="k">COPY</span><span class="w"> </span>. /root/smallpy/
-<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/root/smallpy/</span>
-<span class="k">RUN</span><span class="w"> </span>pip3 install -r requirements.txt <span class="o">&amp;&amp;</span> ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;Asia/Shanghai&quot;</span> &gt;&gt; /etc/timezone
-<span class="k">CMD</span><span class="w"> </span>python3 test.py
+<div class="codehilite"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.8-slim-buster</span>
+<span class="k">COPY</span> . /root/smallpy/
+<span class="k">WORKDIR</span><span class="s"> /root/smallpy/</span>
+<span class="k">RUN</span> pip3 install -r requirements.txt <span class="o">&amp;&amp;</span> ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;Asia/Shanghai&quot;</span> &gt;&gt; /etc/timezone
+<span class="k">CMD</span> python3 test.py
 </code></pre></div>
 
 <p>我们来逐行看一下</p>

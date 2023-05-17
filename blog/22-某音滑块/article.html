@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -161,15 +161,15 @@
 <p>由于整个自执行函数传入的参数不是object而是数组</p>
 <p><img src="image-20210928000014560.png" alt="image-20210928000014560" style="zoom:80%;" /></p>
 <p>使用缺啥补啥的方法时不好定位缺少那个方法，我们先转成object</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">funce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[...]</span><span class="c1">//图片里的数组</span><span class="w"></span>
-<span class="k">for</span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">funce</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">funce_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">i</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="nx">funce</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">toString</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">funce_str</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//定位主动调用的encrypt是哪个方法，是37号方法</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//if (funce_str.indexOf(&#39;l.enc&#39;)!=-1){</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//    console.log(funce_str)</span><span class="w"></span>
-<span class="w">    </span><span class="c1">//}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="kd">var</span> <span class="nx">funce</span> <span class="o">=</span> <span class="p">[...]</span><span class="c1">//图片里的数组</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">funce</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">funce_str</span> <span class="o">=</span> <span class="nx">i</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="nx">funce</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">toString</span><span class="p">();</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">funce_str</span><span class="p">)</span>
+    <span class="c1">//定位主动调用的encrypt是哪个方法，是37号方法</span>
+    <span class="c1">//if (funce_str.indexOf(&#39;l.enc&#39;)!=-1){</span>
+    <span class="c1">//    console.log(funce_str)</span>
+    <span class="c1">//}</span>
+<span class="p">}</span>
 </code></pre></div>
 
 <p>在构造器处打印调用了几号方法</p>

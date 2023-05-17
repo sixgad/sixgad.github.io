@@ -13,7 +13,7 @@
   <meta name="author" content="zp">
 
 
-  <title>某团H5 _token参数</title>
+  <title>linux管道的奇技淫巧</title>
 
   <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
   <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
@@ -123,44 +123,27 @@
                 </div> -->
 
                 <div class="blog-cc">
-                  <span>2021年9月5日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider js逆向</a></span>
+                  <span>2023年5月13日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux</a></span>
 
-                  <h1 id="h5-_token">某团H5 _token参数</h1>
-<p>以某团酒店详细信息为例，记录下_token参数的破解过程，_token生成方法应该是全站通用的</p>
-<h2 id="1">1.目标网站</h2>
-<p>地址：</p>
+                  <h1 id="linux">linux管道的奇技淫巧</h1>
+<p>Linux管道（pipe）是一种进程间通信（IPC）的机制，允许两个或多个进程将其输入和输出连接在一起。通过管道，一个进程的输出可以直接作为另一个进程的输入，这样就无需保存临时文件。这种机制使得在Linux中进行命令组合和数据流处理变得非常方便。</p>
+<p>管道在Linux shell中使用竖线（<code>|</code>）表示。</p>
+<p>常见的使用场景：</p>
 <blockquote>
-<p>aHR0cHM6Ly9pLm1laXR1YW4uY29tL2F3cC9oNS9ob3RlbC9zZWFyY2gvc2VhcmNoLmh0bWw=</p>
+<p>统计文本行数</p>
+<p>cat a.txt | wc -l</p>
+<p>查看所有python进程</p>
+<p>ps aux | grep python</p>
 </blockquote>
-<p><img alt="image-20210905215839637" src="image-20210905215839637.png" /></p>
-<p>红色圈出来的位置，开启就会显示h5界面了。</p>
-<p>因为酒店这个板块，_token出现在酒店详细信息页面，自己随便搜索一个五星高档酒店吧</p>
-<p><img alt="image-20210905220237236" src="image-20210905220237236.png" /></p>
-<h2 id="2_token">2._token加密位置</h2>
-<p>首先，_token长这样</p>
-<p><img alt="image-20210905220440682" src="image-20210905220440682.png" /></p>
-<p>先下个xhr断点，group/v1/poi/酒店id</p>
-<p>刷新页面，当断点断住时，查看堆栈调用，定位到这</p>
+<p>高效操作，让2变为1：</p>
 <blockquote>
-<p>getPoi: function(t, e) {</p>
+<p>aws 跨集群拷贝文件</p>
+<p>aws s3 cp s3://zptest/output/part-00001 - | aws s3 cp - s3://zptest/zhihu-tmp/part-00001 </p>
+<p>wget下载直接上传s3</p>
+<p>wget http://<strong><em>*</em></strong> -O - | aws s3 cp - s3://buck1/test.txt</p>
+<p>查看s3上文件内容</p>
+<p>aws s3 cp s3://buck1/test.txt - | head -n 1</p>
 </blockquote>
-<p>看下这个方法里做了什么</p>
-<p><img alt="image-20210905220840729" src="image-20210905220840729.png" /></p>
-<p>c = {}构造了请求需要的参数，_token = d = window.Rohr_Opt.reload(参数是请求url)</p>
-<p>window.Rohr_Opt.reload，就是加密方法了</p>
-<h2 id="3">3.扣代码，补环境</h2>
-<p>进入window.Rohr_Opt.reload</p>
-<p>头部</p>
-<p><img alt="image-20210905221328806" src="image-20210905221328806.png" /></p>
-<p>reload方法位置</p>
-<p><img alt="image-20210905221414694" src="image-20210905221414694.png" /></p>
-<p>方法导出到全局，也就是为什么我们能直接通过window.Rohr_Opt.reload调用</p>
-<p><img alt="image-20210905221513870" src="image-20210905221513870.png" /></p>
-<p>这个js文件直接复制到本地即可</p>
-<p>直接运行会报错和卡住，需要补环境和去掉setInterval</p>
-<p><img alt="image-20210905221819212" src="image-20210905221819212.png" /></p>
-<p>最后看下生成的_toekn，可以使用</p>
-<p><img alt="image-20210905221910787" src="image-20210905221910787.png" /></p>
 
                 </div>
                 <!-- Blog Post End -->

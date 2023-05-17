@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -131,30 +131,30 @@
 <h2 id="1m3u8">1.m3u8文件格式分析</h2>
 <p>大致分成三种情况</p>
 <p>一、普通无加密</p>
-<div class="codehilite"><pre><span></span><code>#EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-MEDIA-SEQUENCE:0
-#EXT-X-ALLOW-CACHE:YES
-#EXT-X-TARGETDURATION:17
-#EXTINF:10.083333,
-http://aaa.com/0000.ts
+<div class="codehilite"><pre><span></span><code><span class="err">#EXTM3U</span>
+<span class="err">#EXT-X-VERSION:3</span>
+<span class="err">#EXT-X-MEDIA-SEQUENCE:0</span>
+<span class="err">#EXT-X-ALLOW-CACHE:YES</span>
+<span class="err">#EXT-X-TARGETDURATION:17</span>
+<span class="err">#EXTINF:10.083333,</span>
+<span class="c">http://aaa.com/0000.ts</span>
 </code></pre></div>
 
 <p>二、包含ts文件加密key(标准AES加解密)</p>
-<div class="codehilite"><pre><span></span><code>#EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-TARGETDURATION:6
-#EXT-X-PLAYLIST-TYPE:VOD
-#EXT-X-MEDIA-SEQUENCE:0
-#EXT-X-KEY:METHOD=AES-128,URI=&quot;ts4.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/key.key&quot;
-#EXTINF:3.127,
-ttt.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/m0eBxHTh.ts
+<div class="codehilite"><pre><span></span><code><span class="err">#EXTM3U</span>
+<span class="err">#EXT-X-VERSION:3</span>
+<span class="err">#EXT-X-TARGETDURATION:6</span>
+<span class="err">#EXT-X-PLAYLIST-TYPE:VOD</span>
+<span class="err">#EXT-X-MEDIA-SEQUENCE:0</span>
+<span class="err">#EXT-X-KEY:METHOD=AES-128,URI=&quot;ts4.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/key.key&quot;</span>
+<span class="err">#EXTINF:3.127,</span>
+<span class="err">ttt.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/m0eBxHTh.ts</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code>有时候m3u8文件里可能包含多个分辨率连接 比如720x480、1080x720
-#EXTM3U
-#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1000000,RESOLUTION=720x480
-1000kb/hls/index.m3u8
+<div class="codehilite"><pre><span></span><code><span class="err">有时候m3u8文件里可能包含多个分辨率连接 比如720x480、1080x720</span>
+<span class="err">#EXTM3U</span>
+<span class="err">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1000000,RESOLUTION=720x480</span>
+<span class="err">1000kb/hls/index.m3u8</span>
 </code></pre></div>
 
 <p>三、特殊的</p>

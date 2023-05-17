@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -228,11 +228,11 @@
 <p>就会在当前文件夹生成解包后的文件夹 xhs</p>
 <p><img alt="image-20210819220402038" src="image-20210819220402038.png" /></p>
 <p><strong>可能遇到的坑</strong><strong>，</strong><strong>因为反编译的问题，有时解析失败，比如文件夹名plugin变为plugin:，导致解包失败</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="nt">D</span><span class="o">:</span><span class="err">\</span><span class="nt">worksoft</span><span class="err">\</span><span class="nt">nodeworkspace</span><span class="err">\</span><span class="nt">wxappunpacker</span><span class="err">\</span><span class="nt">wuLib</span><span class="p">.</span><span class="nc">js</span><span class="p">:</span><span class="nd">91</span><span class="w"></span>
-<span class="w">        </span><span class="nt">if</span><span class="w"> </span><span class="o">(</span><span class="nt">err</span><span class="o">)</span><span class="w"> </span><span class="nt">throw</span><span class="w"> </span><span class="nt">Error</span><span class="o">(</span><span class="s2">&quot;Save file error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nt">err</span><span class="o">);</span><span class="w"></span>
-<span class="w">                 </span><span class="o">^</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="nt">D</span><span class="o">:</span><span class="err">\</span><span class="nt">worksoft</span><span class="err">\</span><span class="nt">nodeworkspace</span><span class="err">\</span><span class="nt">wxappunpacker</span><span class="err">\</span><span class="nt">wuLib</span><span class="p">.</span><span class="nc">js</span><span class="p">:</span><span class="nd">91</span>
+        <span class="nt">if</span> <span class="o">(</span><span class="nt">err</span><span class="o">)</span> <span class="nt">throw</span> <span class="nt">Error</span><span class="o">(</span><span class="s2">&quot;Save file error: &quot;</span> <span class="o">+</span> <span class="nt">err</span><span class="o">);</span>
+                 <span class="o">^</span>
 
-<span class="nt">Error</span><span class="o">:</span><span class="w"> </span><span class="nt">Save</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">error</span><span class="o">:</span><span class="w"> </span><span class="nt">Error</span><span class="o">:</span><span class="w"> </span><span class="nt">ENOENT</span><span class="o">:</span><span class="w"> </span><span class="nt">no</span><span class="w"> </span><span class="nt">such</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">or</span><span class="w"> </span><span class="nt">directory</span><span class="o">,</span><span class="w"> </span><span class="nt">open</span><span class="w"></span>
+<span class="nt">Error</span><span class="o">:</span> <span class="nt">Save</span> <span class="nt">file</span> <span class="nt">error</span><span class="o">:</span> <span class="nt">Error</span><span class="o">:</span> <span class="nt">ENOENT</span><span class="o">:</span> <span class="nt">no</span> <span class="nt">such</span> <span class="nt">file</span> <span class="nt">or</span> <span class="nt">directory</span><span class="o">,</span> <span class="nt">open</span>
 </code></pre></div>
 
 <p><strong>根据报错信息修改wuLib.js这个文件即可，比如这样</strong></p>

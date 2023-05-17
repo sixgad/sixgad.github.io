@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>基于chatgpt-web+mongodb构建社区问答收集系统</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">雪重</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2023年5月11日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>nodjs</a></span>
+
+                  <h1 id="chatgpt-webmongodb">基于chatgpt-web+mongodb构建社区问答收集系统</h1>
+<p>问：如何收集不同领域、不同专业人员的高质量问答对呢？</p>
+<p>答：调用chatgpt4啊！</p>
+<p>问：谁去调用？谁去想问题？怎么把用户的问题收集入库，供自己的模型进行训练呢？</p>
+<p>答：开放一个免费的问答系统，后端调用openai，将社区千奇百怪的问题收集过来，喂给自己的模型。</p>
+<p>chatgpt交互界面令人眼前一亮，自己如何搭建这样一套界面呢？</p>
+<p>推荐项目：</p>
+<blockquote>
+<p>https://github.com/Chanzhaoyu/chatgpt-web</p>
+<p>界面看起来很清爽，使用Docker compose部署so easy</p>
+</blockquote>
+<p><img src="image-20230517212212111.png" alt="image-20230517212212111" style="zoom: 80%;" /></p>
+<h2 id="mongodb">魔改，加入mongodb收集问答对</h2>
+<p>通过对开源项目源码阅读，原项目只是封装了一层对openai api的请求，响应内容会直接展示在web界面上。</p>
+<p>寻找切入点：</p>
+<blockquote>
+<p>service/src/index.ts中有如下方法</p>
+<p>router.post('/chat-process', [auth, limiter], async (req, res) =&gt; {</p>
+<p>此处就是向openai发起请求的位置</p>
+</blockquote>
+<p>由于是stream的方式，实现界面上一字一字展示的效果，所以要在最后一个字结束时，将完整的消息插入数据库。</p>
+<p>加入insermongo方法后，此段代码为</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">router</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/chat-process&#39;</span><span class="p">,</span> <span class="p">[</span><span class="nx">auth</span><span class="p">,</span> <span class="nx">limiter</span><span class="p">],</span> <span class="nx">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span> <span class="nx">prompt</span><span class="p">,</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">systemMessage</span><span class="p">,</span> <span class="nx">temperature</span><span class="p">,</span> <span class="nx">top_p</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span> <span class="nx">as</span> <span class="nx">RequestProps</span>
+    <span class="kd">let</span> <span class="nx">firstChunk</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="nx">await</span> <span class="nx">chatReplyProcess</span><span class="p">({</span>
+      <span class="nx">message</span><span class="o">:</span> <span class="nx">prompt</span><span class="p">,</span>
+      <span class="nx">lastContext</span><span class="o">:</span> <span class="nx">options</span><span class="p">,</span>
+      <span class="nx">process</span><span class="o">:</span> <span class="nx">async</span> <span class="p">(</span><span class="nx">chat</span><span class="o">:</span> <span class="nx">ChatMessage</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="c1">//判断是否打印完成最后一个字</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">isLastMmessage</span><span class="p">(</span><span class="nx">chat</span><span class="p">))</span> <span class="p">{</span>
+          <span class="nx">await</span> <span class="nx">insertDB</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">chat</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="c1">//以上，调用封装了mongodb insertDB方法插入数据库</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">firstChunk</span> <span class="o">?</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span> <span class="o">:</span> <span class="sb">`</span><span class="err">\</span><span class="sb">n</span><span class="si">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+        <span class="nx">firstChunk</span> <span class="o">=</span> <span class="kc">false</span>
+      <span class="p">},</span>
+      <span class="nx">systemMessage</span><span class="p">,</span>
+      <span class="nx">temperature</span><span class="p">,</span>
+      <span class="nx">top_p</span><span class="p">,</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+  <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">))</span>
+  <span class="p">}</span>
+  <span class="k">finally</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div>
+
+<p>封装mongodb部分代码如下</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">const</span> <span class="p">{</span> <span class="nx">MongoClient</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongodb&#39;</span><span class="p">);</span>
+<span class="kr">import</span> <span class="nx">type</span> <span class="p">{</span> <span class="nx">ChatMessage</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;../chatgpt&#39;</span>
+<span class="kr">import</span> <span class="nx">type</span> <span class="p">{</span> <span class="nx">RequestProps</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;../types&#39;</span>
+
+
+<span class="kr">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">dbName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">dbHost</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">dbPort</span> <span class="o">=</span> <span class="mi">27017</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">uri</span> <span class="o">=</span> <span class="sb">`mongodb://</span><span class="si">${</span><span class="nx">user</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">password</span><span class="si">}</span><span class="sb">@</span><span class="si">${</span><span class="nx">dbHost</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">dbPort</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">dbName</span><span class="si">}</span><span class="sb">?authSource=admin`</span><span class="p">;</span>
+
+<span class="c1">// Connection URL</span>
+<span class="kr">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoClient</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">collection</span><span class="p">;</span>
+
+<span class="nx">async</span> <span class="kd">function</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Use connect method to connect to the server</span>
+  <span class="nx">await</span> <span class="nx">client</span><span class="p">.</span><span class="nx">connect</span><span class="p">();</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Connected successfully to server&#39;</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">client</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="nx">dbName</span><span class="p">);</span>
+  <span class="nx">collection</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">);</span>
+
+  <span class="c1">// the following code examples can be pasted here...</span>
+  <span class="k">return</span> <span class="s1">&#39;done.&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">async</span> <span class="kd">function</span> <span class="nx">insertDB</span><span class="p">(</span><span class="nx">req</span><span class="o">:</span> <span class="nx">RequestProps</span><span class="p">,</span> <span class="nx">chat</span><span class="o">:</span> <span class="nx">ChatMessage</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">question</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="nx">req</span><span class="o">?</span><span class="p">.</span><span class="nx">prompt</span><span class="p">,</span>
+        <span class="nx">parentMessageId</span><span class="o">:</span> <span class="nx">req</span><span class="o">?</span><span class="p">.</span><span class="nx">options</span><span class="o">?</span><span class="p">.</span><span class="nx">parentMessageId</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="nx">answerId</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+        <span class="nx">answerText</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">text</span><span class="p">,</span>
+        <span class="nx">answerCreated</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">detail</span><span class="o">?</span><span class="p">.</span><span class="nx">created</span><span class="p">,</span>
+        <span class="nx">answerModel</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">detail</span><span class="o">?</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span>
+      <span class="p">}</span>
+      <span class="nx">await</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">(</span><span class="nx">question</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">main</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span>
+
+<span class="kr">export</span> <span class="p">{</span> <span class="nx">insertDB</span> <span class="p">}</span>
+</code></pre></div>
+
+<p>insertDB方法里的question结构化了要入库的字段信息，样例数据如下</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span> <span class="p">:</span> <span class="err">ObjectId(</span><span class="s2">&quot;a9f9f76fb&quot;</span><span class="err">)</span><span class="p">,</span>
+    <span class="nt">&quot;prompt&quot;</span> <span class="p">:</span> <span class="s2">&quot;这个分布似乎介于指数分布和帕累托分布之间&quot;</span><span class="p">,</span><span class="err">#当前问题</span>
+    <span class="nt">&quot;parentMessageId&quot;</span> <span class="p">:</span> <span class="s2">&quot;chatcmpl-MvYoOcZyxxhiCe&quot;</span><span class="p">,</span><span class="err">#上一个回答ip</span>
+    <span class="nt">&quot;answerId&quot;</span> <span class="p">:</span> <span class="s2">&quot;chatcmpl-75o5WFqZL6VT6o&quot;</span><span class="p">,</span><span class="err">#当前回答id</span>
+    <span class="nt">&quot;answerText&quot;</span> <span class="p">:</span> <span class="s2">&quot;根据您的描述，这个分布似乎介于指数分布和帕累托分布之间。为了详细阐述这两种概率分布，请允许我对它们进行简要介绍。&quot;</span><span class="p">,</span><span class="err">#当前回答</span>
+    <span class="nt">&quot;answerCreated&quot;</span> <span class="p">:</span> <span class="mi">1681458373</span><span class="p">,</span>
+    <span class="nt">&quot;answerModel&quot;</span> <span class="p">:</span> <span class="s2">&quot;gpt-4-0314&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

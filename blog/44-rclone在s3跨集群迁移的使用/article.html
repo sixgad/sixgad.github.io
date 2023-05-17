@@ -13,7 +13,7 @@
   <meta name="author" content="zp">
 
 
-  <title>某团H5 _token参数</title>
+  <title>rclone在s3跨集群迁移的使用</title>
 
   <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
   <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
@@ -123,44 +123,46 @@
                 </div> -->
 
                 <div class="blog-cc">
-                  <span>2021年9月5日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>spider js逆向</a></span>
+                  <span>2023年5月12日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>rclone s3 ceph</a></span>
 
-                  <h1 id="h5-_token">某团H5 _token参数</h1>
-<p>以某团酒店详细信息为例，记录下_token参数的破解过程，_token生成方法应该是全站通用的</p>
-<h2 id="1">1.目标网站</h2>
-<p>地址：</p>
+                  <h1 id="rclones3">rclone在s3跨集群迁移的使用</h1>
+<p>同一区域ceph集群迁移使用aws s3 sync s3://buck1/dir1/ s3://buck2/dir1/就行</p>
+<p>如果一个s3协议的ceph存储集群在上海（s1），一个存储集群在内蒙古阿里云oss（s2），总体积上百TB(无法满足先下载到本地磁盘)，同时还包含众多小文件如何同步？</p>
+<h2 id="1rclone">1.rclone配置</h2>
+<p>默认配置文件存放位置为： ~/.config/rclone/rclone.conf</p>
+<div class="codehilite"><pre><span></span><code><span class="k">[s1]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">s3</span>
+<span class="na">provider</span> <span class="o">=</span> <span class="s">Ceph</span>
+<span class="na">access_key_id</span> <span class="o">=</span> <span class="s">O1***</span>
+<span class="na">secret_access_key</span> <span class="o">=</span> <span class="s">ep***</span>
+<span class="na">endpoint</span> <span class="o">=</span> <span class="s">http://10.*.*.*:80</span>
+<span class="na">acl</span> <span class="o">=</span> <span class="s">private</span>
+
+<span class="k">[s2]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">s3</span>
+<span class="na">provider</span> <span class="o">=</span> <span class="s">Alibaba</span>
+<span class="na">access_key_id</span> <span class="o">=</span> <span class="s">LTA***</span>
+<span class="na">secret_access_key</span> <span class="o">=</span> <span class="s">cH***</span>
+<span class="na">endpoint</span> <span class="o">=</span> <span class="s">https://oss-cn-***.aliyuncs.com</span>
+<span class="na">acl</span> <span class="o">=</span> <span class="s">private</span>
+<span class="na">bucket_acl</span> <span class="o">=</span> <span class="s">private</span>
+</code></pre></div>
+
+<h2 id="2">2.传输命令示例</h2>
 <blockquote>
-<p>aHR0cHM6Ly9pLm1laXR1YW4uY29tL2F3cC9oNS9ob3RlbC9zZWFyY2gvc2VhcmNoLmh0bWw=</p>
+<p>rclone sync --progress --transfers 200 --checkers 200 s1:buck1/dir1/ s2:buck1/dir1/</p>
+<p>也可使用rclone copy</p>
 </blockquote>
-<p><img alt="image-20210905215839637" src="image-20210905215839637.png" /></p>
-<p>红色圈出来的位置，开启就会显示h5界面了。</p>
-<p>因为酒店这个板块，_token出现在酒店详细信息页面，自己随便搜索一个五星高档酒店吧</p>
-<p><img alt="image-20210905220237236" src="image-20210905220237236.png" /></p>
-<h2 id="2_token">2._token加密位置</h2>
-<p>首先，_token长这样</p>
-<p><img alt="image-20210905220440682" src="image-20210905220440682.png" /></p>
-<p>先下个xhr断点，group/v1/poi/酒店id</p>
-<p>刷新页面，当断点断住时，查看堆栈调用，定位到这</p>
-<blockquote>
-<p>getPoi: function(t, e) {</p>
-</blockquote>
-<p>看下这个方法里做了什么</p>
-<p><img alt="image-20210905220840729" src="image-20210905220840729.png" /></p>
-<p>c = {}构造了请求需要的参数，_token = d = window.Rohr_Opt.reload(参数是请求url)</p>
-<p>window.Rohr_Opt.reload，就是加密方法了</p>
-<h2 id="3">3.扣代码，补环境</h2>
-<p>进入window.Rohr_Opt.reload</p>
-<p>头部</p>
-<p><img alt="image-20210905221328806" src="image-20210905221328806.png" /></p>
-<p>reload方法位置</p>
-<p><img alt="image-20210905221414694" src="image-20210905221414694.png" /></p>
-<p>方法导出到全局，也就是为什么我们能直接通过window.Rohr_Opt.reload调用</p>
-<p><img alt="image-20210905221513870" src="image-20210905221513870.png" /></p>
-<p>这个js文件直接复制到本地即可</p>
-<p>直接运行会报错和卡住，需要补环境和去掉setInterval</p>
-<p><img alt="image-20210905221819212" src="image-20210905221819212.png" /></p>
-<p>最后看下生成的_toekn，可以使用</p>
-<p><img alt="image-20210905221910787" src="image-20210905221910787.png" /></p>
+<p>--progress 打印传输日志</p>
+<p>--transfers 200 --checkers 200 设置比较大的传输线程数，和比较两边文件信息线程数，用于小文件特别多的情况</p>
+<p>注意，rclone 会保持两个目录下内容完全一致，如果源目录内容少于目标目录内容，会将目标目录多出的内容删除</p>
+<p>区别于aws s3 sync，如果源目录内容少于目标目录内容，只会将源目录不同于目标目录的部分上传（无删除操作）</p>
+<h2 id="3rclone">3.其常用rclone命令</h2>
+<ul>
+<li>rclone size s1:buck1/dir1/  统计s3上buck1/dir1/文件夹大小</li>
+<li>rclone lsf s1:buck1/dir1/ 打印s3上buck1/dir1/内所有文件名</li>
+<li>rclone 打印所有rclone参数，自行查找需要使用的命令</li>
+</ul>
 
                 </div>
                 <!-- Blog Post End -->

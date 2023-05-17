@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>nginx转发chatgpt api</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">雪重</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2023年5月10日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux nginx</a></span>
+
+                  <h1 id="nginxchatgpt-api">nginx转发chatgpt api</h1>
+<p>随着chatgpt 4大火，国内众多公司开始冲击大模型领域。同一个问题，比较自己训练的模型和chatgpt上答案差异的需求随之而来。</p>
+<p>背景：</p>
+<blockquote>
+<p>公司网络配置了规则转发，使用了香港代理，openai对国内封锁极强，大陆和香港ip访问存在封账户问题。不少研究员因为不规范的使用api测试，导致封了两个账号。</p>
+</blockquote>
+<p>方案：</p>
+<blockquote>
+<p>因为公司网络默认配置了香港代理，采购一台美国服务器，在美国服务器上转发国内请求到openai服务。</p>
+<p>国内调用api -&gt; 美国服务器nginx转发 -&gt; openai server。</p>
+<p>通过这条链路，无需担心因为ip问题导致账号封禁的问题。</p>
+</blockquote>
+<h2 id="1nginx">1.nginx配置如下</h2>
+<ul>
+<li>由于openai是https，http转发ssl校验不通过，因此添加了域名和证书，以下***处自行替换</li>
+<li>location可自行设置</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nt">http</span> <span class="p">{</span>
+    <span class="err">server</span> <span class="err">{</span>
+        <span class="err">listen</span> <span class="err">443</span> <span class="err">ssl</span><span class="p">;</span>
+        <span class="err">server_name</span> <span class="err">***.com</span><span class="p">;</span><span class="err">#自己申请的域名</span>
+        <span class="err">ssl_certificate</span> <span class="err">/etc/nginx/sskey/***.pem</span><span class="p">;</span><span class="err">#ssl</span>
+        <span class="err">ssl_certificate_key</span> <span class="err">/etc/nginx/sskey/***.key</span><span class="p">;</span><span class="err">#ssl</span>
+        <span class="err">ssl_session_cache</span> <span class="n">shared</span><span class="p">:</span><span class="n">le_nginx_SSL</span><span class="o">:</span><span class="mi">1</span><span class="n">m</span><span class="p">;</span>
+        <span class="err">ssl_session_timeout</span> <span class="err">1440m</span><span class="p">;</span>
+        <span class="err">ssl_protocols</span> <span class="err">TLSv1</span> <span class="err">TLSv1.1</span> <span class="err">TLSv1.2</span> <span class="err">TLSv1.3</span><span class="p">;</span>
+        <span class="err">ssl_prefer_server_ciphers</span> <span class="err">on</span><span class="p">;</span>
+        <span class="err">ssl_ciphers</span> <span class="err">TLS13-AES******</span><span class="p">;</span><span class="err">#ssl</span>
+        <span class="err">location</span> <span class="err">/internal</span> <span class="err">{</span>
+                <span class="err">proxy_pass</span>  <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">api</span><span class="o">.</span><span class="n">openai</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">v1</span><span class="p">;</span>
+                <span class="err">proxy_ssl_server_name</span> <span class="err">on</span><span class="p">;</span>
+                <span class="err">proxy_set_header</span> <span class="err">Host</span> <span class="err">api.openai.com</span><span class="p">;</span>
+                <span class="err">proxy_set_header</span> <span class="err">Connection</span> <span class="err">&#39;&#39;</span><span class="p">;</span>
+                <span class="err">proxy_http_version</span> <span class="err">1.1</span><span class="p">;</span>
+                <span class="err">proxy_connect_timeout</span> <span class="err">60</span><span class="p">;</span>
+                <span class="err">proxy_read_timeout</span> <span class="err">600</span><span class="p">;</span>
+                <span class="err">proxy_send_timeout</span> <span class="err">60</span><span class="p">;</span>
+                <span class="err">chunked_transfer_encoding</span> <span class="err">off</span><span class="p">;</span>
+                <span class="err">proxy_buffering</span> <span class="err">off</span><span class="p">;</span>
+                <span class="err">proxy_cache</span> <span class="err">off</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="err">}</span>
+
+<span class="err">}</span>
+</code></pre></div>
+
+<h2 id="2api">2.调用api</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding:utf-8 -*-</span>
+
+<span class="c1"># @Author:      zp</span>
+<span class="c1"># @Time:        2023/4/7 15:19</span>
+
+<span class="kn">import</span> <span class="nn">openai</span>
+
+<span class="n">openai</span><span class="o">.</span><span class="n">api_base</span> <span class="o">=</span> <span class="s2">&quot;https://</span><span class="si">{自己的域名}</span><span class="s2">/</span><span class="si">{nginx里设置的location}</span><span class="s2">&quot;</span>
+<span class="c1"># 输入完整token</span>
+<span class="n">openai</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;sk-***&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">chat</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    model: gpt-3.5-turbo, gpt-3.5-turbo-0301, gpt-4</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message_log</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">}]</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletion</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                                              <span class="n">messages</span><span class="o">=</span><span class="n">message_log</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">completion</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;question: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2"> ===&gt; answer: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">datas</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;俄语乌拉&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">one_qa</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">:</span>
+        <span class="n">ress</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span><span class="n">one_qa</span><span class="p">)</span>
+</code></pre></div>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

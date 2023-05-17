@@ -76,7 +76,7 @@
             <div class="my-detail">
 
               <div class="white-spacing">
-                <span class="my-sub-title">睡七个小时怎么了</span>
+                <span class="my-sub-title">雪重</span>
                 <span class="my-sub-title">Python Developer</span>
                 <span class="my-sub-title">知识 汗水 灵感 机遇</span>
               </div>
@@ -172,45 +172,45 @@
 <p>vim /etc/my.cnf</p>
 </blockquote>
 <p>写入如下配置</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[mysqld]</span><span class="w"></span>
-<span class="na">basedir</span><span class="o">=</span><span class="s">/usr/local/mysql</span><span class="w"></span>
-<span class="na">datadir</span><span class="o">=</span><span class="s">/data/mysql</span><span class="w"></span>
-<span class="na">socket</span><span class="o">=</span><span class="s">/data/mysql/mysql.sock</span><span class="w"></span>
-<span class="na">log-error</span><span class="o">=</span><span class="s">/logs/mysql/error.log</span><span class="w"></span>
-<span class="na">port</span><span class="o">=</span><span class="s">3306</span><span class="w"></span>
-<span class="na">user</span><span class="o">=</span><span class="s">mysql</span><span class="w"></span>
-<span class="na">server-id</span><span class="o">=</span><span class="s">3306</span><span class="w"></span>
-<span class="na">symbolic-links</span><span class="o">=</span><span class="s">0</span><span class="w"></span>
-<span class="na">character-set-server</span><span class="o">=</span><span class="s">utf8mb4</span><span class="w"></span>
-<span class="na">lower_case_table_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1</span><span class="w"></span>
-<span class="na">collation-server</span><span class="o">=</span><span class="s">utf8mb4_general_ci</span><span class="w"></span>
-<span class="na">default-time-zone</span><span class="o">=</span><span class="s">&#39;+8:00&#39;</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="k">[mysqld]</span>
+<span class="na">basedir</span><span class="o">=</span><span class="s">/usr/local/mysql</span>
+<span class="na">datadir</span><span class="o">=</span><span class="s">/data/mysql</span>
+<span class="na">socket</span><span class="o">=</span><span class="s">/data/mysql/mysql.sock</span>
+<span class="na">log-error</span><span class="o">=</span><span class="s">/logs/mysql/error.log</span>
+<span class="na">port</span><span class="o">=</span><span class="s">3306</span>
+<span class="na">user</span><span class="o">=</span><span class="s">mysql</span>
+<span class="na">server-id</span><span class="o">=</span><span class="s">3306</span>
+<span class="na">symbolic-links</span><span class="o">=</span><span class="s">0</span>
+<span class="na">character-set-server</span><span class="o">=</span><span class="s">utf8mb4</span>
+<span class="na">lower_case_table_names</span> <span class="o">=</span> <span class="s">1</span>
+<span class="na">collation-server</span><span class="o">=</span><span class="s">utf8mb4_general_ci</span>
+<span class="na">default-time-zone</span><span class="o">=</span><span class="s">&#39;+8:00&#39;</span>
 
-<span class="na">max_connections</span><span class="o">=</span><span class="s">1000</span><span class="w"></span>
-<span class="na">max_connect_errors</span><span class="o">=</span><span class="s">10000</span><span class="w"></span>
-<span class="na">tmp_table_size</span><span class="o">=</span><span class="s">256M</span><span class="w"></span>
-<span class="na">max_heap_table_size</span><span class="o">=</span><span class="s">256M</span><span class="w"></span>
+<span class="na">max_connections</span><span class="o">=</span><span class="s">1000</span>
+<span class="na">max_connect_errors</span><span class="o">=</span><span class="s">10000</span>
+<span class="na">tmp_table_size</span><span class="o">=</span><span class="s">256M</span>
+<span class="na">max_heap_table_size</span><span class="o">=</span><span class="s">256M</span>
 
-<span class="na">log-bin</span><span class="o">=</span><span class="s">/data/mysql/mysql-bin</span><span class="w"></span>
-<span class="na">expire_logs_days</span><span class="o">=</span><span class="s">7</span><span class="w"></span>
-<span class="na">tmpdir</span><span class="o">=</span><span class="s">/tmp</span><span class="w"></span>
+<span class="na">log-bin</span><span class="o">=</span><span class="s">/data/mysql/mysql-bin</span>
+<span class="na">expire_logs_days</span><span class="o">=</span><span class="s">7</span>
+<span class="na">tmpdir</span><span class="o">=</span><span class="s">/tmp</span>
 
-<span class="c1"># Disabling symbolic-links is recommended to prevent assorted security risks</span><span class="w"></span>
-<span class="c1"># Settings user and group are ignored when systemd is used.</span><span class="w"></span>
-<span class="c1"># If you need to run mysqld under a different user or group,</span><span class="w"></span>
-<span class="c1"># customize your systemd unit file for mariadb according to the</span><span class="w"></span>
-<span class="c1"># instructions in http://fedoraproject.org/wiki/Systemd</span><span class="w"></span>
+<span class="c1"># Disabling symbolic-links is recommended to prevent assorted security risks</span>
+<span class="c1"># Settings user and group are ignored when systemd is used.</span>
+<span class="c1"># If you need to run mysqld under a different user or group,</span>
+<span class="c1"># customize your systemd unit file for mariadb according to the</span>
+<span class="c1"># instructions in http://fedoraproject.org/wiki/Systemd</span>
 
-<span class="k">[mysqld_safe]</span><span class="w"></span>
-<span class="na">pid_file</span><span class="o">=</span><span class="s">/data/mysqld/mysqld.pid</span><span class="w"></span>
-<span class="na">log_error</span><span class="o">=</span><span class="s">/logs/mysql/error.log</span><span class="w"></span>
+<span class="k">[mysqld_safe]</span>
+<span class="na">pid_file</span><span class="o">=</span><span class="s">/data/mysqld/mysqld.pid</span>
+<span class="na">log_error</span><span class="o">=</span><span class="s">/logs/mysql/error.log</span>
 
-<span class="c1">#</span><span class="w"></span>
-<span class="c1"># include all files from the config directory</span><span class="w"></span>
-<span class="c1">#</span><span class="w"></span>
-<span class="k">[client]</span><span class="w"></span>
-<span class="na">socket</span><span class="o">=</span><span class="s">/data/mysql/mysql.sock</span><span class="w"></span>
-<span class="na">default-character-set</span><span class="o">=</span><span class="s">utf8mb4</span><span class="w"></span>
+<span class="c1">#</span>
+<span class="c1"># include all files from the config directory</span>
+<span class="c1">#</span>
+<span class="k">[client]</span>
+<span class="na">socket</span><span class="o">=</span><span class="s">/data/mysql/mysql.sock</span>
+<span class="na">default-character-set</span><span class="o">=</span><span class="s">utf8mb4</span>
 </code></pre></div>
 
 <h2 id="6">6.初始化数据库</h2>
