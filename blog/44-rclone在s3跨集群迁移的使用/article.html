@@ -130,22 +130,22 @@
 <p>如果一个s3协议的ceph存储集群在上海（s1），一个存储集群在内蒙古阿里云oss（s2），总体积上百TB(无法满足先下载到本地磁盘)，同时还包含众多小文件如何同步？</p>
 <h2 id="1rclone">1.rclone配置</h2>
 <p>默认配置文件存放位置为： ~/.config/rclone/rclone.conf</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[s1]</span>
-<span class="na">type</span> <span class="o">=</span> <span class="s">s3</span>
-<span class="na">provider</span> <span class="o">=</span> <span class="s">Ceph</span>
-<span class="na">access_key_id</span> <span class="o">=</span> <span class="s">O1***</span>
-<span class="na">secret_access_key</span> <span class="o">=</span> <span class="s">ep***</span>
-<span class="na">endpoint</span> <span class="o">=</span> <span class="s">http://10.*.*.*:80</span>
-<span class="na">acl</span> <span class="o">=</span> <span class="s">private</span>
+<div class="codehilite"><pre><span></span><code><span class="k">[s1]</span><span class="w"></span>
+<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span><span class="w"></span>
+<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Ceph</span><span class="w"></span>
+<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">O1***</span><span class="w"></span>
+<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ep***</span><span class="w"></span>
+<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">http://10.*.*.*:80</span><span class="w"></span>
+<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span><span class="w"></span>
 
-<span class="k">[s2]</span>
-<span class="na">type</span> <span class="o">=</span> <span class="s">s3</span>
-<span class="na">provider</span> <span class="o">=</span> <span class="s">Alibaba</span>
-<span class="na">access_key_id</span> <span class="o">=</span> <span class="s">LTA***</span>
-<span class="na">secret_access_key</span> <span class="o">=</span> <span class="s">cH***</span>
-<span class="na">endpoint</span> <span class="o">=</span> <span class="s">https://oss-cn-***.aliyuncs.com</span>
-<span class="na">acl</span> <span class="o">=</span> <span class="s">private</span>
-<span class="na">bucket_acl</span> <span class="o">=</span> <span class="s">private</span>
+<span class="k">[s2]</span><span class="w"></span>
+<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span><span class="w"></span>
+<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Alibaba</span><span class="w"></span>
+<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LTA***</span><span class="w"></span>
+<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">cH***</span><span class="w"></span>
+<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https://oss-cn-***.aliyuncs.com</span><span class="w"></span>
+<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span><span class="w"></span>
+<span class="na">bucket_acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span><span class="w"></span>
 </code></pre></div>
 
 <h2 id="2">2.传输命令示例</h2>

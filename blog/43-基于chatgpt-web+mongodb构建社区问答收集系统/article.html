@@ -147,97 +147,97 @@
 </blockquote>
 <p>由于是stream的方式，实现界面上一字一字展示的效果，所以要在最后一个字结束时，将完整的消息插入数据库。</p>
 <p>加入insermongo方法后，此段代码为</p>
-<div class="codehilite"><pre><span></span><code><span class="nx">router</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/chat-process&#39;</span><span class="p">,</span> <span class="p">[</span><span class="nx">auth</span><span class="p">,</span> <span class="nx">limiter</span><span class="p">],</span> <span class="nx">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="nx">router</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/chat-process&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">auth</span><span class="p">,</span><span class="w"> </span><span class="nx">limiter</span><span class="p">],</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span><span class="w"></span>
 
-  <span class="k">try</span> <span class="p">{</span>
-    <span class="kr">const</span> <span class="p">{</span> <span class="nx">prompt</span><span class="p">,</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">systemMessage</span><span class="p">,</span> <span class="nx">temperature</span><span class="p">,</span> <span class="nx">top_p</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span> <span class="nx">as</span> <span class="nx">RequestProps</span>
-    <span class="kd">let</span> <span class="nx">firstChunk</span> <span class="o">=</span> <span class="kc">true</span>
-    <span class="nx">await</span> <span class="nx">chatReplyProcess</span><span class="p">({</span>
-      <span class="nx">message</span><span class="o">:</span> <span class="nx">prompt</span><span class="p">,</span>
-      <span class="nx">lastContext</span><span class="o">:</span> <span class="nx">options</span><span class="p">,</span>
-      <span class="nx">process</span><span class="o">:</span> <span class="nx">async</span> <span class="p">(</span><span class="nx">chat</span><span class="o">:</span> <span class="nx">ChatMessage</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-        <span class="c1">//判断是否打印完成最后一个字</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">isLastMmessage</span><span class="p">(</span><span class="nx">chat</span><span class="p">))</span> <span class="p">{</span>
-          <span class="nx">await</span> <span class="nx">insertDB</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">chat</span><span class="p">)</span>
-        <span class="p">}</span>
-        <span class="c1">//以上，调用封装了mongodb insertDB方法插入数据库</span>
-        <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">firstChunk</span> <span class="o">?</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span> <span class="o">:</span> <span class="sb">`</span><span class="err">\</span><span class="sb">n</span><span class="si">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
-        <span class="nx">firstChunk</span> <span class="o">=</span> <span class="kc">false</span>
-      <span class="p">},</span>
-      <span class="nx">systemMessage</span><span class="p">,</span>
-      <span class="nx">temperature</span><span class="p">,</span>
-      <span class="nx">top_p</span><span class="p">,</span>
-    <span class="p">})</span>
-  <span class="p">}</span>
-  <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">))</span>
-  <span class="p">}</span>
-  <span class="k">finally</span> <span class="p">{</span>
-    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
-  <span class="p">}</span>
-<span class="p">})</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">prompt</span><span class="p">,</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="nx">systemMessage</span><span class="p">,</span><span class="w"> </span><span class="nx">temperature</span><span class="p">,</span><span class="w"> </span><span class="nx">top_p</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">RequestProps</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">firstChunk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">chatReplyProcess</span><span class="p">({</span><span class="w"></span>
+<span class="w">      </span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="nx">prompt</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nx">lastContext</span><span class="o">:</span><span class="w"> </span><span class="nx">options</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nx">process</span><span class="o">:</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">chat</span><span class="o">:</span><span class="w"> </span><span class="nx">ChatMessage</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//判断是否打印完成最后一个字</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">isLastMmessage</span><span class="p">(</span><span class="nx">chat</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="k">await</span><span class="w"> </span><span class="nx">insertDB</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">chat</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//以上，调用封装了mongodb insertDB方法插入数据库</span><span class="w"></span>
+<span class="w">        </span><span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">firstChunk</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="sb">`\n</span><span class="si">${</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="nx">firstChunk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">      </span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="nx">systemMessage</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nx">temperature</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nx">top_p</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">})</span><span class="w"></span>
 </code></pre></div>
 
 <p>封装mongodb部分代码如下</p>
-<div class="codehilite"><pre><span></span><code><span class="kr">const</span> <span class="p">{</span> <span class="nx">MongoClient</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongodb&#39;</span><span class="p">);</span>
-<span class="kr">import</span> <span class="nx">type</span> <span class="p">{</span> <span class="nx">ChatMessage</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;../chatgpt&#39;</span>
-<span class="kr">import</span> <span class="nx">type</span> <span class="p">{</span> <span class="nx">RequestProps</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;../types&#39;</span>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">MongoClient</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongodb&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ChatMessage</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../chatgpt&#39;</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RequestProps</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../types&#39;</span><span class="w"></span>
 
 
-<span class="kr">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">dbName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">dbHost</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">dbPort</span> <span class="o">=</span> <span class="mi">27017</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dbName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dbHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dbPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">27017</span><span class="p">;</span><span class="w"></span>
 
-<span class="kr">const</span> <span class="nx">uri</span> <span class="o">=</span> <span class="sb">`mongodb://</span><span class="si">${</span><span class="nx">user</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">password</span><span class="si">}</span><span class="sb">@</span><span class="si">${</span><span class="nx">dbHost</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">dbPort</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">dbName</span><span class="si">}</span><span class="sb">?authSource=admin`</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`mongodb://</span><span class="si">${</span><span class="nx">user</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">password</span><span class="si">}</span><span class="sb">@</span><span class="si">${</span><span class="nx">dbHost</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">dbPort</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">dbName</span><span class="si">}</span><span class="sb">?authSource=admin`</span><span class="p">;</span><span class="w"></span>
 
-<span class="c1">// Connection URL</span>
-<span class="kr">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoClient</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">collection</span><span class="p">;</span>
+<span class="c1">// Connection URL</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">uri</span><span class="p">;</span><span class="w"></span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">MongoClient</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">collection</span><span class="p">;</span><span class="w"></span>
 
-<span class="nx">async</span> <span class="kd">function</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// Use connect method to connect to the server</span>
-  <span class="nx">await</span> <span class="nx">client</span><span class="p">.</span><span class="nx">connect</span><span class="p">();</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Connected successfully to server&#39;</span><span class="p">);</span>
-  <span class="kr">const</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">client</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="nx">dbName</span><span class="p">);</span>
-  <span class="nx">collection</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">);</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Use connect method to connect to the server</span><span class="w"></span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">connect</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Connected successfully to server&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="nx">dbName</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="nx">collection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">);</span><span class="w"></span>
 
-  <span class="c1">// the following code examples can be pasted here...</span>
-  <span class="k">return</span> <span class="s1">&#39;done.&#39;</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="c1">// the following code examples can be pasted here...</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="s1">&#39;done.&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="nx">async</span> <span class="kd">function</span> <span class="nx">insertDB</span><span class="p">(</span><span class="nx">req</span><span class="o">:</span> <span class="nx">RequestProps</span><span class="p">,</span> <span class="nx">chat</span><span class="o">:</span> <span class="nx">ChatMessage</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kr">const</span> <span class="nx">question</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">prompt</span><span class="o">:</span> <span class="nx">req</span><span class="o">?</span><span class="p">.</span><span class="nx">prompt</span><span class="p">,</span>
-        <span class="nx">parentMessageId</span><span class="o">:</span> <span class="nx">req</span><span class="o">?</span><span class="p">.</span><span class="nx">options</span><span class="o">?</span><span class="p">.</span><span class="nx">parentMessageId</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="nx">answerId</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
-        <span class="nx">answerText</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">text</span><span class="p">,</span>
-        <span class="nx">answerCreated</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">detail</span><span class="o">?</span><span class="p">.</span><span class="nx">created</span><span class="p">,</span>
-        <span class="nx">answerModel</span><span class="o">:</span> <span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">detail</span><span class="o">?</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span>
-      <span class="p">}</span>
-      <span class="nx">await</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">(</span><span class="nx">question</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">insertDB</span><span class="p">(</span><span class="nx">req</span><span class="o">:</span><span class="w"> </span><span class="nx">RequestProps</span><span class="p">,</span><span class="w"> </span><span class="nx">chat</span><span class="o">:</span><span class="w"> </span><span class="nx">ChatMessage</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">question</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="nx">req</span><span class="o">?</span><span class="p">.</span><span class="nx">prompt</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">parentMessageId</span><span class="o">:</span><span class="w"> </span><span class="nx">req</span><span class="o">?</span><span class="p">.</span><span class="nx">options</span><span class="o">?</span><span class="p">.</span><span class="nx">parentMessageId</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">answerId</span><span class="o">:</span><span class="w"> </span><span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">answerText</span><span class="o">:</span><span class="w"> </span><span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">answerCreated</span><span class="o">:</span><span class="w"> </span><span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">detail</span><span class="o">?</span><span class="p">.</span><span class="nx">created</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">answerModel</span><span class="o">:</span><span class="w"> </span><span class="nx">chat</span><span class="o">?</span><span class="p">.</span><span class="nx">detail</span><span class="o">?</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">(</span><span class="nx">question</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="nx">main</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
-  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span>
+<span class="nx">main</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span><span class="w"></span>
 
-<span class="kr">export</span> <span class="p">{</span> <span class="nx">insertDB</span> <span class="p">}</span>
+<span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">insertDB</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p>insertDB方法里的question结构化了要入库的字段信息，样例数据如下</p>
-<div class="codehilite"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">&quot;_id&quot;</span> <span class="p">:</span> <span class="err">ObjectId(</span><span class="s2">&quot;a9f9f76fb&quot;</span><span class="err">)</span><span class="p">,</span>
-    <span class="nt">&quot;prompt&quot;</span> <span class="p">:</span> <span class="s2">&quot;这个分布似乎介于指数分布和帕累托分布之间&quot;</span><span class="p">,</span><span class="err">#当前问题</span>
-    <span class="nt">&quot;parentMessageId&quot;</span> <span class="p">:</span> <span class="s2">&quot;chatcmpl-MvYoOcZyxxhiCe&quot;</span><span class="p">,</span><span class="err">#上一个回答ip</span>
-    <span class="nt">&quot;answerId&quot;</span> <span class="p">:</span> <span class="s2">&quot;chatcmpl-75o5WFqZL6VT6o&quot;</span><span class="p">,</span><span class="err">#当前回答id</span>
-    <span class="nt">&quot;answerText&quot;</span> <span class="p">:</span> <span class="s2">&quot;根据您的描述，这个分布似乎介于指数分布和帕累托分布之间。为了详细阐述这两种概率分布，请允许我对它们进行简要介绍。&quot;</span><span class="p">,</span><span class="err">#当前回答</span>
-    <span class="nt">&quot;answerCreated&quot;</span> <span class="p">:</span> <span class="mi">1681458373</span><span class="p">,</span>
-    <span class="nt">&quot;answerModel&quot;</span> <span class="p">:</span> <span class="s2">&quot;gpt-4-0314&quot;</span>
-<span class="p">}</span>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">Objec</span><span class="kc">t</span><span class="err">Id(</span><span class="s2">&quot;a9f9f76fb&quot;</span><span class="err">)</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;prompt&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;这个分布似乎介于指数分布和帕累托分布之间&quot;</span><span class="p">,</span><span class="err">#当前问题</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;parentMessageId&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chatcmpl-MvYoOcZyxxhiCe&quot;</span><span class="p">,</span><span class="err">#上一个回答ip</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;answerId&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chatcmpl-75o5WFqZL6VT6o&quot;</span><span class="p">,</span><span class="err">#当前回答id</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;answerText&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;根据您的描述，这个分布似乎介于指数分布和帕累托分布之间。为了详细阐述这两种概率分布，请允许我对它们进行简要介绍。&quot;</span><span class="p">,</span><span class="err">#当前回答</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;answerCreated&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1681458373</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;answerModel&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gpt-4-0314&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
                 </div>

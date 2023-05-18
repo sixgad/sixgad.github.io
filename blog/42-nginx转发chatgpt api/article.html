@@ -142,33 +142,33 @@
 <li>由于openai是https，http转发ssl校验不通过，因此添加了域名和证书，以下***处自行替换</li>
 <li>location可自行设置</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="nt">http</span> <span class="p">{</span>
-    <span class="err">server</span> <span class="err">{</span>
-        <span class="err">listen</span> <span class="err">443</span> <span class="err">ssl</span><span class="p">;</span>
-        <span class="err">server_name</span> <span class="err">***.com</span><span class="p">;</span><span class="err">#自己申请的域名</span>
-        <span class="err">ssl_certificate</span> <span class="err">/etc/nginx/sskey/***.pem</span><span class="p">;</span><span class="err">#ssl</span>
-        <span class="err">ssl_certificate_key</span> <span class="err">/etc/nginx/sskey/***.key</span><span class="p">;</span><span class="err">#ssl</span>
-        <span class="err">ssl_session_cache</span> <span class="n">shared</span><span class="p">:</span><span class="n">le_nginx_SSL</span><span class="o">:</span><span class="mi">1</span><span class="n">m</span><span class="p">;</span>
-        <span class="err">ssl_session_timeout</span> <span class="err">1440m</span><span class="p">;</span>
-        <span class="err">ssl_protocols</span> <span class="err">TLSv1</span> <span class="err">TLSv1.1</span> <span class="err">TLSv1.2</span> <span class="err">TLSv1.3</span><span class="p">;</span>
-        <span class="err">ssl_prefer_server_ciphers</span> <span class="err">on</span><span class="p">;</span>
-        <span class="err">ssl_ciphers</span> <span class="err">TLS13-AES******</span><span class="p">;</span><span class="err">#ssl</span>
-        <span class="err">location</span> <span class="err">/internal</span> <span class="err">{</span>
-                <span class="err">proxy_pass</span>  <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">api</span><span class="o">.</span><span class="n">openai</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">v1</span><span class="p">;</span>
-                <span class="err">proxy_ssl_server_name</span> <span class="err">on</span><span class="p">;</span>
-                <span class="err">proxy_set_header</span> <span class="err">Host</span> <span class="err">api.openai.com</span><span class="p">;</span>
-                <span class="err">proxy_set_header</span> <span class="err">Connection</span> <span class="err">&#39;&#39;</span><span class="p">;</span>
-                <span class="err">proxy_http_version</span> <span class="err">1.1</span><span class="p">;</span>
-                <span class="err">proxy_connect_timeout</span> <span class="err">60</span><span class="p">;</span>
-                <span class="err">proxy_read_timeout</span> <span class="err">600</span><span class="p">;</span>
-                <span class="err">proxy_send_timeout</span> <span class="err">60</span><span class="p">;</span>
-                <span class="err">chunked_transfer_encoding</span> <span class="err">off</span><span class="p">;</span>
-                <span class="err">proxy_buffering</span> <span class="err">off</span><span class="p">;</span>
-                <span class="err">proxy_cache</span> <span class="err">off</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="err">}</span>
+<div class="codehilite"><pre><span></span><code><span class="nt">http</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="err">server</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="err">listen</span><span class="w"> </span><span class="err">443</span><span class="w"> </span><span class="err">ssl</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">server_name</span><span class="w"> </span><span class="err">***.com</span><span class="p">;</span><span class="err">#自己申请的域名</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_certificate</span><span class="w"> </span><span class="err">/etc/nginx/sskey/***.pem</span><span class="p">;</span><span class="err">#ssl</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_certificate_key</span><span class="w"> </span><span class="err">/etc/nginx/sskey/***.key</span><span class="p">;</span><span class="err">#ssl</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_session_cache</span><span class="w"> </span><span class="n">shared</span><span class="p">:</span><span class="n">le_nginx_SSL</span><span class="o">:</span><span class="mi">1</span><span class="n">m</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_session_timeout</span><span class="w"> </span><span class="err">1440m</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_protocols</span><span class="w"> </span><span class="err">TLSv1</span><span class="w"> </span><span class="err">TLSv1.1</span><span class="w"> </span><span class="err">TLSv1.2</span><span class="w"> </span><span class="err">TLSv1.3</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="err">on</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">ssl_ciphers</span><span class="w"> </span><span class="err">TLS13-AES******</span><span class="p">;</span><span class="err">#ssl</span><span class="w"></span>
+<span class="w">        </span><span class="err">location</span><span class="w"> </span><span class="err">/internal</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_pass</span><span class="w">  </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">api</span><span class="o">.</span><span class="n">openai</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">v1</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_ssl_server_name</span><span class="w"> </span><span class="err">on</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_set_header</span><span class="w"> </span><span class="err">Host</span><span class="w"> </span><span class="err">api.openai.com</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_set_header</span><span class="w"> </span><span class="err">Connection</span><span class="w"> </span><span class="err">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_http_version</span><span class="w"> </span><span class="err">1.1</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_connect_timeout</span><span class="w"> </span><span class="err">60</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_read_timeout</span><span class="w"> </span><span class="err">600</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_send_timeout</span><span class="w"> </span><span class="err">60</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">chunked_transfer_encoding</span><span class="w"> </span><span class="err">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_buffering</span><span class="w"> </span><span class="err">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">proxy_cache</span><span class="w"> </span><span class="err">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-<span class="err">}</span>
+<span class="err">}</span><span class="w"></span>
 </code></pre></div>
 
 <h2 id="2api">2.调用api</h2>

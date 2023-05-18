@@ -141,18 +141,18 @@
 <p>整体上看是一个自执行函数，传入的参数一般为object或者数组（内容都是function定义的一个一个方法）</p>
 <p><img alt="image-20210828220027316" src="image-20210828220027316.png" /></p>
 <p>必不可少的加载器，关键字exports，一般长这样</p>
-<div class="codehilite"><pre><span></span><code>    <span class="kd">function</span> <span class="nx">o</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">])</span>
-            <span class="k">return</span> <span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">].</span><span class="nx">exports</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="nx">i</span><span class="o">:</span> <span class="nx">t</span><span class="p">,</span>
-            <span class="nx">l</span><span class="o">:</span> <span class="o">!</span><span class="mi">1</span><span class="p">,</span>
-            <span class="nx">exports</span><span class="o">:</span> <span class="p">{}</span>
-        <span class="p">};</span>
-        <span class="k">return</span> <span class="nx">e</span><span class="p">[</span><span class="nx">t</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span> <span class="nx">o</span><span class="p">),</span>
-        <span class="nx">i</span><span class="p">.</span><span class="nx">l</span> <span class="o">=</span> <span class="o">!</span><span class="mi">0</span><span class="p">,</span>
-        <span class="nx">i</span><span class="p">.</span><span class="nx">exports</span>
-    <span class="p">}</span>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="kd">function</span><span class="w"> </span><span class="nx">o</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">])</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">].</span><span class="nx">exports</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n</span><span class="p">[</span><span class="nx">t</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">i</span><span class="o">:</span><span class="w"> </span><span class="nx">t</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">l</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="mf">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nx">exports</span><span class="o">:</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="nx">t</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">o</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="nx">i</span><span class="p">.</span><span class="nx">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">i</span><span class="p">.</span><span class="nx">exports</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <h2 id="3webpack">3.webpack扣取技巧</h2>

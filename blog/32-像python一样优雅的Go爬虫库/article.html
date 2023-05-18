@@ -135,135 +135,135 @@
 </blockquote>
 <h2 id="demo">二、Demo</h2>
 <p><strong>1.get请求</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span> <span class="nx">main</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&quot;fmt&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
 
-    <span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/get?a=1&amp;b=2&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/get?a=1&amp;b=2&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
 
-    <span class="c1">// Params</span>
-    <span class="nx">params</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span><span class="p">}</span>
-    <span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/get&quot;</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">// Params</span><span class="w"></span>
+<span class="w">    </span><span class="nx">params</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/get&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p><strong>2.post请求</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span> <span class="nx">main</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&quot;fmt&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
 
-    <span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// form post</span>
-    <span class="nx">data</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Data</span><span class="p">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;xiaobulv&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="nx">resp</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// form post</span><span class="w"></span>
+<span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Data</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;xiaobulv&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
 
-    <span class="c1">// json post</span>
-    <span class="nx">jdata</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Json</span><span class="p">{</span><span class="s">&quot;AGE&quot;</span><span class="p">:</span> <span class="s">&quot;131&quot;</span><span class="p">}</span>
-    <span class="nx">respb</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span> <span class="nx">jdata</span><span class="p">)</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">respb</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+<span class="w">    </span><span class="c1">// json post</span><span class="w"></span>
+<span class="w">    </span><span class="nx">jdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Json</span><span class="p">{</span><span class="s">&quot;AGE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;131&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">respb</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">jdata</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">respb</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
 
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p><strong>3.put delete patch等</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span> <span class="nx">main</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&quot;fmt&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
 
-    <span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// put</span>
-    <span class="nx">putdata</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Json</span><span class="p">{</span><span class="s">&quot;AGE&quot;</span><span class="p">:</span> <span class="s">&quot;131&quot;</span><span class="p">}</span>
-    <span class="nx">respp</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Put</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/put&quot;</span><span class="p">,</span> <span class="nx">putdata</span><span class="p">)</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">respp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
-<span class="p">}</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// put</span><span class="w"></span>
+<span class="w">    </span><span class="nx">putdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Json</span><span class="p">{</span><span class="s">&quot;AGE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;131&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">respp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Put</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/put&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">putdata</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">respp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p><strong>4.auth</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span> <span class="nx">main</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">respa</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/basic-auth/admin/123456&quot;</span><span class="p">,</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Auth</span><span class="p">{</span><span class="s">&quot;admin&quot;</span><span class="p">,</span> <span class="s">&quot;123456&quot;</span><span class="p">})</span>
-    <span class="nb">println</span><span class="p">(</span><span class="nx">respa</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
-<span class="p">}</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">respa</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/basic-auth/admin/123456&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Auth</span><span class="p">{</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123456&quot;</span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="nb">println</span><span class="p">(</span><span class="nx">respa</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p><strong>5.header, cookie, timeout, proxy, json等设置</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span> <span class="nx">main</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&quot;fmt&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
 
-    <span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// 设置header</span>
-    <span class="nx">header</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Header</span><span class="p">{</span><span class="s">&quot;user-agent&quot;</span><span class="p">:</span> <span class="s">&quot;hello&quot;</span><span class="p">}</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 设置header</span><span class="w"></span>
+<span class="w">    </span><span class="nx">header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Header</span><span class="p">{</span><span class="s">&quot;user-agent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">}</span><span class="w"></span>
 
-    <span class="c1">// post 请求参数</span>
-    <span class="nx">data</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Data</span><span class="p">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;xiaobulv&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="c1">// post 请求参数</span><span class="w"></span>
+<span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Data</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;xiaobulv&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="c1">// 设置cookie</span>
-    <span class="c1">// 当Header里有Cookie时, 此设置无效</span>
-    <span class="nx">ck</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span><span class="s">&quot;BIDUPSID&quot;</span><span class="p">:</span> <span class="s">&quot;C855441CA6145FBB2741293580&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// 设置cookie</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 当Header里有Cookie时, 此设置无效</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ck</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span><span class="s">&quot;BIDUPSID&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;C855441CA6145FBB2741293580&quot;</span><span class="p">}</span><span class="w"></span>
 
-    <span class="c1">// timeout</span>
-    <span class="nx">timeout</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">SetTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">// timeout</span><span class="w"></span>
+<span class="w">    </span><span class="nx">timeout</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">SetTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
 
-    <span class="c1">// 代理</span>
-    <span class="c1">// proxy := gorequests.Proxy(&quot;http://xxx.ip.com&quot;)</span>
+<span class="w">    </span><span class="c1">// 代理</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// proxy := gorequests.Proxy(&quot;http://xxx.ip.com&quot;)</span><span class="w"></span>
 
-    <span class="nx">resp</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">header</span><span class="p">,</span> <span class="nx">ck</span><span class="p">,</span> <span class="nx">timeout</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">header</span><span class="p">,</span><span class="w"> </span><span class="nx">ck</span><span class="p">,</span><span class="w"> </span><span class="nx">timeout</span><span class="p">)</span><span class="w"></span>
 
-    <span class="c1">// content</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Content</span><span class="p">())</span>
+<span class="w">    </span><span class="c1">// content</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Content</span><span class="p">())</span><span class="w"></span>
 
-    <span class="c1">// text</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+<span class="w">    </span><span class="c1">// text</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span><span class="w"></span>
 
-    <span class="c1">// response.Json</span>
-    <span class="nx">m</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
-    <span class="nx">resp</span><span class="p">.</span><span class="nx">Json</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">m</span><span class="p">[</span><span class="s">&quot;headers&quot;</span><span class="p">])</span>
-    <span class="nx">c</span> <span class="o">:=</span> <span class="nx">m</span><span class="p">[</span><span class="s">&quot;headers&quot;</span><span class="p">]</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">c</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})[</span><span class="s">&quot;Host&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="c1">// response.Json</span><span class="w"></span>
+<span class="w">    </span><span class="nx">m</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span><span class="w"></span>
+<span class="w">    </span><span class="nx">resp</span><span class="p">.</span><span class="nx">Json</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">m</span><span class="p">[</span><span class="s">&quot;headers&quot;</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="nx">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">m</span><span class="p">[</span><span class="s">&quot;headers&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">c</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})[</span><span class="s">&quot;Host&quot;</span><span class="p">])</span><span class="w"></span>
 
-    <span class="c1">// 状态码</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">// 状态码</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span><span class="p">)</span><span class="w"></span>
 
-    <span class="c1">// 响应cookie</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Cookies</span><span class="p">())</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">// 响应cookie</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Cookies</span><span class="p">())</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
                 </div>

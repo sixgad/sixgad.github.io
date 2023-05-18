@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>Keepalived+Virtual_ip+Nginx搭建高可用负载均衡器</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">雪重</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2023年5月15日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>keepalived virtualip nginx</a></span>
+
+                  <h1 id="keepalivedvirtual_ipnginx">Keepalived+Virtual_ip+Nginx搭建高可用负载均衡器</h1>
+<p>在这个教程中，我们将介绍如何使用Nginx和Keepalived搭建高可用负载均衡器。以下是设置过程的简要说明：</p>
+<p><strong>环境准备</strong></p>
+<ol>
+<li>准备两台安装了Linux操作系统的服务器（如Ubuntu）。</li>
+<li>为每台服务器分配一个独立IP地址，并确保它们处于相同的子网。</li>
+<li>在每台服务器上安装Nginx和Keepalived。</li>
+</ol>
+<p><strong>Nginx 配置</strong></p>
+<p>此配置主要作用，通过公网ip-&gt;vip&gt;nginx转发-&gt;ceph，实现打洞</p>
+<div class="codehilite"><pre><span></span><code><span class="n">user</span><span class="w"> </span><span class="n">root</span><span class="p">;</span><span class="w"></span>
+<span class="n">worker_processes</span><span class="w"> </span><span class="n">auto</span><span class="p">;</span><span class="w"></span>
+<span class="n">pid</span><span class="w"> </span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">pid</span><span class="p">;</span><span class="w"></span>
+<span class="n">worker_rlimit_nofile</span><span class="w"> </span><span class="mi">1048576</span><span class="p">;</span><span class="w"></span>
+<span class="n">events</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">worker_connections</span><span class="w"> </span><span class="mi">65535</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">http</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+
+<span class="w">    </span><span class="n">sendfile</span><span class="w"> </span><span class="n">on</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">proxy_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">proxy_send_timeout</span><span class="w">    </span><span class="mi">600</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">proxy_read_timeout</span><span class="w">    </span><span class="mi">600</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1"># 设置单个缓冲区大小为 16k</span><span class="w"></span>
+<span class="w">    </span><span class="n">proxy_buffer_size</span><span class="w"> </span><span class="mi">200</span><span class="n">k</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># 设置每个缓冲区的数量和大小</span><span class="w"></span>
+<span class="w">    </span><span class="n">proxy_buffers</span><span class="w"> </span><span class="mi">512</span><span class="w"> </span><span class="mi">200</span><span class="n">k</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">default_type</span><span class="w"> </span><span class="n">application</span><span class="o">/</span><span class="n">octet</span><span class="o">-</span><span class="n">stream</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">ssl_protocols</span><span class="w"> </span><span class="n">TLSv1</span><span class="w"> </span><span class="n">TLSv1</span><span class="o">.</span><span class="mi">1</span><span class="w"> </span><span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1"># Dropping SSLv3, ref: POODLE</span><span class="w"></span>
+<span class="w">    </span><span class="n">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="n">on</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">access_log</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">error_log</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># gzip on;</span><span class="w"></span>
+
+
+<span class="w">    </span><span class="n">server</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">listen</span><span class="w"> </span><span class="mi">30000</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">location</span><span class="w"> </span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">upload</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">proxy_pass</span><span class="w"> </span><span class="p">{</span><span class="n">ceph的endpoint</span><span class="p">};</span><span class="w"></span>
+<span class="w">            </span><span class="n">proxy_set_header</span><span class="w"> </span><span class="n">Host</span><span class="w"> </span><span class="o">$</span><span class="n">host</span><span class="p">:</span><span class="mi">30000</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">proxy_redirect</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">client_max_body_size</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">proxy_cache</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">       </span><span class="p">}</span><span class="w">    </span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Keepalived 配置</strong></p>
+<ol>
+<li>
+<p>安装 Keepalived:</p>
+<p><code>apt install keepalived</code></p>
+</li>
+<li>
+<p>创建并编辑 Keepalived 配置文件：</p>
+<p><code>vim /etc/keepalived/keepalived.conf</code></p>
+</li>
+</ol>
+<p>在主节点上添加以下内容:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">vrrp_script</span><span class="w"> </span><span class="n">chk_nginx</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">script</span><span class="w"> </span><span class="ss">&quot;/etc/keepalived/scripts/nginx_check.sh&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="k">interval</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="n">weight</span><span class="w"> </span><span class="o">-</span><span class="mi">20</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+<span class="n">global_defs</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">   </span><span class="n">notification_email</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">     </span><span class="n">acassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">     </span><span class="n">failover</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">     </span><span class="n">sysadmin</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">   </span><span class="err">}</span><span class="w"></span>
+<span class="w">   </span><span class="n">notification_email_from</span><span class="w"> </span><span class="n">Alexandre</span><span class="p">.</span><span class="n">Cassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">   </span><span class="n">smtp_server</span><span class="w"> </span><span class="mf">192.168.200.1</span><span class="w"></span>
+<span class="w">   </span><span class="n">smtp_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="w"></span>
+<span class="w">   </span><span class="n">router_id</span><span class="w"> </span><span class="n">LVS_DEVEL</span><span class="w"></span>
+<span class="w">   </span><span class="n">#vrrp_skip_check_adv_addr</span><span class="w"></span>
+<span class="w">   </span><span class="n">#vrrp_strict</span><span class="w"></span>
+<span class="w">   </span><span class="n">script_user</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
+<span class="w">   </span><span class="n">enable_script_security</span><span class="w"></span>
+<span class="w">   </span><span class="n">vrrp_garp_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">   </span><span class="n">vrrp_gna_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+
+<span class="n">vrrp_instance</span><span class="w"> </span><span class="n">VI_1</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">state</span><span class="w"> </span><span class="n">MASTER</span><span class="w"></span>
+<span class="w">    </span><span class="n">interface</span><span class="w"> </span><span class="n">eth0</span><span class="w"></span>
+<span class="w">    </span><span class="n">virtual_router_id</span><span class="w"> </span><span class="mi">55</span><span class="w"></span>
+<span class="w">    </span><span class="n">priority</span><span class="w"> </span><span class="mi">100</span><span class="w"></span>
+<span class="w">    </span><span class="n">advert_int</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">authentication</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">auth_type</span><span class="w"> </span><span class="n">PASS</span><span class="w"></span>
+<span class="w">        </span><span class="n">auth_pass</span><span class="w"> </span><span class="mi">1111</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">virtual_ipaddress</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="mf">10.</span><span class="o">***</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">track_script</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">chk_nginx</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+
+<span class="err">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>在备节点上添加以下内容：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">vrrp_script</span><span class="w"> </span><span class="n">chk_nginx</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">script</span><span class="w"> </span><span class="ss">&quot;/etc/keepalived/scripts/nginx_check.sh&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="k">interval</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="n">weight</span><span class="w"> </span><span class="o">-</span><span class="mi">20</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+
+<span class="n">global_defs</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">   </span><span class="n">notification_email</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">     </span><span class="n">acassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">     </span><span class="n">failover</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">     </span><span class="n">sysadmin</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">   </span><span class="err">}</span><span class="w"></span>
+<span class="w">   </span><span class="n">notification_email_from</span><span class="w"> </span><span class="n">Alexandre</span><span class="p">.</span><span class="n">Cassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
+<span class="w">   </span><span class="n">smtp_server</span><span class="w"> </span><span class="mf">192.168.200.1</span><span class="w"></span>
+<span class="w">   </span><span class="n">smtp_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="w"></span>
+<span class="w">   </span><span class="n">router_id</span><span class="w"> </span><span class="n">LVS_DEVEL</span><span class="w"></span>
+<span class="w">   </span><span class="n">#vrrp_skip_check_adv_addr</span><span class="w"></span>
+<span class="w">   </span><span class="n">#vrrp_strict</span><span class="w"></span>
+<span class="w">   </span><span class="n">script_user</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
+<span class="w">   </span><span class="n">enable_script_security</span><span class="w"></span>
+<span class="w">   </span><span class="n">vrrp_garp_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">   </span><span class="n">vrrp_gna_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+
+<span class="n">vrrp_instance</span><span class="w"> </span><span class="n">VI_1</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">state</span><span class="w"> </span><span class="k">BACKUP</span><span class="w"></span>
+<span class="w">    </span><span class="n">interface</span><span class="w"> </span><span class="n">eth0</span><span class="w"></span>
+<span class="w">    </span><span class="n">virtual_router_id</span><span class="w"> </span><span class="mi">55</span><span class="w"></span>
+<span class="w">    </span><span class="n">priority</span><span class="w"> </span><span class="mi">90</span><span class="w"></span>
+<span class="w">    </span><span class="n">advert_int</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">authentication</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">auth_type</span><span class="w"> </span><span class="n">PASS</span><span class="w"></span>
+<span class="w">        </span><span class="n">auth_pass</span><span class="w"> </span><span class="mi">1111</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">virtual_ipaddress</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="mf">10.</span><span class="o">***</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">track_script</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">chk_nginx</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+
+<span class="err">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>修改 <code>interface</code>、<code>virtual_router_id</code> 和 <code>virtual_ipaddress</code> 的值以适应你的环境。</p>
+<p><strong>注意：</strong></p>
+<blockquote>
+<p>同一网段中virtual_router_id的值不能重复，否则会出错</p>
+<p>可以用这条命令来查看该网络中所存在的vrid： tcpdump -nn -i any net 224.0.0.0/8</p>
+<p>选择未被占用的virtual_router_id</p>
+</blockquote>
+<p><strong>为 Nginx 配置 Keepalived 脚本：</strong></p>
+<div class="codehilite"><pre><span></span><code>vim /etc/keepalived/scripts/nginx_check.sh
+</code></pre></div>
+
+<p>添加以下内容：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># Check if Nginx is running</span>
+<span class="k">if</span> systemctl status nginx <span class="p">|</span> grep -q <span class="s1">&#39;running&#39;</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">exit</span> <span class="m">0</span> <span class="c1"># Nginx is running, exit with success code</span>
+<span class="k">else</span>
+    <span class="nb">exit</span> <span class="m">1</span> <span class="c1"># Nginx is not running, exit with error code</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>更改脚本权限：</p>
+<div class="codehilite"><pre><span></span><code>chmod +x /etc/keepalived/scripts/nginx_check.sh
+</code></pre></div>
+
+<p><strong>启动并检查 Keepalived 服务是否正常运行：</strong></p>
+<div class="codehilite"><pre><span></span><code>systemctl start keepalived
+systemctl status keepalived
+</code></pre></div>
+
+<p>主节点输出：</p>
+<blockquote>
+<p>Keepalived_vrrp[100681]: VRRP_Instance(VI_1) Sending/queueing gratuitous ARPs on eth0 for 10***</p>
+<p>Keepalived_vrrp[100681]: Sending gratuitous ARP on eth0 for 10***</p>
+</blockquote>
+<p>查看虚拟IP地址分配情况</p>
+<blockquote>
+<p>输入命令ip addr</p>
+<p>在 网卡里会有 ”inet ｛virtual_ipaddress｝ scope global” 信息</p>
+</blockquote>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

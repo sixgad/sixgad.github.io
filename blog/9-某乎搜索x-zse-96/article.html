@@ -147,12 +147,12 @@
 </blockquote>
 <p>其中t为api接口，g为101_3_2.0，dc0就是上文提到的cookie值，断点跟进去</p>
 <blockquote>
-<div class="codehilite"><pre><span></span><code><span class="err">    return {</span>
-<span class="err">        source: d,</span>
-<span class="err">        signature: (0,</span>
-<span class="err">        o.default)((0,</span>
-<span class="err">        r.default)(d))</span>
-<span class="err">    }</span>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="k">return</span><span class="w"> </span>{<span class="w"></span>
+<span class="w">        </span><span class="nv">source</span>:<span class="w"> </span><span class="nv">d</span>,<span class="w"></span>
+<span class="w">        </span><span class="nv">signature</span>:<span class="w"> </span><span class="ss">(</span><span class="mi">0</span>,<span class="w"></span>
+<span class="w">        </span><span class="nv">o</span>.<span class="nv">default</span><span class="ss">)((</span><span class="mi">0</span>,<span class="w"></span>
+<span class="w">        </span><span class="nv">r</span>.<span class="nv">default</span><span class="ss">)(</span><span class="nv">d</span><span class="ss">))</span><span class="w"></span>
+<span class="w">    </span>}<span class="w"></span>
 </code></pre></div>
 
 </blockquote>
@@ -171,33 +171,33 @@
 <h2 id="3">3.扣代码</h2>
 <p><img src="image-20210804232930332.png" alt="image-20210804232930332" style="zoom: 67%;" /></p>
 <p>会报错缺少atob方法，因为nodejs和浏览器环境的差异，不存在window.atob给我们用，可以自己写一个base64编码解码函数，抄百度 <a href="https://blog.csdn.net/weixin_33766168/article/details/89613830">关于base64编码的原理及实现</a></p>
-<div class="codehilite"><pre><span></span><code><span class="kd">var</span> <span class="nx">base64hash</span>  <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;</span><span class="p">;</span>
-<span class="kd">function</span> <span class="nx">atob</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\s|=/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">cur</span><span class="p">,</span> <span class="nx">prev</span><span class="p">,</span> <span class="nx">mod</span><span class="p">,</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">cur</span> <span class="o">=</span> <span class="nx">base64hash</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span>
-        <span class="nx">mod</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">%</span> <span class="mi">4</span><span class="p">;</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="nx">mod</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
-                <span class="c1">//TODO</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
-                <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">prev</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span> <span class="o">|</span> <span class="nx">cur</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">));</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
-                <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">((</span><span class="nx">prev</span> <span class="o">&amp;</span> <span class="mh">0x0f</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span> <span class="o">|</span> <span class="nx">cur</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">));</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
-                <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">((</span><span class="nx">prev</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span> <span class="o">|</span> <span class="nx">cur</span><span class="p">));</span>
-                <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="nx">prev</span> <span class="o">=</span> <span class="nx">cur</span><span class="p">;</span>
-        <span class="nx">i</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="codehilite"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">base64hash</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">atob</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\s|=/g</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">cur</span><span class="p">,</span><span class="w"> </span><span class="nx">prev</span><span class="p">,</span><span class="w"> </span><span class="nx">mod</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">base64hash</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="nx">mod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mf">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">mod</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">0</span><span class="o">:</span><span class="w"></span>
+<span class="w">                </span><span class="c1">//TODO</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">1</span><span class="o">:</span><span class="w"></span>
+<span class="w">                </span><span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">cur</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">4</span><span class="p">));</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">2</span><span class="o">:</span><span class="w"></span>
+<span class="w">                </span><span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">((</span><span class="nx">prev</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x0f</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">cur</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">2</span><span class="p">));</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">3</span><span class="o">:</span><span class="w"></span>
+<span class="w">                </span><span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">((</span><span class="nx">prev</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mf">3</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">cur</span><span class="p">));</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="nx">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">cur</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="nx">i</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p>最后要注意的地方，扣下来的这段js生成的结果与浏览器生成的稍有不同，结尾多了9Tuw，需要自己截取！</p>
