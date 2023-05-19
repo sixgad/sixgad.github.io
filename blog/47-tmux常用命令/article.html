@@ -13,7 +13,7 @@
   <meta name="author" content="zp">
 
 
-  <title>rclone在s3跨集群迁移的使用</title>
+  <title>tmux常用命令</title>
 
   <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
   <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
@@ -123,53 +123,63 @@
                 </div> -->
 
                 <div class="blog-cc">
-                  <span>2023年5月12日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>rclone s3 ceph</a></span>
+                  <span>2023年5月16日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>tmux</a></span>
 
-                  <h1 id="rclones3">rclone在s3跨集群迁移的使用</h1>
-<p>同一区域ceph集群迁移使用aws s3 sync s3://buck1/dir1/ s3://buck2/dir1/就行</p>
-<p>如果一个s3协议的ceph存储集群在上海（s1），一个存储集群在内蒙古阿里云oss（s2），总体积上百TB(无法满足先下载到本地磁盘)，同时还包含众多小文件如何同步？</p>
-<h2 id="1rclone">1.rclone配置</h2>
-<p>默认配置文件存放位置为： ~/.config/rclone/rclone.conf</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[s1]</span><span class="w"></span>
-<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span><span class="w"></span>
-<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Ceph</span><span class="w"></span>
-<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">O1***</span><span class="w"></span>
-<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ep***</span><span class="w"></span>
-<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">http://10.*.*.*:80</span><span class="w"></span>
-<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span><span class="w"></span>
-
-<span class="k">[s2]</span><span class="w"></span>
-<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span><span class="w"></span>
-<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Alibaba</span><span class="w"></span>
-<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LTA***</span><span class="w"></span>
-<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">cH***</span><span class="w"></span>
-<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https://oss-cn-***.aliyuncs.com</span><span class="w"></span>
-<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span><span class="w"></span>
-<span class="na">bucket_acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span><span class="w"></span>
-</code></pre></div>
-
-<h2 id="2">2.传输命令示例</h2>
+                  <h1 id="tmux">tmux常用命令</h1>
+<p>还是那个懵懂少年的时候，老老实实一个shell终端，一条nohup python test.py &gt; /dev/null 2&gt;&amp;1 &amp;后台运行命令就够用了。</p>
+<p>然，任务越来越多，启动、查看、对比，或是一不小心忘了后台执行，任务执行到99%时终端断开连接...浅浅拥抱tmux.</p>
+<p><strong>tmux的主要功能</strong></p>
 <blockquote>
-<p>rclone copy--progress --fast-list --transfers 200 --checkers 200 s1:buck1/dir1/ s2:buck1/dir1/</p>
-<p>也可使用rclone sync</p>
+<ol>
+<li>对终端实现分屏功能和便捷的多任务切换。</li>
+<li>允许断开terminal之后，继续后台运行执行中的进程。</li>
+</ol>
 </blockquote>
-<p>--progress 打印传输日志</p>
-<p>--fast-list 加速列出文件</p>
-<p>--transfers 200 --checkers 200 设置比较大的传输线程数，和比较两边文件信息线程数，用于小文件特别多的情况</p>
-<p><strong>rclone copy</strong> 会先check比较，不会覆盖目标位置的现有文件</p>
-<p><strong>rclone copy</strong> 只有在以下情况下才会覆盖现有文件：</p>
-<ul>
-<li>源文件的修改时间（Modification Time）晚于目标文件；</li>
-<li>源文件与目标文件的大小不同。</li>
-</ul>
-<p><strong>注意，rclone sync</strong> 会保持两个目录下内容完全一致，如果源目录内容少于目标目录内容，会将目标目录多出的内容删除</p>
-<p>区别于aws s3 sync，如果源目录内容少于目标目录内容，只会将源目录不同于目标目录的部分上传（无删除操作）</p>
-<h2 id="3rclone">3.其常用rclone命令</h2>
-<ul>
-<li>rclone size s1:buck1/dir1/  统计s3上buck1/dir1/文件夹大小</li>
-<li>rclone lsf s1:buck1/dir1/ 打印s3上buck1/dir1/内所有文件名</li>
-<li>rclone 打印所有rclone参数，自行查找需要使用的命令</li>
-</ul>
+<p>一个tmux里可以包含多个会话<code>sessions</code>，一个session可以有多个窗口<code>windows</code>，一个window可以有多个窗格<code>panes</code>。</p>
+<p>所有的tmux命令都以<code>Ctrl + b</code>为前缀（特指进入tmux后的所有指令，在terminal里的指令不需要）。具体操作是先按下<code>Ctrl + b</code>后手指松开，然后再按其他键。</p>
+<p><strong>安装</strong></p>
+<blockquote>
+<p><code>text
+apt install tmux</code></p>
+</blockquote>
+<p><strong>新建session</strong></p>
+<blockquote>
+<p>```text</p>
+<h1 id="_1">直接创建</h1>
+<p>tmux</p>
+<h1 id="session_name">指定session_name</h1>
+<p>tmux new -s [session_name]</p>
+<h1 id="detach">挂起，不是退出 detach</h1>
+<p>Ctrl + b后再d</p>
+<h1 id="attach">连接 attach</h1>
+<p>tmux a -t <session-name>
+```</p>
+</blockquote>
+<p><strong>显示所有session</strong></p>
+<blockquote>
+<p><code>text
+tmux ls</code></p>
+</blockquote>
+<p><strong>关闭某个会话</strong></p>
+<blockquote>
+<p>```text</p>
+<h1 id="panes">在panes外，使用会话编号或具体名字</h1>
+<p>tmux kill-session -t 0
+tmux kill-session -t <session-name></p>
+<h1 id="panes_1">在panes内</h1>
+<p>Ctrl + d
+```</p>
+</blockquote>
+<p><strong>在新建的一个window里，默认只有一个pane，但是可以对其进行切分：</strong></p>
+<blockquote>
+<p><code>Ctrl+b</code> <code>%</code> 可以将当前pane分成左右两个panes。</p>
+<p><code>Ctrl+b</code> <code>"</code> 可以将当前pane分成上下两个panes。</p>
+<p><code>Ctrl+b</code> <code>o</code>可以移动到下一个pane里。</p>
+<p><code>Ctrl+b</code> <code>;</code>可以切换到上一个pane里。</p>
+<p><code>Ctrl + b</code> <code>&lt;arrow key&gt;</code>也可以直接通过上下左右箭头来切换panes。</p>
+<p><code>Ctrl+b</code> <code>x</code>关闭当前所在pane，这种关闭，会在关闭前进行确认。</p>
+<p><code>Ctrl + d</code> 或者 直接输入<code>exit</code>：直接关闭当前pane；如果当前window的所有pane均已关闭，则自动关闭当前window；直至所有window均已关闭，则自动关闭当前session。</p>
+</blockquote>
 
                 </div>
                 <!-- Blog Post End -->
