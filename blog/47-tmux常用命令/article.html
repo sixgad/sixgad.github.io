@@ -139,37 +139,31 @@
 <p>所有的tmux命令都以<code>Ctrl + b</code>为前缀（特指进入tmux后的所有指令，在terminal里的指令不需要）。具体操作是先按下<code>Ctrl + b</code>后手指松开，然后再按其他键。</p>
 <p><strong>安装</strong></p>
 <blockquote>
-<p><code>text
-apt install tmux</code></p>
+<p>apt install tmux</p>
 </blockquote>
 <p><strong>新建session</strong></p>
-<blockquote>
-<p>```text</p>
-<h1 id="_1">直接创建</h1>
-<p>tmux</p>
-<h1 id="session_name">指定session_name</h1>
-<p>tmux new -s [session_name]</p>
-<h1 id="detach">挂起，不是退出 detach</h1>
-<p>Ctrl + b后再d</p>
-<h1 id="attach">连接 attach</h1>
-<p>tmux a -t <session-name>
-```</p>
-</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">直接创建</span><span class="w"></span>
+<span class="n">tmux</span><span class="w"></span>
+<span class="err">#</span><span class="w"> </span><span class="n">指定session_name</span><span class="w"></span>
+<span class="n">tmux</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="o">[</span><span class="n">session_name</span><span class="o">]</span><span class="w"></span>
+<span class="err">#</span><span class="w"> </span><span class="n">挂起</span><span class="err">，</span><span class="n">不是退出</span><span class="w"> </span><span class="n">detach</span><span class="w"></span>
+<span class="n">Ctrl</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b后再d</span><span class="w"></span>
+<span class="err">#</span><span class="w"> </span><span class="n">连接</span><span class="w"> </span><span class="n">attach</span><span class="w"> </span>
+<span class="n">tmux</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="k">session</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="w"></span>
+</code></pre></div>
+
 <p><strong>显示所有session</strong></p>
 <blockquote>
-<p><code>text
-tmux ls</code></p>
+<p>tmux ls</p>
 </blockquote>
 <p><strong>关闭某个会话</strong></p>
-<blockquote>
-<p>```text</p>
-<h1 id="panes">在panes外，使用会话编号或具体名字</h1>
-<p>tmux kill-session -t 0
-tmux kill-session -t <session-name></p>
-<h1 id="panes_1">在panes内</h1>
-<p>Ctrl + d
-```</p>
-</blockquote>
+<div class="codehilite"><pre><span></span><code># 在panes外，使用会话编号或具体名字
+tmux kill-session -t 0
+tmux kill-session -t &lt;session-name&gt;
+# 在panes内
+Ctrl + d
+</code></pre></div>
+
 <p><strong>在新建的一个window里，默认只有一个pane，但是可以对其进行切分：</strong></p>
 <blockquote>
 <p><code>Ctrl+b</code> <code>%</code> 可以将当前pane分成左右两个panes。</p>
