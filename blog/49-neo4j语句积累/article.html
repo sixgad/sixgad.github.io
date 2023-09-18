@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>neo4j语句积累</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">雪重</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2023年9月16日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>sql,neo4j</a></span>
+
+                  <h1 id="neo4j">neo4j语句积累</h1>
+<p>Neo4j是一个高性能的、NOSQL(非关系型)的图形数据库。它将结构化数据存储在网络上而不是表中，是目前最流行的图形数据库之一。</p>
+<p>Neo4j的主要特点包括：</p>
+<ol>
+<li><strong>图形模型</strong>：Neo4j使用图形模型来表示和存储数据，这使得它非常适合表示复杂的关系网络。</li>
+<li><strong>高性能</strong>：由于其图形结构，Neo4j可以在处理复杂的关系查询时提供出色的性能。</li>
+<li><strong>灵活性</strong>：Neo4j支持ACID事务，支持通过Cypher查询语言进行数据查询，也支持通过RESTful API和各种语言的驱动程序进行访问。</li>
+<li><strong>扩展性</strong>：Neo4j可以在多台机器上分布运行，以提供更大的存储容量和更高的处理能力。</li>
+<li><strong>开源</strong>：Neo4j是开源的，这意味着你可以免费使用和修改它，而且有一个活跃的社区提供支持和开发新功能。</li>
+</ol>
+<p>Neo4j常常用于社交网络、推荐系统、路径规划、网络分析等多种场景，可以有效处理大量复杂的关系数据。</p>
+<h2 id="_1"><strong>安装：</strong></h2>
+<blockquote>
+<p>curl -O http://dist.neo4j.org/neo4j-community-3.4.5-unix.tar.gz</p>
+<p>tar -zxvf neo4j-community-3.4.5-unix.tar.gz</p>
+<p>cd neo4j-community-3.4.5/</p>
+<p>启动</p>
+<p>bin/neo4j start</p>
+<p>停止</p>
+<p>bin/neo4j stop</p>
+</blockquote>
+<h2 id="_2"><strong>几种导入数据方法：</strong></h2>
+<p><strong><em>少量数据，创建节点和关系</em></strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">py2neo</span> <span class="kn">import</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Relationship</span>
+<span class="k">class</span> <span class="nc">NEODB</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="s2">&quot;http://***:7474&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;***&quot;</span><span class="p">,</span> <span class="s2">&quot;***&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;**&quot;</span>
+    <span class="k">def</span> <span class="nf">merge_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+        <span class="c1"># 创建或获取节点</span>
+        <span class="n">node1</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="c1"># 创建或获取节点</span>
+        <span class="n">node2</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">child</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">node2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="c1"># 创建或获取关系</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="n">Relationship</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="s2">&quot;HAS_CHILD&quot;</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">rel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong><em>万级数据，使用LOAD CSV</em></strong></p>
+<p>生成节点和关系demo.csv</p>
+<table>
+<thead>
+<tr>
+<th>parent</th>
+<th>child</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生活、艺术与文化</td>
+<td>生活</td>
+</tr>
+<tr>
+<td>生活、艺术与文化</td>
+<td>收藏</td>
+</tr>
+</tbody>
+</table>
+<p>激活shell</p>
+<blockquote>
+<p>./bin/cypher-shell</p>
+</blockquote>
+<p>执行命令</p>
+<blockquote>
+<p>USING PERIODIC COMMIT 100
+LOAD CSV WITH HEADERS FROM 'file:///neo4j-community-3.4.5/import/demo.csv' AS line
+MERGE (p:cnwk {name: line.parent})
+MERGE (c:cnwk {name: line.child})
+MERGE (p)-[:HAS_CHILD]-&gt;(c);</p>
+</blockquote>
+<p><strong><em>百万级数据，使用neo4j-admin import</em></strong></p>
+<p>生成节点node.csv和关系rels.csv（因为没有merge命令可以用，所以node在生成csv时就去重）</p>
+<table>
+<thead>
+<tr>
+<th>:ID</th>
+<th>name</th>
+<th>:LABEL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>生活、艺术与文化</td>
+<td>cnwk</td>
+</tr>
+<tr>
+<td>2</td>
+<td>生活</td>
+<td>cnwk</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>:start_id</th>
+<th>:end_id</th>
+<th>:type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>HAS_CHILD</td>
+</tr>
+</tbody>
+</table>
+<p>执行命令</p>
+<blockquote>
+<p>./neo4j-admin import --database=demo --nodes=../import/node.csv --relationships=../import/rels.csv</p>
+</blockquote>
+<h2 id="sql">常用sql：</h2>
+<blockquote>
+<p>删除整个label</p>
+<p>MATCH (n:cnwk) DETACH DELETE n</p>
+<p>查询 / limit</p>
+<p>MATCH (n:cnwk) RETURN n LIMIT 25</p>
+<p>查询</p>
+<p>MATCH (root:cnwk {name: 'cnwkdataset'})-[:HAS_CHILD]-&gt;(level1)-[:HAS_CHILD]-&gt;(level2) RETURN root, level1, level2</p>
+<p>查询 / 有关系的前三层</p>
+<p>MATCH (n:enwk {name:"wkdataset"})-[:HAS_CHILD*..3]-&gt;(c) RETURN DISTINCT c</p>
+<p>知道某个子节点，向上查找链</p>
+<p>MATCH (b:cnwk {name: "篮球"})&lt;-[:HAS_CHILD*]-(parents: cnwk) RETURN parents</p>
+<p>知道某个节点，向上查找30层HAS_PARENT关系，limit 50，同时排序</p>
+<p>MATCH path = (child:cnwk {name:"篮球"})-[:HAS_PARENT*..30]-&gt;(parent:cnwk {name:"cnwkdataset"}) with path limit 50 WITH path ORDER BY length(path) ASC with [node in nodes(path) | node.name] AS nodelist return nodelist</p>
+</blockquote>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>

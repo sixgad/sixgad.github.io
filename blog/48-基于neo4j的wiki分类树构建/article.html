@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>基于neo4j的wiki分类树构建</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">雪重</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2023年9月16日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>neo4j,分类树,wiki</a></span>
+
+                  <h1 id="neo4jwiki">基于neo4j的wiki分类树构建</h1>
+<p><strong>目的：</strong></p>
+<ol>
+<li>构建世界知识分类树</li>
+<li>便于模型训练时对某一不均衡类别数据的抽取</li>
+</ol>
+<p><strong>采集wiki分类信息：</strong></p>
+<p>中文分类首页：https://zh.wikipedia.org/wiki/Wikipedia:%E5%88%86%E9%A1%9E%E7%B4%A2%E5%BC%95</p>
+<p>首页展示了一级和二级分类，内部更深层次分类采用爬虫收集</p>
+<p><img src="image-20230918135040064.png" alt="image-20230918135040064" style="zoom:80%;" /></p>
+<p><strong>数据存储：</strong></p>
+<p>在数据收集时，爬虫只需保留以下关系</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;child&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;电影&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;parent&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;生活、艺术与文化&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>为了便于后期分类树的生成和分析，引入neo4j这个图数据库。</p>
+<p><em>遇到的挑战，当节点和关系较多时，如何快速导入neo4j？</em></p>
+<p><img alt="image-20230918140024469" src="image-20230918140024469.png" /></p>
+<blockquote>
+<p>采用neo4j-admin import，命令如下，“啪就站起来了，很快啊!”</p>
+<p>./neo4j-admin import --database=wikicnen --nodes=../import/cnwk_nodes.csv --nodes=../import/enwk_nodes.csv --relationships=../import/cnwk_rels.csv --relationships=../import/enwk_rels.csv </p>
+</blockquote>
+<p><strong>实体分类树构建：</strong></p>
+<p>小试牛刀，查找前两层节点，可以看到，分类最后应该是一个关系网。</p>
+<blockquote>
+<p>MATCH (root:cnwk {name: 'cnwkdataset'})-[:HAS_CHILD]-&gt;(level1)-[:HAS_CHILD]-&gt;(level2) RETURN root, level1, level2<img alt="image-20230918140458750" src="image-20230918140458750.png" /></p>
+</blockquote>
+<p>导出excel，通过kutools插件，合并</p>
+<p><img src="image-20230918140751661.png" alt="image-20230918140751661" style="zoom:80%;" /></p>
+<p>最后通过子节点向上查找，构建完成百万级实体分类树。</p>
+<blockquote>
+<p><code>MATCH path = (child:cnwk {name:"篮球"})-[:HAS_PARENT*..25]-&gt;(parent:cnwk {name:"cnwkdataset"}) with path limit 100</code></p>
+</blockquote>
+<p>当遇见一个实体归属于多个类别时，通过到二级分类的最短路径来过滤，保留路径最短的链路。</p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>
