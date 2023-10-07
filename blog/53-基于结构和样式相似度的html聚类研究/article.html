@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Meta Tag -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <meta name="description" content="爬客,个人学习记录与分享python,web,spider,爬虫,逆向,工具脚本等技术的博客。">
+  <meta name="author" content="zp">
+
+
+  <title>基于结构和样式相似度的html聚类研究</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../static/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon"
+    href="../../static/images/favicon/apple-touch-icon.png">
+
+  <!-- All CSS Plugins -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/plugin.css">
+
+  <!-- Main CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+
+  <!-- Google Web Fonts  -->
+  <link rel="stylesheet" href="../../static/css/ft.css">
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Preloader Start -->
+  <div class="preloader">
+    <div class="rounder"></div>
+  </div>
+  <!-- Preloader End -->
+
+
+
+
+  <div id="main">
+    <div class="container">
+      <div class="row">
+
+
+
+        <!-- About Me (Left Sidebar) Start -->
+        <div class="col-md-3">
+          <div class="about-fixed">
+
+            <div class="my-pic">
+              <img src="../../static/images/top/270-229.png" alt="">
+              <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
+                  class="icon-menu menu"></i></a> -->
+              <!-- <div id="menu" class="collapse">
+                <ul class="menu-link">
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="work.html">Work</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                </ul>
+              </div> -->
+            </div>
+
+
+
+            <div class="my-detail">
+
+              <div class="white-spacing">
+                <span class="my-sub-title">雪重</span>
+                <span class="my-sub-title">Python Developer</span>
+                <span class="my-sub-title">知识 汗水 灵感 机遇</span>
+              </div>
+
+              <ul class="social-icon">
+                <li><a href="https://github.com/sixgad" target="_blank" class="github"><i class="fa fa-github"></i></a>
+                </li>
+                <!-- <li><a href="#" target="_blank" class="github"><i class="fa fa-qq"></i></a></li> -->
+                <li><a href="mailto:278270230@qq.com" target="_blank" class="github"><i class="fa fa-envelope"></i></a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <!-- About Me (Left Sidebar) End -->
+
+
+
+
+
+        <!-- Blog Post (Right Sidebar) Start -->
+        <div class="col-md-9">
+          <div class="col-md-12 page-body">
+            <div class="row">
+
+
+              <div class="sub-title">
+                <a href="../../index.html" title="Go to Home Page">
+                  <h1>Back Home</h1>
+                </a>
+                <!-- <a href="#comment" class="smoth-scroll"><i class="icon-bubbles"></i></a> -->
+              </div>
+
+              <div class="col-md-12 content-page">
+
+
+                <!-- Blog Post Start -->
+                <!-- <div class="col-md-12 blog-post">
+                  <div class="post-info">
+                  </div>
+                    博客正文预留位置
+
+                </div> -->
+
+                <div class="blog-cc">
+                  <span>2023年10月7日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>similarity</a></span>
+
+                  <h1 id="html">基于结构和样式相似度的html聚类研究</h1>
+<blockquote>
+<p>参考论文：https://sci-hub.se/10.1109/IRI.2016.30</p>
+</blockquote>
+<p>论文中提到的几点，<em>网页结构相似度，样式相似度，聚类</em>。本文依据论文思路和相关算法，用代码大致复现。</p>
+<p><strong>结构相似度</strong></p>
+<p>文中提到了APTED全路径树编辑距离算法。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">apted</span> <span class="kn">import</span> <span class="n">APTED</span><span class="p">,</span> <span class="n">helpers</span>
+
+
+<span class="k">def</span> <span class="nf">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_content</span><span class="p">):</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">html_content</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">parse_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">HtmlElement</span><span class="p">):</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_node</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">iterchildren</span><span class="p">()]</span>
+            <span class="k">return</span> <span class="s1">&#39;{</span><span class="si">%s%s</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">children</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">HtmlComment</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">parse_node</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">structural_similarity</span><span class="p">(</span><span class="n">html_1</span><span class="p">,</span> <span class="n">html_2</span><span class="p">):</span>
+    <span class="c1"># 转换为APTED的树表示</span>
+    <span class="n">tree1</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span><span class="n">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_1</span><span class="p">))</span>
+    <span class="n">tree2</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span><span class="n">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_2</span><span class="p">))</span>
+
+    <span class="n">apted_class</span> <span class="o">=</span> <span class="n">APTED</span><span class="p">(</span><span class="n">tree1</span><span class="p">,</span> <span class="n">tree2</span><span class="p">)</span>
+
+    <span class="c1"># 计算编辑距离</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">apted_class</span><span class="o">.</span><span class="n">compute_edit_distance</span><span class="p">()</span>
+    <span class="c1"># print(distance)</span>
+
+    <span class="c1"># 计算相似度</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">distance</span> <span class="o">/</span> <span class="p">(</span><span class="n">apted_class</span><span class="o">.</span><span class="n">it1</span><span class="o">.</span><span class="n">tree_size</span> <span class="o">+</span> <span class="n">apted_class</span><span class="o">.</span><span class="n">it2</span><span class="o">.</span><span class="n">tree_size</span><span class="p">)</span>
+</code></pre></div>
+
+<p>但当我们实际使用时，发现算法复杂度极高，尤其对于当前时代的网页结构，dom节点更为丰富的情况下，可尝试优化为使用 html 标签的序列比较来计算相似度。</p>
+<p><strong>样式相似度</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//*[@class]/@class&#39;</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_cls</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_cls</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">jaccard_similarity</span><span class="p">(</span><span class="n">set1</span><span class="p">,</span> <span class="n">set2</span><span class="p">):</span>
+    <span class="n">set1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">set1</span><span class="p">)</span>
+    <span class="n">set2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">set2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">set1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">set2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="n">intersection</span> <span class="o">=</span> <span class="n">set1</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">set2</span><span class="p">)</span>
+    <span class="n">union</span> <span class="o">=</span> <span class="n">set1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">set2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">union</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">style_similarity</span><span class="p">(</span><span class="n">page1</span><span class="p">,</span> <span class="n">page2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes CSS style Similarity between two DOM trees</span>
+
+<span class="sd">    A = classes(Document_1)</span>
+<span class="sd">    B = classes(Document_2)</span>
+
+<span class="sd">    style_similarity = |A &amp; B| / (|A| + |B| - |A &amp; B|)</span>
+
+<span class="sd">    :param page1: html of the page1</span>
+<span class="sd">    :param page2: html of the page2</span>
+<span class="sd">    :return: Number between 0 and 1. If the number is next to 1 the page are really similar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">classes_page1</span> <span class="o">=</span> <span class="n">get_classes</span><span class="p">(</span><span class="n">page1</span><span class="p">)</span>
+    <span class="n">classes_page2</span> <span class="o">=</span> <span class="n">get_classes</span><span class="p">(</span><span class="n">page2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jaccard_similarity</span><span class="p">(</span><span class="n">classes_page1</span><span class="p">,</span> <span class="n">classes_page2</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>聚类</strong></p>
+<p>文中使用的是共享最近邻算法，复现时使用<strong>DBSCAN</strong>，一种基于密度的聚类方法。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span>
+<span class="n">htmls</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;html&gt;&lt;/html&gt;&quot;</span><span class="p">,]</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">htmls</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">htmls</span><span class="p">)))</span>
+
+<span class="c1"># 需要计算相似度矩阵, similarity_matrix由结构相似度和样式相似度计算得到</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">code...</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># 假设你有一个距离矩阵</span>
+<span class="c1"># 注意，DBSCAN需要一个距离矩阵，而不是相似度矩阵</span>
+<span class="c1"># 你可能需要将你的相似度矩阵转换为距离矩阵，例如，通过 d = 1 - s</span>
+<span class="n">distance_matrix</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">similarity_matrix</span>
+
+<span class="c1"># 使用DBSCAN进行聚类</span>
+<span class="c1"># eps是邻域的大小，min_samples是形成核心对象所需要的最小邻居数目</span>
+<span class="c1"># 你可能需要调整这些参数来得到好的聚类结果</span>
+<span class="n">clustering</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;precomputed&#39;</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>结果</strong></p>
+<p>从cc数据中抽取了部分域名的网站，聚类结果大致如下：</p>
+<p><img src="image-20231007145932631.png" alt="image-20231007145932631" style="zoom:80%;" /></p>
+<p><img src="image-20231007150022247.png" alt="image-20231007150022247" style="zoom:80%;" /></p>
+
+                </div>
+                <!-- Blog Post End -->
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- Footer Start -->
+          <div class="col-md-12 page-body margin-top-50 footer">
+            <footer>
+              <!-- <ul class="menu-link">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul> -->
+
+              <p>Copyright © 2021
+                <a href="#" target="_blank">爬客</a> All rights reserved
+              </p>
+              <p>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow"
+                  target="_blank">辽ICP备2021000509号-1</a>
+                <img src="../../static/images/top/beian.png"
+                  style="display: inline-block;vertical-align: sub;margin-left: 10px;">
+                <a target="_blank" href="http://www.beian.gov.cn/portal/index.do" rel="nofollow">辽公网安备
+                  21032302210389号</a>
+              </p>
+              <p>联系邮箱：
+                <a href="#" rel="nofollow" target="_blank">278270230@qq.com</a>
+              </p>
+              <a href="#">
+                <div class="top_tag"></div>
+              </a>
+            </footer>
+
+          </div>
+          <!-- Footer End -->
+
+
+        </div>
+        <!-- Blog Post (Right Sidebar) End -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Start -->
+  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <!-- Back to Top End -->
+
+
+  <!-- All Javascript Plugins  -->
+  <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../../static/js/plugin.js"></script>
+
+  <!-- Main Javascript File  -->
+  <script type="text/javascript" src="../../static/js/scripts.js"></script>
+
+
+</body>
+
+</html>
