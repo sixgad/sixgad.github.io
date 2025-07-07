@@ -135,21 +135,21 @@
 <p>https://github.com/3proxy/3proxy/releases</p>
 </blockquote>
 <p><strong>编辑配置文件3proxy.cfg</strong></p>
-<div class="codehilite"><pre><span></span><code># daemon
-# nserver 8.8.8.8
-# nserver 8.8.4.4
-# nscache 65536
+<div class="codehilite"><pre><span></span><code><span class="gh">#</span> daemon
+<span class="gh">#</span> nserver 8.8.8.8
+<span class="gh">#</span> nserver 8.8.4.4
+<span class="gh">#</span> nscache 65536
 
 
-# timeouts 1 5 30 60 180 1800 15 60
+<span class="gh">#</span> timeouts 1 5 30 60 180 1800 15 60
 log 3proxy.log
-# users username:CL:password
-# auth none
-allow *
+<span class="gh">#</span> users username:CL:password
+<span class="gh">#</span> auth none
+allow <span class="gs">*</span>
 
 
-# 权重和为1000
-parent 500 socks5 134.*.*.3 9999 name pwd
+<span class="gs"># 权重和为1000</span>
+<span class="gs">parent 500 socks5 134.*</span>.*.3 9999 name pwd
 parent 500 socks5 23.*.*.131 9999 name pwd
 
 

@@ -144,11 +144,11 @@
 <p>pip install tortoise-orm</p>
 </blockquote>
 <p>定义你的模型models.py：</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">tortoise.models</span> <span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">fields</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tortoise.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tortoise</span><span class="w"> </span><span class="kn">import</span> <span class="n">fields</span>
 
-<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Blog</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    博客文章表</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -156,15 +156,15 @@
     <span class="n">url</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
     <span class="n">content</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">views</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">table</span> <span class="o">=</span> <span class="s2">&quot;blog&quot;</span>
 </code></pre></div>
 
 <p>初始化你的模型和数据库test.py：</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">Blog</span>
-<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Tortoise</span><span class="p">,</span> <span class="n">run_async</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tortoise</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tortoise</span><span class="p">,</span> <span class="n">run_async</span>
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">():</span>
     <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
         <span class="n">db_url</span><span class="o">=</span><span class="s1">&#39;sqlite://db.sqlite3&#39;</span><span class="p">,</span>
         <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;models&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;models&#39;</span><span class="p">]}</span><span class="c1">#models.py位置</span>
@@ -235,8 +235,8 @@
 <h2 id="3web">3.对于web开发框架的支持</h2>
 <p>对于Sanic、fastapi等有着很好的支持。</p>
 <p>比如在Sanic中启用Tortoise ORM，so easy!</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">sanic</span> <span class="kn">import</span> <span class="n">Sanic</span>
-<span class="kn">from</span> <span class="nn">tortoise.contrib.sanic</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sanic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sanic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tortoise.contrib.sanic</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_tortoise</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Sanic</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">register_tortoise</span><span class="p">(</span>
     <span class="n">app</span><span class="p">,</span> <span class="n">db_url</span><span class="o">=</span><span class="s2">&quot;sqlite://yourdb&quot;</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;models&quot;</span><span class="p">]},</span> <span class="n">generate_schemas</span><span class="o">=</span><span class="kc">True</span>

@@ -13,7 +13,7 @@
   <meta name="author" content="zp">
 
 
-  <title>rclone在s3跨集群迁移的使用</title>
+  <title>开启bbr加速</title>
 
   <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
   <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
@@ -123,53 +123,98 @@
                 </div> -->
 
                 <div class="blog-cc">
-                  <span>2023年5月12日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>rclone s3 ceph</a></span>
+                  <span>2025年7月2日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>network</a></span>
 
-                  <h1 id="rclones3">rclone在s3跨集群迁移的使用</h1>
-<p>同一区域ceph集群迁移使用aws s3 sync s3://buck1/dir1/ s3://buck2/dir1/就行</p>
-<p>如果一个s3协议的ceph存储集群在上海（s1），一个存储集群在内蒙古阿里云oss（s2），总体积上百TB(无法满足先下载到本地磁盘)，同时还包含众多小文件如何同步？</p>
-<h2 id="1rclone">1.rclone配置</h2>
-<p>默认配置文件存放位置为： ~/.config/rclone/rclone.conf</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[s1]</span>
-<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span>
-<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Ceph</span>
-<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">O1***</span>
-<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ep***</span>
-<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">http://10.*.*.*:80</span>
-<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span>
-
-<span class="k">[s2]</span>
-<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span>
-<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Alibaba</span>
-<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LTA***</span>
-<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">cH***</span>
-<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https://oss-cn-***.aliyuncs.com</span>
-<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span>
-<span class="na">bucket_acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span>
-</code></pre></div>
-
-<h2 id="2">2.传输命令示例</h2>
-<blockquote>
-<p>rclone copy --progress --fast-list --transfers 200 --checkers 200 s1:buck1/dir1/ s2:buck1/dir1/</p>
-<p>也可使用rclone sync</p>
-</blockquote>
-<p>--progress 打印传输日志</p>
-<p>--fast-list 加速列出文件</p>
-<p>--transfers 200 --checkers 200 设置比较大的传输线程数，和比较两边文件信息线程数，用于小文件特别多的情况</p>
-<p><strong>rclone copy</strong> 会先check比较，不会覆盖目标位置的现有文件</p>
-<p><strong>rclone copy</strong> 只有在以下情况下才会覆盖现有文件：</p>
+                  <h1 id="bbr">开启bbr加速</h1>
+<p>在 Ubuntu 系统上开启 <strong>BBR 加速</strong> （Bottleneck Bandwidth and Round-trip propagation time）可以显著提升网络性能。</p>
+<h2 id="bbr_1">开启bbr详细步骤：</h2>
 <ul>
-<li>源文件的修改时间（Modification Time）晚于目标文件；</li>
-<li>源文件与目标文件的大小不同。</li>
+<li><strong>加载 BBR 模块</strong> （如果未启用）：</li>
 </ul>
-<p><strong>注意，rclone sync</strong> 会保持两个目录下内容完全一致，如果源目录内容少于目标目录内容，会将目标目录多出的内容删除</p>
-<p>区别于aws s3 sync，如果源目录内容少于目标目录内容，只会将源目录不同于目标目录的部分上传（无删除操作）</p>
-<h2 id="3rclone">3.其常用rclone命令</h2>
+<p><code>bash
+  sudo modprobe tcp_bbr</code></p>
 <ul>
-<li>rclone size s1:buck1/dir1/  统计s3上buck1/dir1/文件夹大小</li>
-<li>rclone lsf s1:buck1/dir1/ 打印s3上buck1/dir1/内所有文件名</li>
-<li>rclone 打印所有rclone参数，自行查找需要使用的命令</li>
+<li><strong>修改系统配置文件</strong></li>
 </ul>
+<p><code>bash
+  echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.conf
+  echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a /etc/sysctl.conf</code></p>
+<ul>
+<li><strong>应用</strong></li>
+</ul>
+<p><code>bash
+  sudo sysctl -p</code></p>
+<ul>
+<li><strong>验证 BBR 是否生效</strong></li>
+</ul>
+<p><code>bash
+  sysctl net.ipv4.tcp_congestion_control</code></p>
+<p>应显示 <code>net.ipv4.tcp_congestion_control = bbr</code></p>
+<p><code>bash
+  lsmod | grep bbr</code></p>
+<p>输出包含 <code>tcp_bbr</code></p>
+<h2 id="bbr_2">开启bbr的好&amp;坏</h2>
+<h3 id="_1">‌<strong>好处</strong>‌</h3>
+<ol>
+<li>
+<p>‌<strong>提升网络吞吐量</strong>‌</p>
+</li>
+<li>
+<p>动态测量带宽和延迟，避免传统算法过度降速问题，充分利用空闲带宽，显著提高数据传输效率（跨运营商场景下实测下载速度可提升 50%）。</p>
+</li>
+<li>
+<p>在高延迟、高丢包网络中（如海外服务器），性能提升更显著。</p>
+</li>
+<li>
+<p>‌<strong>降低传输延迟</strong>‌</p>
+</li>
+<li>
+<p>通过减少数据包排队时间，有效降低网络延迟（RTT），提升实时应用流畅性（如视频会议、在线游戏）。</p>
+</li>
+<li>
+<p>‌<strong>抗丢包能力强</strong>‌</p>
+</li>
+<li>
+<p>不依赖丢包作为拥塞信号，在高丢包率环境下仍保持稳定传输（4G/移动网络场景优势明显）。</p>
+</li>
+<li>
+<p>‌<strong>网络适应性优</strong>‌</p>
+</li>
+<li>
+<p>实时响应带宽波动和延迟变化，快速适应网络条件波动（如高峰时段拥塞）。</p>
+</li>
+</ol>
+<hr />
+<h3 id="_2">️ ‌<strong>坏处</strong>‌</h3>
+<ol>
+<li>
+<p>‌<strong>公平性问题</strong>‌</p>
+</li>
+<li>
+<p>与传统算法（如 Cubic）共存时，BBR 可能抢占过多带宽（浅缓冲区场景下可占 90% 带宽），导致其他连接性能下降。</p>
+</li>
+<li>
+<p>‌<strong>CPU 开销增加</strong>‌</p>
+</li>
+<li>
+<p>启用 BBR 需配合 <code>fq</code> 队列调度器，否则内核高精度计时器（hrtimer）会显著增加 CPU 负载。</p>
+</li>
+<li>
+<p>‌<strong>收敛速度较慢</strong>‌</p>
+</li>
+<li>
+<p>初始阶段需较长时间探测带宽和延迟，短连接场景（如 HTTP 短请求）收益有限。</p>
+</li>
+<li>
+<p>‌<strong>特定场景性能下降</strong>‌</p>
+</li>
+<li>
+<p>在缓冲区深度大的网络中（如 10MB+），BBR 竞争不过 Cubic，吞吐量可能降低。</p>
+</li>
+<li>高质量网络环境（如数据中心内部）开启 BBR 可能无提升甚至轻微降低性能。</li>
+</ol>
+<h2 id="bbr_3">什么场景应该开启bbr</h2>
+<p>跨境网络、高丢包高延迟环境。</p>
 
                 </div>
                 <!-- Blog Post End -->

@@ -13,7 +13,7 @@
   <meta name="author" content="zp">
 
 
-  <title>rclone在s3跨集群迁移的使用</title>
+  <title>免费markdown编辑器MarkText平替Typora</title>
 
   <link rel="stylesheet" type="text/css" href="../../static/css/pygments.css">
   <link rel="stylesheet" type="text/css" href="../../static/css/github.css">
@@ -123,53 +123,13 @@
                 </div> -->
 
                 <div class="blog-cc">
-                  <span>2023年5月12日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>rclone s3 ceph</a></span>
+                  <span>2025年7月2日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>markdown</a></span>
 
-                  <h1 id="rclones3">rclone在s3跨集群迁移的使用</h1>
-<p>同一区域ceph集群迁移使用aws s3 sync s3://buck1/dir1/ s3://buck2/dir1/就行</p>
-<p>如果一个s3协议的ceph存储集群在上海（s1），一个存储集群在内蒙古阿里云oss（s2），总体积上百TB(无法满足先下载到本地磁盘)，同时还包含众多小文件如何同步？</p>
-<h2 id="1rclone">1.rclone配置</h2>
-<p>默认配置文件存放位置为： ~/.config/rclone/rclone.conf</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[s1]</span>
-<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span>
-<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Ceph</span>
-<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">O1***</span>
-<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ep***</span>
-<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">http://10.*.*.*:80</span>
-<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span>
-
-<span class="k">[s2]</span>
-<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3</span>
-<span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Alibaba</span>
-<span class="na">access_key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LTA***</span>
-<span class="na">secret_access_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">cH***</span>
-<span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https://oss-cn-***.aliyuncs.com</span>
-<span class="na">acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span>
-<span class="na">bucket_acl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">private</span>
-</code></pre></div>
-
-<h2 id="2">2.传输命令示例</h2>
-<blockquote>
-<p>rclone copy --progress --fast-list --transfers 200 --checkers 200 s1:buck1/dir1/ s2:buck1/dir1/</p>
-<p>也可使用rclone sync</p>
-</blockquote>
-<p>--progress 打印传输日志</p>
-<p>--fast-list 加速列出文件</p>
-<p>--transfers 200 --checkers 200 设置比较大的传输线程数，和比较两边文件信息线程数，用于小文件特别多的情况</p>
-<p><strong>rclone copy</strong> 会先check比较，不会覆盖目标位置的现有文件</p>
-<p><strong>rclone copy</strong> 只有在以下情况下才会覆盖现有文件：</p>
-<ul>
-<li>源文件的修改时间（Modification Time）晚于目标文件；</li>
-<li>源文件与目标文件的大小不同。</li>
-</ul>
-<p><strong>注意，rclone sync</strong> 会保持两个目录下内容完全一致，如果源目录内容少于目标目录内容，会将目标目录多出的内容删除</p>
-<p>区别于aws s3 sync，如果源目录内容少于目标目录内容，只会将源目录不同于目标目录的部分上传（无删除操作）</p>
-<h2 id="3rclone">3.其常用rclone命令</h2>
-<ul>
-<li>rclone size s1:buck1/dir1/  统计s3上buck1/dir1/文件夹大小</li>
-<li>rclone lsf s1:buck1/dir1/ 打印s3上buck1/dir1/内所有文件名</li>
-<li>rclone 打印所有rclone参数，自行查找需要使用的命令</li>
-</ul>
+                  <h1 id="markdownmarktexttypora">免费markdown编辑器MarkText，平替Typora</h1>
+<p>‌<strong>MarkText是一款开源免费的Markdown编辑器，支持Windows、macOS和Linux系统，以简洁界面、实时预览（所见即所得）和丰富的功能（如表格、流程图、数学公式等）著称，常被视为Typora的平替工具。</strong></p>
+<p><a href="https://github.com/marktext/marktext">marktext官方仓库</a></p>
+<p>注：官方下载为英文版</p>
+<p><a href="https://github.com/chinayangxiaowei/marktext-chinese-language-pack/releases">中文版下载地址</a></p>
 
                 </div>
                 <!-- Blog Post End -->

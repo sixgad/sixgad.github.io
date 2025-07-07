@@ -142,14 +142,14 @@
 <p>apt install tmux</p>
 </blockquote>
 <p><strong>新建session</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">直接创建</span><span class="w"></span>
-<span class="n">tmux</span><span class="w"></span>
-<span class="err">#</span><span class="w"> </span><span class="n">指定session_name</span><span class="w"></span>
-<span class="n">tmux</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="o">[</span><span class="n">session_name</span><span class="o">]</span><span class="w"></span>
-<span class="err">#</span><span class="w"> </span><span class="n">挂起</span><span class="err">，</span><span class="n">不是退出</span><span class="w"> </span><span class="n">detach</span><span class="w"></span>
-<span class="n">Ctrl</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b后再d</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">直接创建</span>
+<span class="n">tmux</span>
+<span class="err">#</span><span class="w"> </span><span class="n">指定session_name</span>
+<span class="n">tmux</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="o">[</span><span class="n">session_name</span><span class="o">]</span>
+<span class="err">#</span><span class="w"> </span><span class="n">挂起</span><span class="err">，</span><span class="n">不是退出</span><span class="w"> </span><span class="n">detach</span>
+<span class="n">Ctrl</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b后再d</span>
 <span class="err">#</span><span class="w"> </span><span class="n">连接</span><span class="w"> </span><span class="n">attach</span><span class="w"> </span>
-<span class="n">tmux</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="k">session</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">tmux</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="k">session</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
 </code></pre></div>
 
 <p><strong>显示所有session</strong></p>

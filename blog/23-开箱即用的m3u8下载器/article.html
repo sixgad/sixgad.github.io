@@ -164,10 +164,10 @@ ttt.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/m0eBxHTh.ts
 比如阿里云大学的TS视频AES密钥做了位运算处理。牛客网的TS视频AES密钥在发送前被AES加密了一遍</p>
 </blockquote>
 <h2 id="2">2.从零开发，部分代码</h2>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">M3u8VideoDownloader</span><span class="p">():</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m3u8_url</span><span class="p">,</span> <span class="n">download_path</span><span class="o">=</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="n">video_name</span><span class="o">=</span><span class="s1">&#39;xhp&#39;</span><span class="p">,</span> <span class="n">is_del_clip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">M3u8VideoDownloader</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m3u8_url</span><span class="p">,</span> <span class="n">download_path</span><span class="o">=</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="n">video_name</span><span class="o">=</span><span class="s1">&#39;xhp&#39;</span><span class="p">,</span> <span class="n">is_del_clip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">dec_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">m3u8_content_plaintext</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param m3u8_url: m3u8链接</span>
 <span class="sd">        :param download_path: 下载路径</span>
 <span class="sd">        :param video_name: 视频名称（不能出现括号）</span>

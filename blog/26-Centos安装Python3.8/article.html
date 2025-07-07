@@ -129,9 +129,9 @@
 <p>centos7下源码编译安装python3.8（3.7+版本均可），3.6可通过yum安装（yum install python36）略。。。</p>
 <h2 id="1">1.安装编译相关工具</h2>
 <p>准备工作，每台机器运行过一次即可</p>
-<div class="codehilite"><pre><span></span><code>yum -y groupinstall <span class="s2">&quot;Development tools&quot;</span>
-yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel
-yum -y install libffi-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+<div class="codehilite"><pre><span></span><code>yum<span class="w"> </span>-y<span class="w"> </span>groupinstall<span class="w"> </span><span class="s2">&quot;Development tools&quot;</span>
+yum<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>zlib-devel<span class="w"> </span>bzip2-devel<span class="w"> </span>openssl-devel<span class="w"> </span>ncurses-devel<span class="w"> </span>sqlite-devel<span class="w"> </span>readline-devel
+yum<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>libffi-devel<span class="w"> </span>tk-devel<span class="w"> </span>gdbm-devel<span class="w"> </span>db4-devel<span class="w"> </span>libpcap-devel<span class="w"> </span>xz-devel
 </code></pre></div>
 
 <h2 id="2python">2.下载python源码包</h2>
@@ -139,23 +139,23 @@ yum -y install libffi-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
 <p><img alt="image-20211108212857021" src="image-20211108212857021.png" /></p>
 <p>本文以<strong>3.8.8</strong>版本为例</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># 下载</span>
-wget https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tgz
+wget<span class="w"> </span>https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tgz
 <span class="c1"># 解压</span>
-tar -zxvf  Python-3.8.8.tgz
+tar<span class="w"> </span>-zxvf<span class="w">  </span>Python-3.8.8.tgz
 </code></pre></div>
 
 <h2 id="3">3.编译安装</h2>
-<div class="codehilite"><pre><span></span><code>mkdir /usr/local/python3.8 <span class="c1">#创建编译安装目录</span>
-<span class="nb">cd</span> Python-3.8.8
-./configure --prefix<span class="o">=</span>/usr/local/python3.8
-make <span class="o">&amp;&amp;</span> make install
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>/usr/local/python3.8<span class="w"> </span><span class="c1">#创建编译安装目录</span>
+<span class="nb">cd</span><span class="w"> </span>Python-3.8.8
+./configure<span class="w"> </span>--prefix<span class="o">=</span>/usr/local/python3.8
+make<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>install
 </code></pre></div>
 
 <h2 id="4">4.创建软连接</h2>
 <div class="codehilite"><pre><span></span><code><span class="c1"># python</span>
-ln -s /usr/local/python3.8/bin/python3.8 /usr/bin/python38
+ln<span class="w"> </span>-s<span class="w"> </span>/usr/local/python3.8/bin/python3.8<span class="w"> </span>/usr/bin/python38
 <span class="c1"># pip</span>
-ln -s /usr/local/python3.8/bin/pip3.8 /usr/bin/pip38
+ln<span class="w"> </span>-s<span class="w"> </span>/usr/local/python3.8/bin/pip3.8<span class="w"> </span>/usr/bin/pip38
 </code></pre></div>
 
 <h2 id="5">5.使用</h2>

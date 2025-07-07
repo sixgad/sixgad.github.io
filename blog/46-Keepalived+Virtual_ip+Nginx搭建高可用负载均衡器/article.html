@@ -135,47 +135,47 @@
 </ol>
 <p><strong>Nginx 配置</strong></p>
 <p>此配置主要作用，通过公网ip-&gt;vip&gt;nginx转发-&gt;ceph，实现打洞</p>
-<div class="codehilite"><pre><span></span><code><span class="n">user</span><span class="w"> </span><span class="n">root</span><span class="p">;</span><span class="w"></span>
-<span class="n">worker_processes</span><span class="w"> </span><span class="n">auto</span><span class="p">;</span><span class="w"></span>
-<span class="n">pid</span><span class="w"> </span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">pid</span><span class="p">;</span><span class="w"></span>
-<span class="n">worker_rlimit_nofile</span><span class="w"> </span><span class="mi">1048576</span><span class="p">;</span><span class="w"></span>
-<span class="n">events</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">worker_connections</span><span class="w"> </span><span class="mi">65535</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="n">user</span><span class="w"> </span><span class="n">root</span><span class="p">;</span>
+<span class="n">worker_processes</span><span class="w"> </span><span class="n">auto</span><span class="p">;</span>
+<span class="n">pid</span><span class="w"> </span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">pid</span><span class="p">;</span>
+<span class="n">worker_rlimit_nofile</span><span class="w"> </span><span class="mi">1048576</span><span class="p">;</span>
+<span class="n">events</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">worker_connections</span><span class="w"> </span><span class="mi">65535</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="n">http</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-
-<span class="w">    </span><span class="n">sendfile</span><span class="w"> </span><span class="n">on</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">proxy_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">proxy_send_timeout</span><span class="w">    </span><span class="mi">600</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">proxy_read_timeout</span><span class="w">    </span><span class="mi">600</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="c1"># 设置单个缓冲区大小为 16k</span><span class="w"></span>
-<span class="w">    </span><span class="n">proxy_buffer_size</span><span class="w"> </span><span class="mi">200</span><span class="n">k</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># 设置每个缓冲区的数量和大小</span><span class="w"></span>
-<span class="w">    </span><span class="n">proxy_buffers</span><span class="w"> </span><span class="mi">512</span><span class="w"> </span><span class="mi">200</span><span class="n">k</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">default_type</span><span class="w"> </span><span class="n">application</span><span class="o">/</span><span class="n">octet</span><span class="o">-</span><span class="n">stream</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">ssl_protocols</span><span class="w"> </span><span class="n">TLSv1</span><span class="w"> </span><span class="n">TLSv1</span><span class="o">.</span><span class="mi">1</span><span class="w"> </span><span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1"># Dropping SSLv3, ref: POODLE</span><span class="w"></span>
-<span class="w">    </span><span class="n">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="n">on</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">access_log</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">error_log</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># gzip on;</span><span class="w"></span>
+<span class="n">http</span><span class="w"> </span><span class="p">{</span>
 
 
-<span class="w">    </span><span class="n">server</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">listen</span><span class="w"> </span><span class="mi">30000</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">location</span><span class="w"> </span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">upload</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">proxy_pass</span><span class="w"> </span><span class="p">{</span><span class="n">ceph的endpoint</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">proxy_set_header</span><span class="w"> </span><span class="n">Host</span><span class="w"> </span><span class="o">$</span><span class="n">host</span><span class="p">:</span><span class="mi">30000</span><span class="p">;</span><span class="w"></span>
-<span class="w">            </span><span class="n">proxy_redirect</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="w"></span>
-<span class="w">            </span><span class="n">client_max_body_size</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="w">            </span><span class="n">proxy_cache</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">sendfile</span><span class="w"> </span><span class="n">on</span><span class="p">;</span>
+<span class="w">    </span><span class="n">proxy_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+<span class="w">    </span><span class="n">proxy_send_timeout</span><span class="w">    </span><span class="mi">600</span><span class="p">;</span>
+<span class="w">    </span><span class="n">proxy_read_timeout</span><span class="w">    </span><span class="mi">600</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1"># 设置单个缓冲区大小为 16k</span>
+<span class="w">    </span><span class="n">proxy_buffer_size</span><span class="w"> </span><span class="mi">200</span><span class="n">k</span><span class="p">;</span>
+<span class="w">    </span><span class="c1"># 设置每个缓冲区的数量和大小</span>
+<span class="w">    </span><span class="n">proxy_buffers</span><span class="w"> </span><span class="mi">512</span><span class="w"> </span><span class="mi">200</span><span class="n">k</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">default_type</span><span class="w"> </span><span class="n">application</span><span class="o">/</span><span class="n">octet</span><span class="o">-</span><span class="n">stream</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ssl_protocols</span><span class="w"> </span><span class="n">TLSv1</span><span class="w"> </span><span class="n">TLSv1</span><span class="o">.</span><span class="mi">1</span><span class="w"> </span><span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1"># Dropping SSLv3, ref: POODLE</span>
+<span class="w">    </span><span class="n">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="n">on</span><span class="p">;</span>
+<span class="w">    </span><span class="n">access_log</span><span class="w"> </span><span class="n">off</span><span class="p">;</span>
+<span class="w">    </span><span class="n">error_log</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
+<span class="w">    </span><span class="c1"># gzip on;</span>
+
+
+<span class="w">    </span><span class="n">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">listen</span><span class="w"> </span><span class="mi">30000</span><span class="p">;</span>
+<span class="w">        </span><span class="n">location</span><span class="w"> </span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">upload</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">proxy_pass</span><span class="w"> </span><span class="p">{</span><span class="n">ceph的endpoint</span><span class="p">};</span>
+<span class="w">            </span><span class="n">proxy_set_header</span><span class="w"> </span><span class="n">Host</span><span class="w"> </span><span class="o">$</span><span class="n">host</span><span class="p">:</span><span class="mi">30000</span><span class="p">;</span>
+<span class="w">            </span><span class="n">proxy_redirect</span><span class="w"> </span><span class="n">off</span><span class="p">;</span>
+<span class="w">            </span><span class="n">client_max_body_size</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="n">proxy_cache</span><span class="w"> </span><span class="n">off</span><span class="p">;</span>
 <span class="w">       </span><span class="p">}</span><span class="w">    </span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="p">}</span><span class="w"></span>
+<span class="p">}</span>
 </code></pre></div>
 
 <p><strong>Keepalived 配置</strong></p>
@@ -190,92 +190,92 @@
 </li>
 </ol>
 <p>在主节点上添加以下内容:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">vrrp_script</span><span class="w"> </span><span class="n">chk_nginx</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">script</span><span class="w"> </span><span class="ss">&quot;/etc/keepalived/scripts/nginx_check.sh&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="k">interval</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
-<span class="w">    </span><span class="n">weight</span><span class="w"> </span><span class="o">-</span><span class="mi">20</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
-<span class="n">global_defs</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">   </span><span class="n">notification_email</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">     </span><span class="n">acassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">     </span><span class="n">failover</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">     </span><span class="n">sysadmin</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">   </span><span class="err">}</span><span class="w"></span>
-<span class="w">   </span><span class="n">notification_email_from</span><span class="w"> </span><span class="n">Alexandre</span><span class="p">.</span><span class="n">Cassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">   </span><span class="n">smtp_server</span><span class="w"> </span><span class="mf">192.168.200.1</span><span class="w"></span>
-<span class="w">   </span><span class="n">smtp_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="w"></span>
-<span class="w">   </span><span class="n">router_id</span><span class="w"> </span><span class="n">LVS_DEVEL</span><span class="w"></span>
-<span class="w">   </span><span class="n">#vrrp_skip_check_adv_addr</span><span class="w"></span>
-<span class="w">   </span><span class="n">#vrrp_strict</span><span class="w"></span>
-<span class="w">   </span><span class="n">script_user</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
-<span class="w">   </span><span class="n">enable_script_security</span><span class="w"></span>
-<span class="w">   </span><span class="n">vrrp_garp_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">   </span><span class="n">vrrp_gna_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="nx">vrrp_script</span><span class="w"> </span><span class="nx">chk_nginx</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">script</span><span class="w"> </span><span class="s">&quot;/etc/keepalived/scripts/nginx_check.sh&quot;</span>
+<span class="w">    </span><span class="nx">interval</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="nx">weight</span><span class="w"> </span><span class="o">-</span><span class="mi">20</span>
+<span class="p">}</span>
+<span class="nx">global_defs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nx">notification_email</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nx">acassen</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">     </span><span class="nx">failover</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">     </span><span class="nx">sysadmin</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="nx">notification_email_from</span><span class="w"> </span><span class="nx">Alexandre</span><span class="p">.</span><span class="nx">Cassen</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">   </span><span class="nx">smtp_server</span><span class="w"> </span><span class="m m-Double">192.168.200.1</span>
+<span class="w">   </span><span class="nx">smtp_connect_timeout</span><span class="w"> </span><span class="mi">30</span>
+<span class="w">   </span><span class="nx">router_id</span><span class="w"> </span><span class="nx">LVS_DEVEL</span>
+<span class="w">   </span><span class="err">#</span><span class="nx">vrrp_skip_check_adv_addr</span>
+<span class="w">   </span><span class="err">#</span><span class="nx">vrrp_strict</span>
+<span class="w">   </span><span class="nx">script_user</span><span class="w"> </span><span class="nx">root</span>
+<span class="w">   </span><span class="nx">enable_script_security</span>
+<span class="w">   </span><span class="nx">vrrp_garp_interval</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">   </span><span class="nx">vrrp_gna_interval</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
 
-<span class="n">vrrp_instance</span><span class="w"> </span><span class="n">VI_1</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">state</span><span class="w"> </span><span class="n">MASTER</span><span class="w"></span>
-<span class="w">    </span><span class="n">interface</span><span class="w"> </span><span class="n">eth0</span><span class="w"></span>
-<span class="w">    </span><span class="n">virtual_router_id</span><span class="w"> </span><span class="mi">55</span><span class="w"></span>
-<span class="w">    </span><span class="n">priority</span><span class="w"> </span><span class="mi">100</span><span class="w"></span>
-<span class="w">    </span><span class="n">advert_int</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">    </span><span class="n">authentication</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">auth_type</span><span class="w"> </span><span class="n">PASS</span><span class="w"></span>
-<span class="w">        </span><span class="n">auth_pass</span><span class="w"> </span><span class="mi">1111</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">virtual_ipaddress</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="mf">10.</span><span class="o">***</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">track_script</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">chk_nginx</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="nx">vrrp_instance</span><span class="w"> </span><span class="nx">VI_1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">state</span><span class="w"> </span><span class="nx">MASTER</span>
+<span class="w">    </span><span class="kd">interface</span><span class="w"> </span><span class="nx">eth0</span>
+<span class="w">    </span><span class="nx">virtual_router_id</span><span class="w"> </span><span class="mi">55</span>
+<span class="w">    </span><span class="nx">priority</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">    </span><span class="nx">advert_int</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="nx">authentication</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">auth_type</span><span class="w"> </span><span class="nx">PASS</span>
+<span class="w">        </span><span class="nx">auth_pass</span><span class="w"> </span><span class="mi">1111</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">virtual_ipaddress</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="mi">10</span><span class="p">.</span><span class="o">***</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">track_script</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">chk_nginx</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="err">}</span><span class="w"></span>
+<span class="p">}</span>
 </code></pre></div>
 
 <p>在备节点上添加以下内容：</p>
-<div class="codehilite"><pre><span></span><code><span class="n">vrrp_script</span><span class="w"> </span><span class="n">chk_nginx</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">script</span><span class="w"> </span><span class="ss">&quot;/etc/keepalived/scripts/nginx_check.sh&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="k">interval</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
-<span class="w">    </span><span class="n">weight</span><span class="w"> </span><span class="o">-</span><span class="mi">20</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="nx">vrrp_script</span><span class="w"> </span><span class="nx">chk_nginx</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">script</span><span class="w"> </span><span class="s">&quot;/etc/keepalived/scripts/nginx_check.sh&quot;</span>
+<span class="w">    </span><span class="nx">interval</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="nx">weight</span><span class="w"> </span><span class="o">-</span><span class="mi">20</span>
+<span class="p">}</span>
 
-<span class="n">global_defs</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">   </span><span class="n">notification_email</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">     </span><span class="n">acassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">     </span><span class="n">failover</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">     </span><span class="n">sysadmin</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">   </span><span class="err">}</span><span class="w"></span>
-<span class="w">   </span><span class="n">notification_email_from</span><span class="w"> </span><span class="n">Alexandre</span><span class="p">.</span><span class="n">Cassen</span><span class="nv">@firewall</span><span class="p">.</span><span class="n">loc</span><span class="w"></span>
-<span class="w">   </span><span class="n">smtp_server</span><span class="w"> </span><span class="mf">192.168.200.1</span><span class="w"></span>
-<span class="w">   </span><span class="n">smtp_connect_timeout</span><span class="w"> </span><span class="mi">30</span><span class="w"></span>
-<span class="w">   </span><span class="n">router_id</span><span class="w"> </span><span class="n">LVS_DEVEL</span><span class="w"></span>
-<span class="w">   </span><span class="n">#vrrp_skip_check_adv_addr</span><span class="w"></span>
-<span class="w">   </span><span class="n">#vrrp_strict</span><span class="w"></span>
-<span class="w">   </span><span class="n">script_user</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
-<span class="w">   </span><span class="n">enable_script_security</span><span class="w"></span>
-<span class="w">   </span><span class="n">vrrp_garp_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">   </span><span class="n">vrrp_gna_interval</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<span class="nx">global_defs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nx">notification_email</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nx">acassen</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">     </span><span class="nx">failover</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">     </span><span class="nx">sysadmin</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="nx">notification_email_from</span><span class="w"> </span><span class="nx">Alexandre</span><span class="p">.</span><span class="nx">Cassen</span><span class="err">@</span><span class="nx">firewall</span><span class="p">.</span><span class="nx">loc</span>
+<span class="w">   </span><span class="nx">smtp_server</span><span class="w"> </span><span class="m m-Double">192.168.200.1</span>
+<span class="w">   </span><span class="nx">smtp_connect_timeout</span><span class="w"> </span><span class="mi">30</span>
+<span class="w">   </span><span class="nx">router_id</span><span class="w"> </span><span class="nx">LVS_DEVEL</span>
+<span class="w">   </span><span class="err">#</span><span class="nx">vrrp_skip_check_adv_addr</span>
+<span class="w">   </span><span class="err">#</span><span class="nx">vrrp_strict</span>
+<span class="w">   </span><span class="nx">script_user</span><span class="w"> </span><span class="nx">root</span>
+<span class="w">   </span><span class="nx">enable_script_security</span>
+<span class="w">   </span><span class="nx">vrrp_garp_interval</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">   </span><span class="nx">vrrp_gna_interval</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
 
-<span class="n">vrrp_instance</span><span class="w"> </span><span class="n">VI_1</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">state</span><span class="w"> </span><span class="k">BACKUP</span><span class="w"></span>
-<span class="w">    </span><span class="n">interface</span><span class="w"> </span><span class="n">eth0</span><span class="w"></span>
-<span class="w">    </span><span class="n">virtual_router_id</span><span class="w"> </span><span class="mi">55</span><span class="w"></span>
-<span class="w">    </span><span class="n">priority</span><span class="w"> </span><span class="mi">90</span><span class="w"></span>
-<span class="w">    </span><span class="n">advert_int</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">    </span><span class="n">authentication</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">auth_type</span><span class="w"> </span><span class="n">PASS</span><span class="w"></span>
-<span class="w">        </span><span class="n">auth_pass</span><span class="w"> </span><span class="mi">1111</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">virtual_ipaddress</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="mf">10.</span><span class="o">***</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">track_script</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">chk_nginx</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="nx">vrrp_instance</span><span class="w"> </span><span class="nx">VI_1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">state</span><span class="w"> </span><span class="nx">BACKUP</span>
+<span class="w">    </span><span class="kd">interface</span><span class="w"> </span><span class="nx">eth0</span>
+<span class="w">    </span><span class="nx">virtual_router_id</span><span class="w"> </span><span class="mi">55</span>
+<span class="w">    </span><span class="nx">priority</span><span class="w"> </span><span class="mi">90</span>
+<span class="w">    </span><span class="nx">advert_int</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="nx">authentication</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">auth_type</span><span class="w"> </span><span class="nx">PASS</span>
+<span class="w">        </span><span class="nx">auth_pass</span><span class="w"> </span><span class="mi">1111</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">virtual_ipaddress</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="mi">10</span><span class="p">.</span><span class="o">***</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">track_script</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">chk_nginx</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="err">}</span><span class="w"></span>
+<span class="p">}</span>
 </code></pre></div>
 
 <p>修改 <code>interface</code>、<code>virtual_router_id</code> 和 <code>virtual_ipaddress</code> 的值以适应你的环境。</p>
@@ -292,10 +292,10 @@
 <p>添加以下内容：</p>
 <div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
 <span class="c1"># Check if Nginx is running</span>
-<span class="k">if</span> systemctl status nginx <span class="p">|</span> grep -q <span class="s1">&#39;running&#39;</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">exit</span> <span class="m">0</span> <span class="c1"># Nginx is running, exit with success code</span>
+<span class="k">if</span><span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>nginx<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">&#39;running&#39;</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="c1"># Nginx is running, exit with success code</span>
 <span class="k">else</span>
-    <span class="nb">exit</span> <span class="m">1</span> <span class="c1"># Nginx is not running, exit with error code</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="c1"># Nginx is not running, exit with error code</span>
 <span class="k">fi</span>
 </code></pre></div>
 

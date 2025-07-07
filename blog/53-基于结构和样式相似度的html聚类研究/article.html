@@ -132,14 +132,14 @@
 <p>论文中提到的几点，<em>网页结构相似度，样式相似度，聚类</em>。本文依据论文思路和相关算法，用代码大致复现。</p>
 <p><strong>结构相似度</strong></p>
 <p>文中提到了APTED全路径树编辑距离算法。</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
-<span class="kn">from</span> <span class="nn">apted</span> <span class="kn">import</span> <span class="n">APTED</span><span class="p">,</span> <span class="n">helpers</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apted</span><span class="w"> </span><span class="kn">import</span> <span class="n">APTED</span><span class="p">,</span> <span class="n">helpers</span>
 
 
-<span class="k">def</span> <span class="nf">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_content</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_content</span><span class="p">):</span>
     <span class="n">tree</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">html_content</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">parse_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">HtmlElement</span><span class="p">):</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span>
             <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_node</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">iterchildren</span><span class="p">()]</span>
@@ -152,7 +152,7 @@
     <span class="k">return</span> <span class="n">parse_node</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">structural_similarity</span><span class="p">(</span><span class="n">html_1</span><span class="p">,</span> <span class="n">html_2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">structural_similarity</span><span class="p">(</span><span class="n">html_1</span><span class="p">,</span> <span class="n">html_2</span><span class="p">):</span>
     <span class="c1"># 转换为APTED的树表示</span>
     <span class="n">tree1</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span><span class="n">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_1</span><span class="p">))</span>
     <span class="n">tree2</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span><span class="n">lxml_to_tree_structure</span><span class="p">(</span><span class="n">html_2</span><span class="p">))</span>
@@ -169,9 +169,9 @@
 
 <p>但当我们实际使用时，发现算法复杂度极高，尤其对于当前时代的网页结构，dom节点更为丰富的情况下，可尝试优化为使用 html 标签的序列比较来计算相似度。</p>
 <p><strong>样式相似度</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">etree</span>
 
-<span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_classes</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//*[@class]/@class&#39;</span><span class="p">))</span>
     <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -181,7 +181,7 @@
     <span class="k">return</span> <span class="n">result</span>
 
 
-<span class="k">def</span> <span class="nf">jaccard_similarity</span><span class="p">(</span><span class="n">set1</span><span class="p">,</span> <span class="n">set2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jaccard_similarity</span><span class="p">(</span><span class="n">set1</span><span class="p">,</span> <span class="n">set2</span><span class="p">):</span>
     <span class="n">set1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">set1</span><span class="p">)</span>
     <span class="n">set2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">set2</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">set1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">set2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -192,8 +192,8 @@
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">union</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">style_similarity</span><span class="p">(</span><span class="n">page1</span><span class="p">,</span> <span class="n">page2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">style_similarity</span><span class="p">(</span><span class="n">page1</span><span class="p">,</span> <span class="n">page2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes CSS style Similarity between two DOM trees</span>
 
 <span class="sd">    A = classes(Document_1)</span>
@@ -212,8 +212,8 @@
 
 <p><strong>聚类</strong></p>
 <p>文中使用的是共享最近邻算法，复现时使用<strong>DBSCAN</strong>，一种基于密度的聚类方法。</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">DBSCAN</span>
 <span class="n">htmls</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;html&gt;&lt;/html&gt;&quot;</span><span class="p">,]</span>
 <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
 <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">htmls</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">htmls</span><span class="p">)))</span>

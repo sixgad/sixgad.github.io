@@ -131,51 +131,51 @@
 <p>首先rsync, ssh, sftp都必须使用socks代理，如果只有http代理，那么需要先把http代理转为socks代理。下面讲方法：</p>
 <p>网上有很多开源软件，可以把http代理转化为socks代理，本文利用python-proxy, 地址在： https://github.com/qwj/python-proxy</p>
 <p>并非所有的http代理都能连通通ssh, 必须支持https。其次ssh服务需要运行在443端口，因为有些http代理处于某些考虑不支持底层代理方式</p>
-<div class="codehilite"><pre><span></span><code><span class="nv">$pip</span> install pproxy
-<span class="nv">$pproxy</span> -l socks5://:8888  -r  http://my-http-proxy-ip:1080 <span class="c1"># 这样就把我再1080端口的一个http代理转为本机ip端口8888的一个socks5代理</span>
+<div class="codehilite"><pre><span></span><code><span class="nv">$pip</span><span class="w"> </span>install<span class="w"> </span>pproxy
+<span class="nv">$pproxy</span><span class="w"> </span>-l<span class="w"> </span>socks5://:8888<span class="w">  </span>-r<span class="w">  </span>http://my-http-proxy-ip:1080<span class="w"> </span><span class="c1"># 这样就把我再1080端口的一个http代理转为本机ip端口8888的一个socks5代理</span>
 </code></pre></div>
 
 <p><strong>ssh 使用代理</strong></p>
-<div class="codehilite"><pre><span></span><code>ssh -p <span class="m">443</span>  root@my-ssh-host -o <span class="nv">ProxyCommand</span><span class="o">=</span><span class="s2">&quot;connect-proxy -S 127.0.0.1:8888 %h %p&quot;</span> 
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-p<span class="w"> </span><span class="m">443</span><span class="w">  </span>root@my-ssh-host<span class="w"> </span>-o<span class="w"> </span><span class="nv">ProxyCommand</span><span class="o">=</span><span class="s2">&quot;connect-proxy -S 127.0.0.1:8888 %h %p&quot;</span><span class="w"> </span>
 </code></pre></div>
 
 <p><code>connect-proxy</code> 是一个linux命令，如果没有则去安装吧，具体自己google一下。</p>
 <p>如果不想输入-o后面一长串，可以配置<code>~/.ssh/config</code>：</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># 本人在centos7验证可以</span>
-Host foobar.example.com
-    ProxyCommand          connect-proxy -S <span class="m">127</span>.0.0.1:8888 %h %p
-    User root   <span class="c1"># 这样ssh登录的时候可以不用指定登录名字， 可以直接用  ssh host</span>
-    ServerAliveInterval   <span class="m">10</span>
-    Port <span class="m">443</span>  <span class="c1"># ssh 目标IP，写了这一行就不用在命令行规定端口了</span>
+Host<span class="w"> </span>foobar.example.com
+<span class="w">    </span>ProxyCommand<span class="w">          </span>connect-proxy<span class="w"> </span>-S<span class="w"> </span><span class="m">127</span>.0.0.1:8888<span class="w"> </span>%h<span class="w"> </span>%p
+<span class="w">    </span>User<span class="w"> </span>root<span class="w">   </span><span class="c1"># 这样ssh登录的时候可以不用指定登录名字， 可以直接用  ssh host</span>
+<span class="w">    </span>ServerAliveInterval<span class="w">   </span><span class="m">10</span>
+<span class="w">    </span>Port<span class="w"> </span><span class="m">443</span><span class="w">  </span><span class="c1"># ssh 目标IP，写了这一行就不用在命令行规定端口了</span>
 </code></pre></div>
 
 <p>然后：<code>ssh root@foobar.example.com</code></p>
 <p>还能配置免密登录，使用key，请参考连接，这里面各种用法都讲清楚了</p>
 <p>https://stackoverflow.com/questions/19161960/connect-with-ssh-through-a-proxy, 强烈推荐仔细阅读</p>
 <p><strong>rsync使用代理</strong></p>
-<div class="codehilite"><pre><span></span><code>rsync -Pavzr  -e <span class="s2">&quot;ssh -o -p 443 &#39;ProxyCommand connect-proxy -S 127.0.0.1:8888 %h %p&#39;&quot;</span>   /mnt/src     root@xxxx:/mnt/mydir
+<div class="codehilite"><pre><span></span><code>rsync<span class="w"> </span>-Pavzr<span class="w">  </span>-e<span class="w"> </span><span class="s2">&quot;ssh -o -p 443 &#39;ProxyCommand connect-proxy -S 127.0.0.1:8888 %h %p&#39;&quot;</span><span class="w">   </span>/mnt/src<span class="w">     </span>root@xxxx:/mnt/mydir
 </code></pre></div>
 
 <p>看起来原理很简单，就是指定使用某个ssh命令。</p>
 <p>如果你按照本文<code>ssh 使用代理一节</code>配置了 <code>~/.ssh/config</code>的话，那么可以简写成如下的样子：</p>
-<div class="codehilite"><pre><span></span><code>rsync -Pavzr   /mnt/src     root@foobar.example.com:/mydata
+<div class="codehilite"><pre><span></span><code>rsync<span class="w"> </span>-Pavzr<span class="w">   </span>/mnt/src<span class="w">     </span>root@foobar.example.com:/mydata
 </code></pre></div>
 
 <p><strong>sftp使用代理</strong></p>
-<div class="codehilite"><pre><span></span><code>scp -P <span class="m">443</span> -o <span class="s2">&quot;ProxyCommand connect-proxy -S 127.0.0.1:8888 %h %p&quot;</span>  linuxUser@111.111.11.11:/root/youtube   /mnt/local/dir
+<div class="codehilite"><pre><span></span><code>scp<span class="w"> </span>-P<span class="w"> </span><span class="m">443</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;ProxyCommand connect-proxy -S 127.0.0.1:8888 %h %p&quot;</span><span class="w">  </span>linuxUser@111.111.11.11:/root/youtube<span class="w">   </span>/mnt/local/dir
 </code></pre></div>
 
 <p>同样如果配置了 <code>~/.ssh/config</code>的话，无需额外参数：</p>
-<div class="codehilite"><pre><span></span><code>scp   linuxUser@111.111.11.11:/root/youtube   /mnt/local/dir
+<div class="codehilite"><pre><span></span><code>scp<span class="w">   </span>linuxUser@111.111.11.11:/root/youtube<span class="w">   </span>/mnt/local/dir
 </code></pre></div>
 
 <p><strong>scp使用代理</strong></p>
 <p>首先我建议的方案是按照本文<code>ssh使用代理</code>一节配置 <code>~/.ssh/config</code>。这样会让命令十分简单：</p>
-<div class="codehilite"><pre><span></span><code>scp  root@foobar.example.com:/root/youtube   /mnt/local/dir
+<div class="codehilite"><pre><span></span><code>scp<span class="w">  </span>root@foobar.example.com:/root/youtube<span class="w">   </span>/mnt/local/dir
 </code></pre></div>
 
 <p>否则用如下命令</p>
-<div class="codehilite"><pre><span></span><code>scp -P <span class="m">443</span> -o <span class="s2">&quot;ProxyCommand connect-proxy -S 127.0.0.1:8888 %h %p&quot;</span>  linuxUser@xxx.xxx.xxx.xxx:/root/youtube   /mnt/local/dir
+<div class="codehilite"><pre><span></span><code>scp<span class="w"> </span>-P<span class="w"> </span><span class="m">443</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;ProxyCommand connect-proxy -S 127.0.0.1:8888 %h %p&quot;</span><span class="w">  </span>linuxUser@xxx.xxx.xxx.xxx:/root/youtube<span class="w">   </span>/mnt/local/dir
 </code></pre></div>
 
 <p><strong>总结</strong></p>

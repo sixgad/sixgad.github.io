@@ -129,7 +129,7 @@
 <p>NFS（NetworkFileSystem）即网络文件系统，是FreeBSD支持的文件系统中的一种，它允许网络中的计算机之间通过TCP/IP网络共享资源。在NFS的应用中，本地NFS的客户端应用可以透明地读写位于远端NFS服务器上的文件，就像访问本地文件一样。</p>
 <h2 id="_1">服务端</h2>
 <p><strong>1.安装NFS服务</strong></p>
-<div class="codehilite"><pre><span></span><code>apt install nfs-kernel-server 
+<div class="codehilite"><pre><span></span><code>apt<span class="w"> </span>install<span class="w"> </span>nfs-kernel-server<span class="w"> </span>
 </code></pre></div>
 
 <p><strong>2.创建服务端要共享的目录</strong></p>
@@ -138,7 +138,7 @@
 <p>chmod -R 777 /root/nfs  #放开权限</p>
 </blockquote>
 <p><strong>3.编辑/etc/exports文件，追加写入</strong></p>
-<div class="codehilite"><pre><span></span><code>/root/nfs <span class="m">2</span>.*.*.1<span class="o">(</span>rw,async,no_root_squash,no_subtree_check<span class="o">)</span>
+<div class="codehilite"><pre><span></span><code>/root/nfs<span class="w"> </span><span class="m">2</span>.*.*.1<span class="o">(</span>rw,async,no_root_squash,no_subtree_check<span class="o">)</span>
 </code></pre></div>
 
 <p>此配置理解为，某ip主机(客户端)可以挂载服务端/root/nfs目录</p>
@@ -147,16 +147,16 @@
 <p>no_root_squash ：root用户具有对根目录的完全管理访问权限。</p>
 <p>no_subtree_check：不检查父目录的权限</p>
 <p><strong>4.重启nfs server</strong></p>
-<div class="codehilite"><pre><span></span><code>systemctl restart nfs-kernel-server.service
+<div class="codehilite"><pre><span></span><code>systemctl<span class="w"> </span>restart<span class="w"> </span>nfs-kernel-server.service
 </code></pre></div>
 
 <h2 id="_2">客户端</h2>
 <p><strong>1.安装 nfs-common</strong></p>
-<div class="codehilite"><pre><span></span><code>apt install nfs-common
+<div class="codehilite"><pre><span></span><code>apt<span class="w"> </span>install<span class="w"> </span>nfs-common
 </code></pre></div>
 
 <p><strong>2.将服务端目录/root/nfs挂载到到当前 /mnt 目录下</strong></p>
-<div class="codehilite"><pre><span></span><code>mount -t nfs 服务端ip:/root/nfs /mnt
+<div class="codehilite"><pre><span></span><code>mount<span class="w"> </span>-t<span class="w"> </span>nfs<span class="w"> </span>服务端ip:/root/nfs<span class="w"> </span>/mnt
 </code></pre></div>
 
                 </div>

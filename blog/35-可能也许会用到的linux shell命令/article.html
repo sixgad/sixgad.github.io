@@ -128,33 +128,33 @@
                   <h1 id="linux-shell">可能也许会用到的linux shell命令</h1>
 <p>嗯，，，shell到用时方恨少。</p>
 <p><strong>统计当前文件夹下有几种文件类型</strong></p>
-<div class="codehilite"><pre><span></span><code>find . -type f <span class="p">|</span> sed -n <span class="s1">&#39;s/..*\.//p&#39;</span> <span class="p">|</span> sort <span class="p">|</span> uniq -c
+<div class="codehilite"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;s/..*\.//p&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c
 </code></pre></div>
 
 <p><strong>统计当前文件夹下所有json文件行数</strong></p>
-<div class="codehilite"><pre><span></span><code>awk <span class="s1">&#39;END{print NR}&#39;</span> *.json
+<div class="codehilite"><pre><span></span><code>awk<span class="w"> </span><span class="s1">&#39;END{print NR}&#39;</span><span class="w"> </span>*.json
 </code></pre></div>
 
 <p><strong>进阶：结合xargs，统计22年10月所有json文件行数</strong></p>
-<div class="codehilite"><pre><span></span><code>ls -al <span class="p">|</span> grep <span class="s1">&#39;202210&#39;</span><span class="p">|</span> awk <span class="s1">&#39;{print $9}&#39;</span>  <span class="p">|</span> xargs -I <span class="o">{}</span> awk <span class="s1">&#39;END{print NR}&#39;</span> <span class="o">{}</span> <span class="p">|</span> awk <span class="s1">&#39;{sum+=$1} END{print &quot;sum=&quot;sum}&#39;</span>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-al<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;202210&#39;</span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $9}&#39;</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;END{print NR}&#39;</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{sum+=$1} END{print &quot;sum=&quot;sum}&#39;</span>
 </code></pre></div>
 
 <p><strong>批量kill程序</strong></p>
-<div class="codehilite"><pre><span></span><code>ps aux <span class="p">|</span> grep -v grep <span class="p">|</span> grep programname <span class="p">|</span> awk <span class="s1">&#39;{print $2}&#39;</span> <span class="p">|</span> xargs <span class="nb">kill</span>
+<div class="codehilite"><pre><span></span><code>ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>grep<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>programname<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span><span class="nb">kill</span>
 </code></pre></div>
 
 <p><strong>显示当前文件夹下size最大的前十个文件</strong></p>
-<div class="codehilite"><pre><span></span><code>ls -lSh  <span class="p">|</span> head -n <span class="m">10</span>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-lSh<span class="w">  </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span>
 </code></pre></div>
 
 <p>or</p>
-<div class="codehilite"><pre><span></span><code>du -h ./ <span class="p">|</span> sort -hr <span class="p">|</span> head -n <span class="m">10</span>
+<div class="codehilite"><pre><span></span><code>du<span class="w"> </span>-h<span class="w"> </span>./<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-hr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span>
 </code></pre></div>
 
 <p><strong>显示当前文件夹下时间最新的前十个文件</strong></p>
-<div class="codehilite"><pre><span></span><code>ls -lt <span class="p">|</span> head -n <span class="m">10</span>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-lt<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span>
 <span class="c1">#倒序 </span>
-ls -rlt <span class="p">|</span> head -n <span class="m">10</span>
+ls<span class="w"> </span>-rlt<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span>
 </code></pre></div>
 
                 </div>

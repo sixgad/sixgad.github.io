@@ -133,8 +133,8 @@
 <p>在 div class="page box"里，使用xpath helper插件看一下，//div[@class='page box']正确定位高亮了</p>
 <p><img src="image-20220302140620132.png" alt="image-20220302140620132" style="zoom:80%;" /></p>
 <p>用python请求并解析看看，结果是输出为空，没有提取到序号和古诗名称</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">etree</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://paker.net.cn/anti/xpath&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
@@ -158,9 +158,9 @@
 <p>报告，还是拿不到数据，再探网页源代码！</p>
 <p><img alt="image-20220302142748368" src="image-20220302142748368.png" /></p>
 <p>只有《/tr》，《tr》哪去了，被哪个小可爱吃掉了。想想办法，python如何把不闭合的标签补全？用它html5lib</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
-<span class="kn">from</span> <span class="nn">lxml.html</span> <span class="kn">import</span> <span class="n">tostring</span><span class="p">,</span> <span class="n">html5parser</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lxml.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">tostring</span><span class="p">,</span> <span class="n">html5parser</span>
 <span class="c1"># html5parser底层就是调用了html5lib</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://paker.net.cn/anti/xpath&#39;</span><span class="p">)</span>
 <span class="n">shtml</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">tostring</span><span class="p">(</span><span class="n">html5parser</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)))</span>

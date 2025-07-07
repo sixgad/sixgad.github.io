@@ -130,7 +130,7 @@
 <h2 id="1encodingapparent_encoding">1.encoding&amp;apparent_encoding</h2>
 <p>别人家的网址：https://www.kanunu8.com/</p>
 <p>python请求代码如下</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.kanunu8.com/&quot;</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;</span><span class="p">,</span>
@@ -161,8 +161,8 @@
 <p><img src="image-20220222213141286.png" alt="image-20220222213141286" style="zoom:80%;" /></p>
 <p>看看代码为什么默认res.encoding这么重要的设置，还能识别错误</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># package requests utils</span>
-<span class="k">def</span> <span class="nf">get_encoding_from_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns encodings from given HTTP Header Dict.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_encoding_from_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns encodings from given HTTP Header Dict.</span>
 
 <span class="sd">    :param headers: dictionary to extract encoding from.</span>
 <span class="sd">    :rtype: str</span>
@@ -191,8 +191,8 @@
 <p><strong>为什么apparent_encoding能正确识别网页编码？</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># package requests models</span>
 <span class="nd">@property</span>
-<span class="k">def</span> <span class="nf">apparent_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The apparent encoding, provided by the chardet library.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">apparent_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The apparent encoding, provided by the chardet library.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">chardet</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s1">&#39;encoding&#39;</span><span class="p">]</span>
 </code></pre></div>
 
@@ -216,7 +216,7 @@
 <p>基本遇不到，因为requests使用的urllib3已经处理了服务端返回压缩文本</p>
 <p><img src="image-20220222214336183.png" alt="image-20220222214336183" style="zoom:80%;" /></p>
 <p>其他的一些库，如urllib就没有处理</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">urllib.request</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://paker.net.cn/anti/charset&#39;</span>
 <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 <span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;*/*&#39;</span><span class="p">)</span>
@@ -232,7 +232,7 @@
 
 <p><img alt="image-20220222214537112" src="image-20220222214537112.png" /></p>
 <p><strong>可能会遇到，requests请求不能处自动解压的情况，如</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://paker.net.cn/anti/charset&#39;</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
