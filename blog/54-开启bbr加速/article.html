@@ -128,91 +128,66 @@
                   <h1 id="bbr">开启bbr加速</h1>
 <p>在 Ubuntu 系统上开启 <strong>BBR 加速</strong> （Bottleneck Bandwidth and Round-trip propagation time）可以显著提升网络性能。</p>
 <h2 id="bbr_1">开启bbr详细步骤：</h2>
-<ul>
-<li><strong>加载 BBR 模块</strong> （如果未启用）：</li>
-</ul>
-<p><code>bash
-  sudo modprobe tcp_bbr</code></p>
-<ul>
-<li><strong>修改系统配置文件</strong></li>
-</ul>
-<p><code>bash
-  echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.conf
-  echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a /etc/sysctl.conf</code></p>
-<ul>
-<li><strong>应用</strong></li>
-</ul>
-<p><code>bash
-  sudo sysctl -p</code></p>
-<ul>
-<li><strong>验证 BBR 是否生效</strong></li>
-</ul>
-<p><code>bash
-  sysctl net.ipv4.tcp_congestion_control</code></p>
+<p><strong>加载 BBR 模块</strong> （如果未启用）：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>modprobe<span class="w"> </span>tcp_bbr
+</code></pre></div>
+
+<p><strong>修改系统配置文件</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;net.core.default_qdisc=fq&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/sysctl.conf
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;net.ipv4.tcp_congestion_control=bbr&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/sysctl.conf
+</code></pre></div>
+
+<p><strong>应用</strong></p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>sysctl<span class="w"> </span>-p
+</code></pre></div>
+
+<p><strong>验证 BBR 是否生效</strong></p>
+<div class="codehilite"><pre><span></span><code>sysctl<span class="w"> </span>net.ipv4.tcp_congestion_control
+</code></pre></div>
+
 <p>应显示 <code>net.ipv4.tcp_congestion_control = bbr</code></p>
-<p><code>bash
-  lsmod | grep bbr</code></p>
+<div class="codehilite"><pre><span></span><code>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>bbr
+</code></pre></div>
+
 <p>输出包含 <code>tcp_bbr</code></p>
 <h2 id="bbr_2">开启bbr的好&amp;坏</h2>
 <h3 id="_1">‌<strong>好处</strong>‌</h3>
-<ol>
-<li>
 <p>‌<strong>提升网络吞吐量</strong>‌</p>
-</li>
-<li>
-<p>动态测量带宽和延迟，避免传统算法过度降速问题，充分利用空闲带宽，显著提高数据传输效率（跨运营商场景下实测下载速度可提升 50%）。</p>
-</li>
-<li>
-<p>在高延迟、高丢包网络中（如海外服务器），性能提升更显著。</p>
-</li>
-<li>
+<ul>
+<li>动态测量带宽和延迟，避免传统算法过度降速问题，充分利用空闲带宽，显著提高数据传输效率（跨运营商场景下实测下载速度可提升 50%）。</li>
+<li>在高延迟、高丢包网络中（如海外服务器），性能提升更显著。</li>
+</ul>
 <p>‌<strong>降低传输延迟</strong>‌</p>
-</li>
-<li>
-<p>通过减少数据包排队时间，有效降低网络延迟（RTT），提升实时应用流畅性（如视频会议、在线游戏）。</p>
-</li>
-<li>
+<ul>
+<li>通过减少数据包排队时间，有效降低网络延迟（RTT），提升实时应用流畅性（如视频会议、在线游戏）。</li>
+</ul>
 <p>‌<strong>抗丢包能力强</strong>‌</p>
-</li>
-<li>
-<p>不依赖丢包作为拥塞信号，在高丢包率环境下仍保持稳定传输（4G/移动网络场景优势明显）。</p>
-</li>
-<li>
+<ul>
+<li>不依赖丢包作为拥塞信号，在高丢包率环境下仍保持稳定传输（4G/移动网络场景优势明显）。</li>
+</ul>
 <p>‌<strong>网络适应性优</strong>‌</p>
-</li>
-<li>
-<p>实时响应带宽波动和延迟变化，快速适应网络条件波动（如高峰时段拥塞）。</p>
-</li>
-</ol>
+<ul>
+<li>实时响应带宽波动和延迟变化，快速适应网络条件波动（如高峰时段拥塞）。</li>
+</ul>
 <hr />
 <h3 id="_2">️ ‌<strong>坏处</strong>‌</h3>
-<ol>
-<li>
 <p>‌<strong>公平性问题</strong>‌</p>
-</li>
-<li>
-<p>与传统算法（如 Cubic）共存时，BBR 可能抢占过多带宽（浅缓冲区场景下可占 90% 带宽），导致其他连接性能下降。</p>
-</li>
-<li>
+<ul>
+<li>与传统算法（如 Cubic）共存时，BBR 可能抢占过多带宽（浅缓冲区场景下可占 90% 带宽），导致其他连接性能下降。</li>
+</ul>
 <p>‌<strong>CPU 开销增加</strong>‌</p>
-</li>
-<li>
-<p>启用 BBR 需配合 <code>fq</code> 队列调度器，否则内核高精度计时器（hrtimer）会显著增加 CPU 负载。</p>
-</li>
-<li>
+<ul>
+<li>启用 BBR 需配合 <code>fq</code> 队列调度器，否则内核高精度计时器（hrtimer）会显著增加 CPU 负载。</li>
+</ul>
 <p>‌<strong>收敛速度较慢</strong>‌</p>
-</li>
-<li>
-<p>初始阶段需较长时间探测带宽和延迟，短连接场景（如 HTTP 短请求）收益有限。</p>
-</li>
-<li>
+<ul>
+<li>初始阶段需较长时间探测带宽和延迟，短连接场景（如 HTTP 短请求）收益有限。</li>
+</ul>
 <p>‌<strong>特定场景性能下降</strong>‌</p>
-</li>
-<li>
-<p>在缓冲区深度大的网络中（如 10MB+），BBR 竞争不过 Cubic，吞吐量可能降低。</p>
-</li>
+<ul>
+<li>在缓冲区深度大的网络中（如 10MB+），BBR 竞争不过 Cubic，吞吐量可能降低。</li>
 <li>高质量网络环境（如数据中心内部）开启 BBR 可能无提升甚至轻微降低性能。</li>
-</ol>
+</ul>
 <h2 id="bbr_3">什么场景应该开启bbr</h2>
 <p>跨境网络、高丢包高延迟环境。</p>
 
