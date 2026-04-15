@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
 
@@ -28,10 +28,11 @@
   <!-- Google Web Fonts  -->
   <link rel="stylesheet" href="./static/css/ft.css">
 
+  <link rel="stylesheet" type="text/css" href="./static/css/site-v2.css">
 
 </head>
 
-<body>
+<body class="site-v2">
 
 
 
@@ -41,8 +42,18 @@
   </div>
   <!-- Preloader End -->
 
-
-
+  <header class="site-topbar site-topbar--entry" role="banner">
+    <nav class="site-nav-belt" aria-label="站点导航">
+  <div class="site-nav-belt__track">
+    <a class="site-nav-belt__link" href="./index-hub.html">导航</a>
+    <a class="site-nav-belt__link is-active" href="./index.html" aria-current="page">博客</a>
+    <a class="site-nav-belt__link" href="./index-list.html">文章索引</a>
+    <a class="site-nav-belt__link" href="./index-acg.html">ACG 推荐</a>
+    <a class="site-nav-belt__link site-nav-belt__link--ext" href="https://github.com/sixgad" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a class="site-nav-belt__link site-nav-belt__link--ext" href="mailto:278270230@qq.com">邮箱</a>
+  </div>
+</nav>
+  </header>
 
   <div id="main">
     <div class="container">
@@ -101,8 +112,8 @@
 
 
               <div class="sub-title">
-                <h1>Paker Blog</h1>
-                <a href="index-list.html" target="_blank"><i class="icon-list"></i></a>
+                <h1>爬客 · 文章</h1>
+                <a href="index-list.html" title="全部文章索引"><i class="icon-list"></i></a>
               </div>
 
 
@@ -124,8 +135,7 @@
                     <span>2023年5月15日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>keepalived virtualip nginx</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/46-Keepalived+Virtual_ip+Nginx搭建高可用负载均衡器/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/46-Keepalived+Virtual_ip+Nginx搭建高可用负载均衡器/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -144,8 +154,7 @@
                     <span>2023年5月13日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/45-linux管道的奇技淫巧/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/45-linux管道的奇技淫巧/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -164,8 +173,7 @@
                     <span>2023年5月12日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>rclone s3 ceph</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/44-rclone在s3跨集群迁移的使用/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/44-rclone在s3跨集群迁移的使用/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -184,8 +192,7 @@
                     <span>2023年5月11日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>nodejs</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/43-基于chatgpt-web+mongodb构建社区问答收集系统/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/43-基于chatgpt-web+mongodb构建社区问答收集系统/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -204,8 +211,7 @@
                     <span>2023年5月10日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux nginx</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/42-nginx转发chatgpt api/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/42-nginx转发chatgpt api/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -224,8 +230,7 @@
                     <span>2022年11月22日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux nas</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/41-ubuntu nfs服务搭建&挂载/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/41-ubuntu nfs服务搭建&挂载/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -244,8 +249,7 @@
                     <span>2022年11月11日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux shell</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/40-ssh,rsync,sftp使用代理/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/40-ssh,rsync,sftp使用代理/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -264,8 +268,7 @@
                     <span>2022年11月11日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>linux</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/39-rsync远程数据同步/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/39-rsync远程数据同步/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -284,8 +287,7 @@
                     <span>2022年11月11日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>windows tool</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/38-Sumatra PDF阅读器/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/38-Sumatra PDF阅读器/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
@@ -304,27 +306,26 @@
                     <span>2022年11月10日</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;<span><a>windows tool</a></span>
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="../blog/37-windows网速监控工具TrafficMonitor/article.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="../blog/37-windows网速监控工具TrafficMonitor/article.html" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 
 
 
 
-                <div class="text-center">
+                <div class="text-center site-pagination">
                   <ul class="pagination pagination-lg">
-                    <li><a href=index.html>&laquo;</a></li>
+                    <li><a href="index.html" rel="prev">&laquo;</a></li>
                     
-                    <li><a href=index.html >1</a></li>
+                    <li><a href="index.html">1</a></li>
                     
-                    <li><a href=index2.html  class="active" >2</a></li>
+                    <li><a href="index2.html" class="active">2</a></li>
                     
-                    <li><a href=index3.html >3</a></li>
+                    <li><a href="index3.html">3</a></li>
                     
-                    <li><a href=index4.html >4</a></li>
+                    <li><a href="index4.html">4</a></li>
                     
-                    <li><a href=index6.html>&raquo;</a></li>
+                    <li><a href="index6.html" rel="next">&raquo;</a></li>
                   </ul>
                 </div>
 

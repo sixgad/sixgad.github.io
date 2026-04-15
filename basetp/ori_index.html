@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
 
@@ -28,10 +28,11 @@
   <!-- Google Web Fonts  -->
   <link rel="stylesheet" href="./static/css/ft.css">
 
+  <link rel="stylesheet" type="text/css" href="./static/css/site-v2.css">
 
 </head>
 
-<body>
+<body class="site-v2">
 
 
 
@@ -41,8 +42,9 @@
   </div>
   <!-- Preloader End -->
 
-
-
+  <header class="site-topbar site-topbar--entry" role="banner">
+    {% include 'frag_nav.html' %}
+  </header>
 
   <div id="main">
     <div class="container">
@@ -101,8 +103,8 @@
 
 
               <div class="sub-title">
-                <h1>Paker Blog</h1>
-                <a href="index-list.html" target="_blank"><i class="icon-list"></i></a>
+                <h1>爬客 · 文章</h1>
+                <a href="index-list.html" title="全部文章索引"><i class="icon-list"></i></a>
               </div>
 
 
@@ -125,21 +127,20 @@
                     %}<span><a>{{tag}}</a></span>{% endfor %}
                   </div>
                   <!-- <p>描述预留位置</p> -->
-                  <a href="{{blog.href}}" class="button button-style button-anim fa fa-long-arrow-right"><span>Read
-                      More</span></a>
+                  <a href="{{blog.href}}" class="button button-style"><span>阅读全文</span></a>
                 </div>
                 <!-- Blog Post End -->
                 {% endfor %}
 
 
 
-                <div class="text-center">
+                <div class="text-center site-pagination">
                   <ul class="pagination pagination-lg">
-                    <li><a href={{pagedata.first}}>&laquo;</a></li>
+                    <li><a href="{{ pagedata.first }}" rel="prev">&laquo;</a></li>
                     {% for paged in pagedata.padding %}
-                    <li><a href={{paged.url}} {% if paged.current %} class="active" {% endif %}>{{paged.num}}</a></li>
+                    <li><a href="{{ paged.url }}"{% if paged.current %} class="active"{% endif %}>{{ paged.num }}</a></li>
                     {% endfor %}
-                    <li><a href={{pagedata.last}}>&raquo;</a></li>
+                    <li><a href="{{ pagedata.last }}" rel="next">&raquo;</a></li>
                   </ul>
                 </div>
 

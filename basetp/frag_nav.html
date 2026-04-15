@@ -1,0 +1,10 @@
+<nav class="site-nav-belt" aria-label="站点导航">
+  <div class="site-nav-belt__track">
+    <a class="site-nav-belt__link{% if (nav_active|default('')) == 'hub' %} is-active{% endif %}" href="{{ nav_prefix }}/index-hub.html"{% if (nav_active|default('')) == 'hub' %} aria-current="page"{% endif %}>导航</a>
+    <a class="site-nav-belt__link{% if (nav_active|default('')) == 'home' %} is-active{% endif %}" href="{{ nav_prefix }}/index.html"{% if (nav_active|default('')) == 'home' %} aria-current="page"{% endif %}>博客</a>
+    <a class="site-nav-belt__link{% if (nav_active|default('')) == 'list' %} is-active{% endif %}" href="{{ nav_prefix }}/index-list.html"{% if (nav_active|default('')) == 'list' %} aria-current="page"{% endif %}>文章索引</a>
+    <a class="site-nav-belt__link{% if (nav_active|default('')) == 'acg' %} is-active{% endif %}" href="{{ nav_prefix }}/index-acg.html"{% if (nav_active|default('')) == 'acg' %} aria-current="page"{% endif %}>ACG 推荐</a>
+    <a class="site-nav-belt__link site-nav-belt__link--ext" href="https://github.com/sixgad" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a class="site-nav-belt__link site-nav-belt__link--ext" href="mailto:278270230@qq.com">邮箱</a>
+  </div>
+</nav>

@@ -5,7 +5,6 @@
 
 import os
 import json
-import random
 import markdown
 # from lxml import etree
 # from lxml import html as lxhtml
@@ -80,7 +79,7 @@ def deal_blogs():
                         "title": title,
                         "content": html
                     }
-                    detail_template.stream(blog=b_data).dump(
+                    detail_template.stream(blog=b_data, nav_prefix="../..").dump(
                         f'{default_config["blog_dir"]}/{blog}/article.html', encoding='utf-8')
                     # 为列表页收集每篇博客文章
                     collect_list.append(
@@ -139,7 +138,12 @@ def deal_index():
         if current_page == 1:
             index_html = "index.html"
 
-        index_template.stream(blogs=index_list[i], pagedata=res).dump(
+        index_template.stream(
+            blogs=index_list[i],
+            pagedata=res,
+            nav_prefix=".",
+            nav_active="home",
+        ).dump(
             f'{default_config["index_dir"]}/{index_html}', encoding='utf-8')
 
 
@@ -152,7 +156,9 @@ def deal_search():
             article["id"] = idx+1
             article["tags"] = " ".join(article["tags"])
             tmp_collect_list.append(article)
-        search_template.stream(blogs=tmp_collect_list).dump(
+        search_template.stream(
+            blogs=tmp_collect_list, nav_prefix=".", nav_active="list",
+        ).dump(
             f'{default_config["index_dir"]}/index-list.html', encoding='utf-8')
 
 
@@ -161,12 +167,15 @@ def deal_acg():
     acg_template = env.get_template('ori_acg.html')
     with open(f'{default_config["blog_dir"]}/0-demo/acg.json', 'r', encoding='utf-8') as f:
         acg_data = json.load(f)
-    corlors = ["table-active", "table-success",
-               "table-warning", "table-danger"]
-    for i in acg_data:
-        i["corlor"] = corlors[random.randint(0, 3)]
-    acg_template.stream(acg=acg_data).dump(
+    acg_template.stream(acg=acg_data, nav_prefix=".", nav_active="acg").dump(
         f'{default_config["index_dir"]}/index-acg.html', encoding='utf-8')
+
+
+def deal_hub():
+    env = Environment(loader=FileSystemLoader("basetp"))
+    hub_template = env.get_template('ori_hub.html')
+    hub_template.stream(nav_prefix=".", nav_active="hub").dump(
+        f'{default_config["index_dir"]}/index-hub.html', encoding='utf-8')
 
 
 if __name__ == "__main__":
@@ -182,3 +191,5 @@ if __name__ == "__main__":
     print("success generate")
     # 其他-动漫、音乐、小说推荐
     deal_acg()
+    # 站点导航聚合页
+    deal_hub()

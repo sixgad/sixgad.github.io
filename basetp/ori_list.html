@@ -1,49 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>文章索引 · 爬客</title>
+    <meta name="description" content="爬客博客全部文章索引" />
+    <meta name="author" content="zp" />
+    <link rel="shortcut icon" href="./static/images/favicon/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./static/css/plugin.css" />
+    <link href="./static/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="./static/css/style.css" />
+    <link rel="stylesheet" href="./static/css/ft.css" />
+    <link rel="stylesheet" type="text/css" href="./static/css/site-v2.css" />
+  </head>
+  <body class="site-v2 site-tool">
+    <header class="site-topbar site-topbar--entry" role="banner">
+      {% include 'frag_nav.html' %}
+    </header>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>列表</title>
-
-    <meta name="description" content="列表">
-    <meta name="author" content="zp">
-
-    <link href="./static/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="./static/css/bootstyle.css" rel="stylesheet">
-
-</head>
-<body>
-<div class="container-fluid">
-    <p align="center"><b>所有文章索引</b></p>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th width="10%">序号</th>
-                    <th width="20%">日期</th>
-                    <th width="20%">标签</th>
-                    <th>文章</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for blog in blogs %}
-                    <tr class="table-active">
-                        <td width="10%">{{blog.id}}</td>
-                        <td width="20%">{{blog.date}}</td>
-                        <td width="20%">{{blog.tags}}</td>
-                        <td><a href="{{blog.href}}" target="_blank">{{blog.title}}</a</td>
-                    </tr>
-                    {% endfor %}
-                
-                </tbody>
-            </table>
-        </div>
+    <div class="site-tool-wrap">
+      <div class="site-tool-hero">
+        <h1>文章索引</h1>
+        <p>按发布时间倒序编号，点击标题打开正文。</p>
+      </div>
+      <div class="site-panel site-panel-scroll">
+        <table class="table table-hover site-table-index">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 8%">序号</th>
+              <th scope="col" style="width: 18%">日期</th>
+              <th scope="col" style="width: 22%">标签</th>
+              <th scope="col">文章</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for blog in blogs %}
+            <tr>
+              <td>{{ blog.id }}</td>
+              <td>{{ blog.date }}</td>
+              <td>{{ blog.tags }}</td>
+              <td><a href="{{ blog.href }}">{{ blog.title }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
 
-</body>
+    <script type="text/javascript" src="./static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./static/js/plugin.js"></script>
+  </body>
 </html>
