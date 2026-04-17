@@ -137,11 +137,10 @@
                 </div> -->
 
                   <div class="blog-cc">
-                    <span>2021年10月17日</span>&nbsp;&nbsp;<i
-                      class="fa fa-tags"
-                    ></i
-                    >&nbsp;<span><a>python</a></span
-                    > <h1 id="server-sent-events">Server-Sent Events实现实时日志查看器</h1>
+                    <div class="blog-cc__meta">
+                      <span class="blog-cc__meta-date">2021年10月17日</span>
+                      <i class="fa fa-tags" aria-hidden="true"></i><span class="blog-cc__meta-tag"><a>python</a></span></div>
+                    <h1 id="server-sent-events">Server-Sent Events实现实时日志查看器</h1>
 <p>SSE(Server-sent events)：服务器发送事件。是基于http协议，和WebSocket的全双工通道（web端和服务端相互通信）相比，SSE只是单通道（服务端主动推送数据到web端），但正是由于此特性，在不需要客户端频繁发送消息给服务端，客户端却需要实时或频繁显示服务端数据的业务场景中可以使用。</p>
 <p>项目地址：https://github.com/sixgad/sse-sanic-log</p>
 <h2 id="1">1.开发背景</h2>

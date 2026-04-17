@@ -137,11 +137,10 @@
                 </div> -->
 
                   <div class="blog-cc">
-                    <span>2023年5月12日</span>&nbsp;&nbsp;<i
-                      class="fa fa-tags"
-                    ></i
-                    >&nbsp;<span><a>rclone s3 ceph</a></span
-                    > <h1 id="rclones3">rclone在s3跨集群迁移的使用</h1>
+                    <div class="blog-cc__meta">
+                      <span class="blog-cc__meta-date">2023年5月12日</span>
+                      <i class="fa fa-tags" aria-hidden="true"></i><span class="blog-cc__meta-tag"><a>rclone s3 ceph</a></span></div>
+                    <h1 id="rclones3">rclone在s3跨集群迁移的使用</h1>
 <p>同一区域ceph集群迁移使用aws s3 sync s3://buck1/dir1/ s3://buck2/dir1/就行</p>
 <p>如果一个s3协议的ceph存储集群在上海（s1），一个存储集群在内蒙古阿里云oss（s2），总体积上百TB(无法满足先下载到本地磁盘)，同时还包含众多小文件如何同步？</p>
 <h2 id="1rclone">1.rclone配置</h2>

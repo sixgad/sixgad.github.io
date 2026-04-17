@@ -137,11 +137,10 @@
                 </div> -->
 
                   <div class="blog-cc">
-                    <span>2021年7月30日</span>&nbsp;&nbsp;<i
-                      class="fa fa-tags"
-                    ></i
-                    >&nbsp;<span><a>spider js逆向</a></span
-                    > <h1 id="webcookietimestamp2">某红书web个人主页cookie：timestamp2生成</h1>
+                    <div class="blog-cc__meta">
+                      <span class="blog-cc__meta-date">2021年7月30日</span>
+                      <i class="fa fa-tags" aria-hidden="true"></i><span class="blog-cc__meta-tag"><a>spider js逆向</a></span></div>
+                    <h1 id="webcookietimestamp2">某红书web个人主页cookie：timestamp2生成</h1>
 <p>某红书web版上面的数据比较少，本着学习的态度，我们来看下web版访问页面必带的cookie：timestamp2的生成算法。网站地址(base64):aHR0cHM6Ly93d3cueGlhb2hvbmdzaHUuY29tL3VzZXIvcHJvZmlsZS81YzZjMzA5OTAwMDAwMDAwMTAwMWQ3MGQ=</p>
 <h2 id="1cookie">1.确认必传的cookie值</h2>
 <p>个人主页的视频列表是静态数据，当我们不带cookie直接访问时会返回这样的一坨东西，没有我们想要的数据</p>

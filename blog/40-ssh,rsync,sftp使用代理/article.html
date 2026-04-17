@@ -137,11 +137,10 @@
                 </div> -->
 
                   <div class="blog-cc">
-                    <span>2022年11月11日</span>&nbsp;&nbsp;<i
-                      class="fa fa-tags"
-                    ></i
-                    >&nbsp;<span><a>linux shell</a></span
-                    > <h1 id="sshrsyncsftp">ssh,rsync,sftp使用代理</h1>
+                    <div class="blog-cc__meta">
+                      <span class="blog-cc__meta-date">2022年11月11日</span>
+                      <i class="fa fa-tags" aria-hidden="true"></i><span class="blog-cc__meta-tag"><a>linux shell</a></span></div>
+                    <h1 id="sshrsyncsftp">ssh,rsync,sftp使用代理</h1>
 <p>本文摘自超哥blog，https://mkmerich.com/2022-09-16/ssh,rsync,sftp%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86.html</p>
 <p><strong>前提</strong></p>
 <p>首先rsync, ssh, sftp都必须使用socks代理，如果只有http代理，那么需要先把http代理转为socks代理。下面讲方法：</p>

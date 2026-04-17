@@ -128,11 +128,14 @@
                 </div> -->
 
                   <div class="blog-cc">
-                    <span>{{blog.date}}</span>&nbsp;&nbsp;<i
-                      class="fa fa-tags"
-                    ></i
-                    >&nbsp;{% for tag in blog.tags %}<span><a>{{tag}}</a></span
-                    >{% endfor %} {{blog.content}}
+                    <div class="blog-cc__meta">
+                      <span class="blog-cc__meta-date">{{ blog.date }}</span>
+                      <i class="fa fa-tags" aria-hidden="true"></i>
+                      {%- for tag in blog.tags -%}
+                      <span class="blog-cc__meta-tag"><a>{{ tag }}</a></span>
+                      {%- endfor -%}
+                    </div>
+                    {{ blog.content }}
                   </div>
                   <!-- Blog Post End -->
                 </div>

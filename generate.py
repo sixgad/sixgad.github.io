@@ -6,8 +6,6 @@
 import os
 import json
 import markdown
-# from lxml import etree
-# from lxml import html as lxhtml
 from jinja2 import Environment, FileSystemLoader
 
 default_config = {

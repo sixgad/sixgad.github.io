@@ -137,11 +137,10 @@
                 </div> -->
 
                   <div class="blog-cc">
-                    <span>2023年5月13日</span>&nbsp;&nbsp;<i
-                      class="fa fa-tags"
-                    ></i
-                    >&nbsp;<span><a>linux</a></span
-                    > <h1 id="linux">linux管道的奇技淫巧</h1>
+                    <div class="blog-cc__meta">
+                      <span class="blog-cc__meta-date">2023年5月13日</span>
+                      <i class="fa fa-tags" aria-hidden="true"></i><span class="blog-cc__meta-tag"><a>linux</a></span></div>
+                    <h1 id="linux">linux管道的奇技淫巧</h1>
 <p>Linux管道（pipe）是一种进程间通信（IPC）的机制，允许两个或多个进程将其输入和输出连接在一起。通过管道，一个进程的输出可以直接作为另一个进程的输入，这样就无需保存临时文件。这种机制使得在Linux中进行命令组合和数据流处理变得非常方便。</p>
 <p>管道在Linux shell中使用竖线（<code>|</code>）表示。</p>
 <p>常见的使用场景：</p>
