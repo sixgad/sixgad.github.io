@@ -17,6 +17,7 @@
 ## 目录结构
 
 - `blog/`：文章目录，子文件夹名为 `序号-标题`；内含源稿 `.md`（及图片等）、生成结果 `article.html`。
+- `blog/0-demo/` 是例外而非文章：其中 `acg.json` 被 `generate.py` 的 `deal_acg()` 按固定路径读取，缺失会导致 `index-acg.html` 生成失败，勿当文章目录删改。
 - `basetp/`：Jinja2 源模板——`ori_index.html`（首页分页）、`ori_detail.html`（文章页）、`ori_list.html`（索引）、`ori_acg.html`（ACG）、`ori_hub.html`（导航聚合）、`frag_nav.html`（顶栏导航片段，被各页 `include`）。
 - `static/`：全站公共 CSS/JS/字体与图片（如 `static/css/`、`static/js/`、`static/fonts/`、`static/images/`）。
 - 仓库根目录：`generate.py` 为生成入口；`index.html`、`index2.html`… 为列表分页输出；`index-list.html`、`index-acg.html`、`index-hub.html` 为单页输出（运行生成脚本后更新）。
