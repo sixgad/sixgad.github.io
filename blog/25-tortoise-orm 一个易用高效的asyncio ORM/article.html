@@ -159,104 +159,104 @@
 <p>pip install tortoise-orm</p>
 </blockquote>
 <p>定义你的模型models.py：</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tortoise.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tortoise</span><span class="w"> </span><span class="kn">import</span> <span class="n">fields</span>
+<pre class="codehilite"><code class="language-python">from tortoise.models import Model
+from tortoise import fields
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Blog</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    博客文章表</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-    <span class="n">views</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="s2">&quot;blog&quot;</span>
-</code></pre></div>
+class Blog(Model):
+    &quot;&quot;&quot;
+    博客文章表
+    &quot;&quot;&quot;
+    id = fields.IntField(pk=True)
+    title = fields.CharField(max_length=500)
+    url = fields.CharField(max_length=300)
+    content = fields.TextField()
+    views = fields.IntField(default=0)
+    class Meta:
+        table = &quot;blog&quot;
+</code></pre>
 
 <p>初始化你的模型和数据库test.py：</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blog</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tortoise</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tortoise</span><span class="p">,</span> <span class="n">run_async</span>
+<pre class="codehilite"><code class="language-python">from models import Blog
+from tortoise import Tortoise, run_async
 
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
-        <span class="n">db_url</span><span class="o">=</span><span class="s1">&#39;sqlite://db.sqlite3&#39;</span><span class="p">,</span>
-        <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;models&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;models&#39;</span><span class="p">]}</span><span class="c1">#models.py位置</span>
-    <span class="p">)</span>
-    <span class="c1"># 建表,只运行一次即可，后边注释掉</span>
-    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>
-    <span class="c1"># 增删改查</span>
-<span class="n">run_async</span><span class="p">(</span><span class="n">init</span><span class="p">())</span>
-</code></pre></div>
+async def init():
+    await Tortoise.init(
+        db_url='sqlite://db.sqlite3',
+        modules={'models': ['models']}#models.py位置
+    )
+    # 建表,只运行一次即可，后边注释掉
+    await Tortoise.generate_schemas()
+    # 增删改查
+run_async(init())
+</code></pre>
 
 <h2 id="2">2.增删改查</h2>
 <p>代码放到上文test.py ”<strong>#增删改查</strong>“ 处即可运行</p>
 <p><strong>增</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 新增一篇博客文章</span>
-<span class="n">insert_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;测试title1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.baidu.com&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;正文开始1&quot;</span>
-        <span class="p">}</span>
-<span class="n">bg</span> <span class="o">=</span> <span class="n">Blog</span><span class="p">(</span><span class="o">**</span><span class="n">insert_data</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">bg</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python"># 新增一篇博客文章
+insert_data = {
+        &quot;title&quot;: &quot;测试title1&quot;,
+        &quot;url&quot;: &quot;https://www.baidu.com&quot;,
+        &quot;content&quot;: &quot;正文开始1&quot;
+        }
+bg = Blog(**insert_data)
+await bg.save()
+</code></pre>
 
 <p><strong>删</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 删除id=1的文章</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python"># 删除id=1的文章
+await Blog.filter(id=1).delete()
+</code></pre>
 
 <p><strong>改</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 修改id为1文章的title,views</span>
-<span class="n">insert_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;修改title1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.baidu.com&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;正文开始1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;views&quot;</span><span class="p">:</span><span class="mi">666</span>
-        <span class="p">}</span>
-<span class="n">bg</span> <span class="o">=</span> <span class="n">Blog</span><span class="p">(</span><span class="o">**</span><span class="n">insert_data</span><span class="p">)</span>
-<span class="c1"># 当待修改部分的主键为空时，不会执行新增操作，报错</span>
-<span class="k">await</span> <span class="n">bg</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="c1"># 或者用update_fields,当数据内容主键为空时，下边方法会插入，当主键不为空时会修改</span>
-<span class="c1"># await bg.save(update_fields=insert_data.keys())</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python"># 修改id为1文章的title,views
+insert_data = {
+        &quot;id&quot;:1,
+        &quot;title&quot;: &quot;修改title1&quot;,
+        &quot;url&quot;: &quot;https://www.baidu.com&quot;,
+        &quot;content&quot;: &quot;正文开始1&quot;,
+        &quot;views&quot;:666
+        }
+bg = Blog(**insert_data)
+# 当待修改部分的主键为空时，不会执行新增操作，报错
+await bg.save(force_update=True)
+# 或者用update_fields,当数据内容主键为空时，下边方法会插入，当主键不为空时会修改
+# await bg.save(update_fields=insert_data.keys())
+</code></pre>
 
 <p><strong>查</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 查询所有文章</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="c1">#values()返回一个list,[{&quot;id&quot;:1},{&quot;id&quot;:2}]</span>
+<pre class="codehilite"><code class="language-python"># 查询所有文章
+await Blog.all().values()#values()返回一个list,[{&quot;id&quot;:1},{&quot;id&quot;:2}]
 
-<span class="c1"># 条件查询id=1的文章</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+# 条件查询id=1的文章
+await Blog.filter(id=1).values()
 
-<span class="c1"># 条件查询 title包含“python”的文章</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title__contains</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+# 条件查询 title包含“python”的文章
+await Blog.filter(title__contains=&quot;python&quot;).values()
 
-<span class="c1"># 条件查询 views&gt;=10且&lt;=1000的文章</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">views__gte</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">views__lte</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+# 条件查询 views&gt;=10且&lt;=1000的文章
+await Blog.filter(views__gte = 10, views__lte = 1000).values()
 
-<span class="c1"># id 倒序</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-id&quot;</span><span class="p">)</span>
+# id 倒序
+await Blog.all().order_by(&quot;-id&quot;)
 
-<span class="c1"># 分页</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">page</span><span class="p">)</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+# 分页
+await Blog.all().order_by('-id').offset(int(page) * 20).limit(20).values()
 
-<span class="c1"># groupby</span>
-<span class="k">await</span> <span class="n">Blog</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">sum</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">articleid__not</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s2">&quot;articleid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-sum&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;articleid&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">)</span>
-</code></pre></div>
+# groupby
+await Blog.annotate(sum=Sum(1)).filter(articleid__not='list').group_by(&quot;articleid&quot;).order_by('-sum').limit(3).values(&quot;articleid&quot;, &quot;sum&quot;)
+</code></pre>
 
 <h2 id="3web">3.对于web开发框架的支持</h2>
 <p>对于Sanic、fastapi等有着很好的支持。</p>
 <p>比如在Sanic中启用Tortoise ORM，so easy!</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sanic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sanic</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tortoise.contrib.sanic</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_tortoise</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Sanic</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">register_tortoise</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span> <span class="n">db_url</span><span class="o">=</span><span class="s2">&quot;sqlite://yourdb&quot;</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;models&quot;</span><span class="p">]},</span> <span class="n">generate_schemas</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">from sanic import Sanic
+from tortoise.contrib.sanic import register_tortoise
+app = Sanic(__name__)
+register_tortoise(
+    app, db_url=&quot;sqlite://yourdb&quot;, modules={&quot;models&quot;: [&quot;models&quot;]}, generate_schemas=True
+)
+</code></pre>
                   </div>
                   <!-- Blog Post End -->
                 </div>

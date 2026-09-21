@@ -175,35 +175,35 @@
 <p>从这行args or kwargs，分析args和kwargs只要有一个存在就行</p>
 <p>改写思路是，忽略args的作用，默认只使用kwargs来做一些设置，将args转成str拼接成message打印</p>
 <p>稍微封装了一下的代码如下：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: UTF-8 -*-</span>
-<span class="c1"># @Time : 2021/9/18 10:22</span>
-<span class="c1"># @Author : zp</span>
+<pre class="codehilite"><code class="language-python"># -*- coding: UTF-8 -*-
+# @Time : 2021/9/18 10:22
+# @Author : zp
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span> <span class="k">as</span> <span class="n">logclass</span>
+from loguru import logger as logclass
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Logging</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logtool</span> <span class="o">=</span> <span class="n">logclass</span>
-        <span class="c1"># 这是hook啊</span>
-        <span class="n">ori_log</span> <span class="o">=</span> <span class="n">logclass</span><span class="o">.</span><span class="n">_log</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">selflog</span><span class="p">(</span><span class="n">level_id</span><span class="p">,</span> <span class="n">static_level_no</span><span class="p">,</span> <span class="n">from_decorator</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-            <span class="n">ori_log</span><span class="p">(</span><span class="n">level_id</span><span class="p">,</span> <span class="n">static_level_no</span><span class="p">,</span> <span class="n">from_decorator</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+class Logging(object):
+    def __init__(self):
+        self.logtool = logclass
+        # 这是hook啊
+        ori_log = logclass._log
+        def selflog(level_id, static_level_no, from_decorator, options, message, args, kwargs):
+            args = [str(arg) for arg in args]
+            if args:
+                message = str(message) + ' ' + ' '.join(args)
+            ori_log(level_id, static_level_no, from_decorator, options, message, None, kwargs)
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">logtool</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">selflog</span>
+        self.logtool._log = selflog
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">Logging</span><span class="p">()</span><span class="o">.</span><span class="n">logtool</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;test2.log&#39;</span><span class="p">)</span>
-    <span class="c1"># print可以逗号输出</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
-    <span class="c1"># logger不可以逗号输出,只会输出第一个</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s2">&quot;adasda&quot;</span><span class="p">},</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;你好啊&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;this is test&quot;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
-</code></pre></div>
+if __name__ == '__main__':
+    logger = Logging().logtool
+    logger.add('test2.log')
+    # print可以逗号输出
+    print('a', 'b', 'c')
+    # logger不可以逗号输出,只会输出第一个
+    logger.info('a', 'b', 'c')
+    logger.info({&quot;a&quot;: 123, '3': &quot;adasda&quot;}, [1, 2, 3, 4], &quot;你好啊&quot;)
+    logger.info(&quot;this is test&quot;, Exception, logger)
+</code></pre>
 
 <p>输出如下：</p>
 <p><img alt="image-20210920221929690" src="image-20210920221929690.png" /></p>

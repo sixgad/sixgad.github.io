@@ -146,17 +146,17 @@
 <h2 id="1m3u8">1.m3u8文件格式分析</h2>
 <p>大致分成三种情况</p>
 <p>一、普通无加密</p>
-<div class="codehilite"><pre><span></span><code>#EXTM3U
+<pre class="codehilite"><code>#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-MEDIA-SEQUENCE:0
 #EXT-X-ALLOW-CACHE:YES
 #EXT-X-TARGETDURATION:17
 #EXTINF:10.083333,
 http://aaa.com/0000.ts
-</code></pre></div>
+</code></pre>
 
 <p>二、包含ts文件加密key(标准AES加解密)</p>
-<div class="codehilite"><pre><span></span><code>#EXTM3U
+<pre class="codehilite"><code>#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-TARGETDURATION:6
 #EXT-X-PLAYLIST-TYPE:VOD
@@ -164,13 +164,13 @@ http://aaa.com/0000.ts
 #EXT-X-KEY:METHOD=AES-128,URI=&quot;ts4.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/key.key&quot;
 #EXTINF:3.127,
 ttt.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/m0eBxHTh.ts
-</code></pre></div>
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code>有时候m3u8文件里可能包含多个分辨率连接 比如720x480、1080x720
+<pre class="codehilite"><code>有时候m3u8文件里可能包含多个分辨率连接 比如720x480、1080x720
 #EXTM3U
 #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1000000,RESOLUTION=720x480
 1000kb/hls/index.m3u8
-</code></pre></div>
+</code></pre>
 
 <p>三、特殊的</p>
 <blockquote>
@@ -179,32 +179,32 @@ ttt.ttt.com:9999/20210617/DmV0P4zD/1000kb/hls/m0eBxHTh.ts
 比如阿里云大学的TS视频AES密钥做了位运算处理。牛客网的TS视频AES密钥在发送前被AES加密了一遍</p>
 </blockquote>
 <h2 id="2">2.从零开发，部分代码</h2>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">M3u8VideoDownloader</span><span class="p">():</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m3u8_url</span><span class="p">,</span> <span class="n">download_path</span><span class="o">=</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="n">video_name</span><span class="o">=</span><span class="s1">&#39;xhp&#39;</span><span class="p">,</span> <span class="n">is_del_clip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">dec_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">m3u8_content_plaintext</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param m3u8_url: m3u8链接</span>
-<span class="sd">        :param download_path: 下载路径</span>
-<span class="sd">        :param video_name: 视频名称（不能出现括号）</span>
-<span class="sd">        :param is_del_clip: 合并视频完成后是否删除ts文件</span>
-<span class="sd">        :param dec_func: m3u8内容解密函数（内容被加密时可传入解密函数，或直接将解密后的明文内容传递给参数m3u8_content_plaintext）</span>
-<span class="sd">        :param m3u8_content_plaintext: 已解密的m3u8明文内容</span>
-<span class="sd">        :param cache_path:默认ts下载目录</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m3u8_url</span> <span class="o">=</span> <span class="n">m3u8_url</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">download_path</span> <span class="o">=</span> <span class="n">download_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">video_name</span> <span class="o">=</span> <span class="n">video_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_del_clip</span> <span class="o">=</span> <span class="n">is_del_clip</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dec_func</span> <span class="o">=</span> <span class="n">dec_func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m3u8_content_plaintext</span><span class="o">=</span><span class="n">m3u8_content_plaintext</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">video_name_suffix</span> <span class="o">=</span> <span class="s1">&#39;.ts&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cache_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_path</span><span class="p">,</span> <span class="s1">&#39;tmp&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">key_url</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iv</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">decipher</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ts_list</span> <span class="o">=</span> <span class="p">[]</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">class M3u8VideoDownloader():
+    def __init__(self, m3u8_url, download_path='video', video_name='xhp', is_del_clip=True,
+                 dec_func=None, m3u8_content_plaintext=None):
+        &quot;&quot;&quot;
+        :param m3u8_url: m3u8链接
+        :param download_path: 下载路径
+        :param video_name: 视频名称（不能出现括号）
+        :param is_del_clip: 合并视频完成后是否删除ts文件
+        :param dec_func: m3u8内容解密函数（内容被加密时可传入解密函数，或直接将解密后的明文内容传递给参数m3u8_content_plaintext）
+        :param m3u8_content_plaintext: 已解密的m3u8明文内容
+        :param cache_path:默认ts下载目录
+        &quot;&quot;&quot;
+        self.m3u8_url = m3u8_url
+        self.download_path = download_path
+        self.video_name = video_name
+        self.is_del_clip = is_del_clip
+        self.dec_func = dec_func
+        self.m3u8_content_plaintext=m3u8_content_plaintext
+        self.video_name_suffix = '.ts'
+        self.cache_path = os.path.join(self.download_path, 'tmp')
+        self.key_url = None
+        self.key = None
+        self.iv = None
+        self.decipher = None
+        self.ts_list = []
+</code></pre>
 
 <p>完整项目地址：https://github.com/sixgad/m3u8download</p>
 <h2 id="3">3.演示</h2>

@@ -144,25 +144,25 @@
 <p>在 Ubuntu 系统上开启 <strong>BBR 加速</strong> （Bottleneck Bandwidth and Round-trip propagation time）可以显著提升网络性能。</p>
 <h2 id="bbr_1">开启bbr详细步骤：</h2>
 <p><strong>加载 BBR 模块</strong> （如果未启用）：</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>modprobe<span class="w"> </span>tcp_bbr
-</code></pre></div>
+<pre class="codehilite"><code class="language-bash">sudo modprobe tcp_bbr
+</code></pre>
 
 <p><strong>修改系统配置文件</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;net.core.default_qdisc=fq&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/sysctl.conf
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;net.ipv4.tcp_congestion_control=bbr&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/sysctl.conf
-</code></pre></div>
+<pre class="codehilite"><code class="language-bash">echo &quot;net.core.default_qdisc=fq&quot; | sudo tee -a /etc/sysctl.conf
+echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; | sudo tee -a /etc/sysctl.conf
+</code></pre>
 
 <p><strong>应用</strong></p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>sysctl<span class="w"> </span>-p
-</code></pre></div>
+<pre class="codehilite"><code class="language-bash">sudo sysctl -p
+</code></pre>
 
 <p><strong>验证 BBR 是否生效</strong></p>
-<div class="codehilite"><pre><span></span><code>sysctl<span class="w"> </span>net.ipv4.tcp_congestion_control
-</code></pre></div>
+<pre class="codehilite"><code class="language-bash">sysctl net.ipv4.tcp_congestion_control
+</code></pre>
 
 <p>应显示 <code>net.ipv4.tcp_congestion_control = bbr</code></p>
-<div class="codehilite"><pre><span></span><code>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>bbr
-</code></pre></div>
+<pre class="codehilite"><code class="language-bash">lsmod | grep bbr
+</code></pre>
 
 <p>输出包含 <code>tcp_bbr</code></p>
 <h2 id="bbr_2">开启bbr的好&amp;坏</h2>

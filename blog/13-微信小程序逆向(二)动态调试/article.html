@@ -168,29 +168,29 @@
     at _typeof (typeof.js? [sm]:2)</p>
 </blockquote>
 <p>@babel\runtime\helpers文件夹下面的typeof.js报错，因为本地装过这个包npm install --save @babel/runtime，直接进去拷一份typeof.js覆盖就好了，新typeof.js如下</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">_typeof</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="s2">&quot;@babel/helpers - typeof&quot;</span><span class="p">;</span>
+<pre class="codehilite"><code class="language-javascript">function _typeof(obj) {
+  &quot;@babel/helpers - typeof&quot;;
 
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="ow">typeof</span><span class="w"> </span><span class="nb">Symbol</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;symbol&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">_typeof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">_typeof</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">obj</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
+  if (typeof Symbol === &quot;function&quot; &amp;&amp; typeof Symbol.iterator === &quot;symbol&quot;) {
+    module.exports = _typeof = function _typeof(obj) {
+      return typeof obj;
+    };
 
-<span class="w">    </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">__esModule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">_typeof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">_typeof</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="nx">obj</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nb">Symbol</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">obj</span><span class="p">.</span><span class="kr">constructor</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nb">Symbol</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">obj</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">prototype</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s2">&quot;symbol&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">obj</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
+    module.exports[&quot;default&quot;] = module.exports, module.exports.__esModule = true;
+  } else {
+    module.exports = _typeof = function _typeof(obj) {
+      return obj &amp;&amp; typeof Symbol === &quot;function&quot; &amp;&amp; obj.constructor === Symbol &amp;&amp; obj !== Symbol.prototype ? &quot;symbol&quot; : typeof obj;
+    };
 
-<span class="w">    </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">__esModule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
+    module.exports[&quot;default&quot;] = module.exports, module.exports.__esModule = true;
+  }
 
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">_typeof</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
-<span class="p">}</span>
+  return _typeof(obj);
+}
 
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">_typeof</span><span class="p">;</span>
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span><span class="w"> </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">__esModule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-</code></pre></div>
+module.exports = _typeof;
+module.exports[&quot;default&quot;] = module.exports, module.exports.__esModule = true;
+</code></pre>
 
 <h2 id="3">3.调试</h2>
 <p>正常会在network下看到请求的数据包</p>
@@ -200,12 +200,12 @@
 <p>传入的参数e</p>
 <p><img alt="image-20210821133052728" src="image-20210821133052728.png" /></p>
 <p>追到这 s + p + "WSUDD"，发现和pc web端一模一样的加密方式，就是做了"X"+md5(api+"WSUDD")</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
-<span class="n">x_sign</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
-<span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">api</span><span class="o">+</span><span class="s2">&quot;WSUDD&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-<span class="n">x_sign</span> <span class="o">=</span> <span class="n">x_sign</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">import hashlib
+x_sign = &quot;X&quot;
+m = hashlib.md5()
+m.update((api+&quot;WSUDD&quot;).encode())
+x_sign = x_sign + m.hexdigest()
+</code></pre>
 
 <h2 id="4fiddler">4.fiddler如何抓到微信开发者工具调试的包</h2>
 <p>微信开发者工具-》设置-》代理设置（默认是使用系统代理），打开fiddler，修改为手动设置代理</p>

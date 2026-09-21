@@ -155,71 +155,71 @@
 </blockquote>
 <h2 id="2pc">2.PC小程序文件位置</h2>
 <p>获取手机小程序文件步骤比较繁琐，下面介绍另一种方式，frida hook pc微信，直接找到小程序文件位置</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: UTF-8 -*-</span>
-<span class="c1"># @Time : 2021/3/2 17:56</span>
+<pre class="codehilite"><code class="language-python"># -*- coding: UTF-8 -*-
+# @Time : 2021/3/2 17:56
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">frida</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+import frida
+import sys
 
-<span class="c1"># 生成文件路径 C:\Users\{User}\Documents\WeChat Files\Applet\...</span>
+# 生成文件路径 C:\Users\{User}\Documents\WeChat Files\Applet\...
 
-<span class="k">def</span><span class="w"> </span><span class="nf">on_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">pass</span>
+def on_message(message, data):
+    pass
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">target_process</span><span class="p">):</span>
-    <span class="n">session</span> <span class="o">=</span> <span class="n">frida</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">target_process</span><span class="p">)</span>
-    <span class="n">script</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">create_script</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">var baseAddr = Module.findBaseAddress(&#39;WeChatAppHost.dll&#39;);</span>
-<span class="s2">console.log(&#39;WeChatAppHost.dll baseAddr: &#39; + baseAddr);</span>
-
-
-<span class="s2">var EncryptBufToFile = Module.findExportByName(&#39;WeChatAppHost.dll&#39;, &#39;EncryptBufToFile&#39;);</span>
-
-<span class="s2">if (EncryptBufToFile) {</span>
-
-<span class="s2">    console.log(&#39;EncryptBufToFile 函数地址: &#39; + EncryptBufToFile);</span>
-
-<span class="s2">    // HOOK函数, 监听参数</span>
-<span class="s2">    Interceptor.attach(EncryptBufToFile, {</span>
-<span class="s2">        onEnter: function (args) {</span>
-<span class="s2">            // console.log(`$</span><span class="si">{args[0]}</span><span class="s2">,$</span><span class="si">{args[1]}</span><span class="s2">,$</span><span class="si">{args[2]}</span><span class="s2">,$</span><span class="si">{args[3]}</span><span class="s2">`);</span>
-<span class="s2">            // 微信小程序AppId</span>
-<span class="s2">            this.appId = ptr(args[0]).readPointer().readAnsiString();</span>
-<span class="s2">            // 微信小程序本地缓存文件路径</span>
-<span class="s2">            this.apkgFilePath = ptr(args[1]).readPointer().readAnsiString();</span>
-<span class="s2">            // 小程序代码原始内容(未加密)</span>
-<span class="s2">            this.originalData = Memory.readByteArray(args[2], args[3].toInt32());</span>
-<span class="s2">        },</span>
-<span class="s2">        onLeave: function (retval) {</span>
-<span class="s2">            console.log(&#39;文件解密成功&#39;, this.apkgFilePath);</span>
-
-<span class="s2">            // 将文件替换为未加密的wxapkg包</span>
-<span class="s2">            var f = new File(this.apkgFilePath, &#39;wb&#39;);</span>
-<span class="s2">            f.write(this.originalData);</span>
-<span class="s2">            f.flush();</span>
-<span class="s2">            f.close();</span>
-
-<span class="s2">            // 释放内存</span>
-<span class="s2">            delete this.appId;</span>
-<span class="s2">            delete this.apkgFilePath;</span>
-<span class="s2">            delete this.originalData;</span>
-<span class="s2">        }</span>
-<span class="s2">    });</span>
-
-<span class="s2">} else {</span>
-<span class="s2">    console.log(&#39;WeChatAppHost.dll 模块未加载, 请先打开界面中的小程序面板&#39;);</span>
-<span class="s2">}</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-    <span class="n">script</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="n">on_message</span><span class="p">)</span>
-    <span class="n">script</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[!] Ctrl+D on UNIX, Ctrl+Z on Windows/cmd.exe to detach from instrumented program.</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="n">session</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+def main(target_process):
+    session = frida.attach(target_process)
+    script = session.create_script(&quot;&quot;&quot;
+var baseAddr = Module.findBaseAddress('WeChatAppHost.dll');
+console.log('WeChatAppHost.dll baseAddr: ' + baseAddr);
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">(</span><span class="s1">&#39;wechat.exe&#39;</span><span class="p">)</span>
-</code></pre></div>
+var EncryptBufToFile = Module.findExportByName('WeChatAppHost.dll', 'EncryptBufToFile');
+
+if (EncryptBufToFile) {
+
+    console.log('EncryptBufToFile 函数地址: ' + EncryptBufToFile);
+
+    // HOOK函数, 监听参数
+    Interceptor.attach(EncryptBufToFile, {
+        onEnter: function (args) {
+            // console.log(`${args[0]},${args[1]},${args[2]},${args[3]}`);
+            // 微信小程序AppId
+            this.appId = ptr(args[0]).readPointer().readAnsiString();
+            // 微信小程序本地缓存文件路径
+            this.apkgFilePath = ptr(args[1]).readPointer().readAnsiString();
+            // 小程序代码原始内容(未加密)
+            this.originalData = Memory.readByteArray(args[2], args[3].toInt32());
+        },
+        onLeave: function (retval) {
+            console.log('文件解密成功', this.apkgFilePath);
+
+            // 将文件替换为未加密的wxapkg包
+            var f = new File(this.apkgFilePath, 'wb');
+            f.write(this.originalData);
+            f.flush();
+            f.close();
+
+            // 释放内存
+            delete this.appId;
+            delete this.apkgFilePath;
+            delete this.originalData;
+        }
+    });
+
+} else {
+    console.log('WeChatAppHost.dll 模块未加载, 请先打开界面中的小程序面板');
+}
+&quot;&quot;&quot;)
+    script.on('message', on_message)
+    script.load()
+    print(&quot;[!] Ctrl+D on UNIX, Ctrl+Z on Windows/cmd.exe to detach from instrumented program.\n\n&quot;)
+    sys.stdin.read()
+    session.detach()
+
+
+if __name__ == '__main__':
+    main('wechat.exe')
+</code></pre>
 
 <p>使用方法：</p>
 <ul>
@@ -243,12 +243,12 @@
 <p>就会在当前文件夹生成解包后的文件夹 xhs</p>
 <p><img alt="image-20210819220402038" src="image-20210819220402038.png" /></p>
 <p><strong>可能遇到的坑</strong><strong>，</strong><strong>因为反编译的问题，有时解析失败，比如文件夹名plugin变为plugin:，导致解包失败</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="nt">D</span><span class="o">:</span><span class="err">\</span><span class="nt">worksoft</span><span class="err">\</span><span class="nt">nodeworkspace</span><span class="err">\</span><span class="nt">wxappunpacker</span><span class="err">\</span><span class="nt">wuLib</span><span class="p">.</span><span class="nc">js</span><span class="p">:</span><span class="nd">91</span>
-<span class="w">        </span><span class="nt">if</span><span class="w"> </span><span class="o">(</span><span class="nt">err</span><span class="o">)</span><span class="w"> </span><span class="nt">throw</span><span class="w"> </span><span class="nt">Error</span><span class="o">(</span><span class="s2">&quot;Save file error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nt">err</span><span class="o">);</span>
-<span class="w">                 </span><span class="o">^</span>
+<pre class="codehilite"><code>D:\worksoft\nodeworkspace\wxappunpacker\wuLib.js:91
+        if (err) throw Error(&quot;Save file error: &quot; + err);
+                 ^
 
-<span class="nt">Error</span><span class="o">:</span><span class="w"> </span><span class="nt">Save</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">error</span><span class="o">:</span><span class="w"> </span><span class="nt">Error</span><span class="o">:</span><span class="w"> </span><span class="nt">ENOENT</span><span class="o">:</span><span class="w"> </span><span class="nt">no</span><span class="w"> </span><span class="nt">such</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">or</span><span class="w"> </span><span class="nt">directory</span><span class="o">,</span><span class="w"> </span><span class="nt">open</span>
-</code></pre></div>
+Error: Save file error: Error: ENOENT: no such file or directory, open
+</code></pre>
 
 <p><strong>根据报错信息修改wuLib.js这个文件即可，比如这样</strong></p>
 <p><img alt="image-20210819220838517" src="image-20210819220838517.png" /></p>

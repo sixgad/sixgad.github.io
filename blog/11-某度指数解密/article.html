@@ -168,18 +168,18 @@
 </blockquote>
 <p>e就是接口返回数据的加密部分，t的值来自于接口ptbk?uniqid=***，uniqid来于自加密数据的接口</p>
 <h2 id="3python">3.python实现解密方法</h2>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">decrypt_func</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">key</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">):</span>
-        <span class="n">n</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">o</span><span class="p">]]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span> <span class="o">+</span> <span class="n">o</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">]])</span>
-    <span class="n">dd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">dd</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">def decrypt_func(key, data):
+    a = key
+    i = data
+    n = {}
+    s = []
+    for o in range(len(a)//2):
+        n[a[o]] = a[len(a)//2 + o]
+    for r in range(len(data)):
+        s.append(n[i[r]])
+    dd = ''.join(s).split(',')
+    return dd
+</code></pre>
                   </div>
                   <!-- Blog Post End -->
                 </div>

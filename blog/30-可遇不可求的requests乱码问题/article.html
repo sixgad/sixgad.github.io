@@ -145,21 +145,21 @@
 <h2 id="1encodingapparent_encoding">1.encoding&amp;apparent_encoding</h2>
 <p>别人家的网址：https://www.kanunu8.com/</p>
 <p>python请求代码如下</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.kanunu8.com/&quot;</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">import requests
+url = &quot;https://www.kanunu8.com/&quot;
+headers = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+}
+res = requests.get(url, headers=headers)
+print(res.encoding, res.apparent_encoding)
+print(res.text)
+</code></pre>
 
 <p>打印结果，啥呀这是</p>
 <p><img src="image-20220222210501658.png" alt="image-20220222210501658" style="zoom:80%;" /></p>
 <p>首先想到encoding设置是否正确，原网页html源码</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;text/html; charset=gb2312&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-html">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=gb2312&quot;&gt;
+</code></pre>
 
 <p>python requests包获取的encoding为</p>
 <ul>
@@ -168,48 +168,48 @@
 </ul>
 <p>encoding是ISO-8859-1</p>
 <p><strong>解决方案</strong>，既然requests默认识别的编码错误，我们手动指定</p>
-<div class="codehilite"><pre><span></span><code><span class="n">res</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;GB2312&#39;</span>
-<span class="c1"># 或</span>
-<span class="n">res</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">res.encoding = 'GB2312'
+# 或
+res.encoding = res.apparent_encoding
+</code></pre>
 
 <p><img src="image-20220222213141286.png" alt="image-20220222213141286" style="zoom:80%;" /></p>
 <p>看看代码为什么默认res.encoding这么重要的设置，还能识别错误</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># package requests utils</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_encoding_from_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns encodings from given HTTP Header Dict.</span>
+<pre class="codehilite"><code class="language-python"># package requests utils
+def get_encoding_from_headers(headers):
+    &quot;&quot;&quot;Returns encodings from given HTTP Header Dict.
 
-<span class="sd">    :param headers: dictionary to extract encoding from.</span>
-<span class="sd">    :rtype: str</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    :param headers: dictionary to extract encoding from.
+    :rtype: str
+    &quot;&quot;&quot;
 
-    <span class="n">content_type</span> <span class="o">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
+    content_type = headers.get('content-type')
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
+    if not content_type:
+        return None
 
-    <span class="n">content_type</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">_parse_content_type_header</span><span class="p">(</span><span class="n">content_type</span><span class="p">)</span>
+    content_type, params = _parse_content_type_header(content_type)
 
-    <span class="k">if</span> <span class="s1">&#39;charset&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;charset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+    if 'charset' in params:
+        return params['charset'].strip(&quot;'\&quot;&quot;)
 
-    <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;ISO-8859-1&#39;</span>
+    if 'text' in content_type:
+        return 'ISO-8859-1'
 
-    <span class="k">if</span> <span class="s1">&#39;application/json&#39;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
-        <span class="c1"># Assume UTF-8 based on RFC 4627: https://www.ietf.org/rfc/rfc4627.txt since the charset was unset</span>
-        <span class="k">return</span> <span class="s1">&#39;utf-8&#39;</span>
-</code></pre></div>
+    if 'application/json' in content_type:
+        # Assume UTF-8 based on RFC 4627: https://www.ietf.org/rfc/rfc4627.txt since the charset was unset
+        return 'utf-8'
+</code></pre>
 
 <p>原来是人家网站返回的response headers没有设置charset</p>
 <p><img src="image-20220222212300912.png" alt="image-20220222212300912" style="zoom:80%;" /></p>
 <p><strong>为什么apparent_encoding能正确识别网页编码？</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># package requests models</span>
-<span class="nd">@property</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">apparent_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The apparent encoding, provided by the chardet library.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">chardet</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s1">&#39;encoding&#39;</span><span class="p">]</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python"># package requests models
+@property
+def apparent_encoding(self):
+    &quot;&quot;&quot;The apparent encoding, provided by the chardet library.&quot;&quot;&quot;
+    return chardet.detect(self.content)['encoding']
+</code></pre>
 
 <p>chardet是python的一个第三方编码检测模块，通过它对网页编码进行检测</p>
 <h2 id="2gb2312gb18030">2.GB2312&amp;GB18030</h2>
@@ -222,43 +222,43 @@
 <li>GB2312：基本集共收入汉字6763个和非汉字图形字符682个。</li>
 </ul>
 <p><strong>总之，GB18030更新、更全、更兼容，建议以后代码这样写</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;gbk&#39;</span> <span class="ow">or</span> <span class="n">res</span><span class="o">.</span><span class="n">apparent_encoding</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;gb2312&#39;</span><span class="p">:</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;GB18030&#39;</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">if res.apparent_encoding.lower() == 'gbk' or res.apparent_encoding.lower() == 'gb2312':
+    res.encoding = 'GB18030'
+</code></pre>
 
 <p><img src="image-20220222214010191.png" alt="image-20220222214010191" style="zoom:80%;" /></p>
 <h2 id="3gzip-deflate-br">3.gzip, deflate, br压缩</h2>
 <p>基本遇不到，因为requests使用的urllib3已经处理了服务端返回压缩文本</p>
 <p><img src="image-20220222214336183.png" alt="image-20220222214336183" style="zoom:80%;" /></p>
 <p>其他的一些库，如urllib就没有处理</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://paker.net.cn/anti/charset&#39;</span>
-<span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;*/*&#39;</span><span class="p">)</span>
-<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept-Encoding&#39;</span><span class="p">,</span> <span class="s1">&#39;gzip, deflate, br&#39;</span><span class="p">)</span>
-<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Accept-Language&#39;</span><span class="p">,</span> <span class="s1">&#39;zh-CN,zh;q=0.8,en;q=0.6&#39;</span><span class="p">)</span>
-<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Cache-Control&#39;</span><span class="p">,</span> <span class="s1">&#39;max-age=0&#39;</span><span class="p">)</span>
-<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Connection&#39;</span><span class="p">,</span> <span class="s1">&#39;keep-alive&#39;</span><span class="p">)</span>
-<span class="n">req</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">,</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36&#39;</span><span class="p">)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
-<span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">import urllib.request
+url = 'https://paker.net.cn/anti/charset'
+req = urllib.request.Request(url)
+req.add_header('Accept', '*/*')
+req.add_header('Accept-Encoding', 'gzip, deflate, br')
+req.add_header('Accept-Language', 'zh-CN,zh;q=0.8,en;q=0.6')
+req.add_header('Cache-Control', 'max-age=0')
+req.add_header('Connection', 'keep-alive')
+req.add_header('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36')
+f = urllib.request.urlopen(req)
+content = f.read()
+print(content)
+</code></pre>
 
 <p><img alt="image-20220222214537112" src="image-20220222214537112.png" /></p>
 <p><strong>可能会遇到，requests请求不能处自动解压的情况，如</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<pre class="codehilite"><code class="language-python">import requests
 
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://paker.net.cn/anti/charset&#39;</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Accept-Encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;gzip, deflate, br&#39;</span><span class="p">,</span>
-    <span class="c1"># &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36&#39;,</span>
-    <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;</span><span class="p">,</span>
-    <span class="c1"># &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,</span>
-<span class="p">}</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
+url = 'https://paker.net.cn/anti/charset'
+headers = {
+    'Accept-Encoding': 'gzip, deflate, br',
+    # 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    # 'Accept-Language': 'zh-CN,zh;q=0.9',
+}
+response = requests.get(url, headers=headers)
+print(response.text)
+</code></pre>
 
 <p><img src="image-20220222214812534.png" alt="image-20220222214812534" style="zoom:80%;" /></p>
 <p><strong>解决方案：</strong></p>

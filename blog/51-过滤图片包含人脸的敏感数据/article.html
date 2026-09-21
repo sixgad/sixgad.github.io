@@ -160,23 +160,23 @@
 </blockquote>
 <p>代码实现</p>
 <p><img src="fff.jpg" alt="fff" style="zoom:50%;" /></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">facenet_pytorch</span><span class="w"> </span><span class="kn">import</span> <span class="n">MTCNN</span>
+<pre class="codehilite"><code class="language-python">from PIL import Image
+from facenet_pytorch import MTCNN
 
-<span class="c1"># 创建一个MTCNN实例</span>
-<span class="n">mtcnn</span> <span class="o">=</span> <span class="n">MTCNN</span><span class="p">(</span><span class="n">min_face_size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+# 创建一个MTCNN实例
+mtcnn = MTCNN(min_face_size=30)
 
-<span class="c1"># 使用PIL库打开图片</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;fff.jpg&#39;</span><span class="p">)</span>
+# 使用PIL库打开图片
+image = Image.open('fff.jpg')
 
-<span class="c1"># 使用MTCNN检测图片中的人脸</span>
-<span class="n">boxes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mtcnn</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="c1"># boxes包含了检测到的人脸的边界框，如果没有检测到人脸，boxes会是None</span>
-<span class="k">if</span> <span class="n">boxes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;检测到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">boxes</span><span class="p">)</span><span class="si">}</span><span class="s1"> 个人脸&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;没有检测到人脸&#39;</span><span class="p">)</span>
-</code></pre></div>
+# 使用MTCNN检测图片中的人脸
+boxes, _ = mtcnn.detect(image)
+# boxes包含了检测到的人脸的边界框，如果没有检测到人脸，boxes会是None
+if boxes is not None:
+    print(f'检测到 {len(boxes)} 个人脸')
+else:
+    print('没有检测到人脸')
+</code></pre>
 
 <blockquote>
 <p>结果：检测到 1 个人脸</p>

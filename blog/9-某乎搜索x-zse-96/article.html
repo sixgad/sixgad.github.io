@@ -162,13 +162,13 @@
 </blockquote>
 <p>其中t为api接口，g为101_3_2.0，dc0就是上文提到的cookie值，断点跟进去</p>
 <blockquote>
-<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="k">return</span><span class="w"> </span>{
-<span class="w">        </span><span class="nv">source</span>:<span class="w"> </span><span class="nv">d</span>,
-<span class="w">        </span><span class="nv">signature</span>:<span class="w"> </span><span class="ss">(</span><span class="mi">0</span>,
-<span class="w">        </span><span class="nv">o</span>.<span class="nv">default</span><span class="ss">)((</span><span class="mi">0</span>,
-<span class="w">        </span><span class="nv">r</span>.<span class="nv">default</span><span class="ss">)(</span><span class="nv">d</span><span class="ss">))</span>
-<span class="w">    </span>}
-</code></pre></div>
+<pre class="codehilite"><code>    return {
+        source: d,
+        signature: (0,
+        o.default)((0,
+        r.default)(d))
+    }
+</code></pre>
 
 </blockquote>
 <p>这里的signature就是x-zse-96的加密部分,d = 101_3_2.0+api接口+"cookie d_c0的值"</p>
@@ -186,34 +186,34 @@
 <h2 id="3">3.扣代码</h2>
 <p><img src="image-20210804232930332.png" alt="image-20210804232930332" style="zoom: 67%;" /></p>
 <p>会报错缺少atob方法，因为nodejs和浏览器环境的差异，不存在window.atob给我们用，可以自己写一个base64编码解码函数，抄百度 <a href="https://blog.csdn.net/weixin_33766168/article/details/89613830">关于base64编码的原理及实现</a></p>
-<div class="codehilite"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">base64hash</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;</span><span class="p">;</span>
-<span class="kd">function</span><span class="w"> </span><span class="nx">atob</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\s|=/g</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">cur</span><span class="p">,</span><span class="w"> </span><span class="nx">prev</span><span class="p">,</span><span class="w"> </span><span class="nx">mod</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
-<span class="w">        </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
-<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">base64hash</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span>
-<span class="w">        </span><span class="nx">mod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mf">4</span><span class="p">;</span>
-<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">mod</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">0</span><span class="o">:</span>
-<span class="w">                </span><span class="c1">//TODO</span>
-<span class="w">                </span><span class="k">break</span><span class="p">;</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">1</span><span class="o">:</span>
-<span class="w">                </span><span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">cur</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">4</span><span class="p">));</span>
-<span class="w">                </span><span class="k">break</span><span class="p">;</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">2</span><span class="o">:</span>
-<span class="w">                </span><span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">((</span><span class="nx">prev</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x0f</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">cur</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">2</span><span class="p">));</span>
-<span class="w">                </span><span class="k">break</span><span class="p">;</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mf">3</span><span class="o">:</span>
-<span class="w">                </span><span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">((</span><span class="nx">prev</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mf">3</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">cur</span><span class="p">));</span>
-<span class="w">                </span><span class="k">break</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="nx">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">cur</span><span class="p">;</span>
-<span class="w">        </span><span class="nx">i</span><span class="o">++</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-javascript">var base64hash  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+function atob(s) {
+    s = s.replace(/\s|=/g, '');
+    var cur, prev, mod, i = 0,
+        result = [];
+    while (i &lt; s.length) {
+        cur = base64hash.indexOf(s.charAt(i));
+        mod = i % 4;
+        switch (mod) {
+            case 0:
+                //TODO
+                break;
+            case 1:
+                result.push(String.fromCharCode(prev &lt;&lt; 2 | cur &gt;&gt; 4));
+                break;
+            case 2:
+                result.push(String.fromCharCode((prev &amp; 0x0f) &lt;&lt; 4 | cur &gt;&gt; 2));
+                break;
+            case 3:
+                result.push(String.fromCharCode((prev &amp; 3) &lt;&lt; 6 | cur));
+                break;
+        }
+        prev = cur;
+        i++;
+    }
+    return result.join('');
+}
+</code></pre>
 
 <p>最后要注意的地方，扣下来的这段js生成的结果与浏览器生成的稍有不同，结尾多了9Tuw，需要自己截取！</p>
                   </div>

@@ -143,33 +143,33 @@
                     <h1 id="mmc4">如何构造mmc4形式的多模态数据集</h1>
 <p>mmc4数据集【https://github.com/allenai/mmc4】是一个扩展了仅文本C4语料库的数据集，其中交错了图像和文本。该数据集涵盖了日常主题，如烹饪、旅行、科技等，在过滤掉NSFW图像、广告等后，该语料库包含103M个文档，其中交错了585M个图像和43B个英语标记。</p>
 <p>数据格式如下</p>
-<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="err">&#39;image_i</span><span class="kc">nf</span><span class="err">o&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="err">&#39;</span><span class="kc">fa</span><span class="err">ce_de</span><span class="kc">te</span><span class="err">c</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">No</span><span class="kc">ne</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;image_</span><span class="kc">na</span><span class="err">me&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">9040</span><span class="err">a</span><span class="mi">0</span><span class="err">dbb</span><span class="mf">22.</span><span class="err">jpg&#39;</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;ma</span><span class="kc">t</span><span class="err">ched_sim&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.27694183588027954</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;ma</span><span class="kc">t</span><span class="err">ched_</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="err">_i</span><span class="kc">n</span><span class="err">dex&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;raw_url&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;h</span><span class="kc">tt</span><span class="err">p</span><span class="p">:</span><span class="c1">//www.hfitinfo.com/honda_fit_pics/3/2/index.90.jpg&#39;},</span>
-<span class="w">                </span><span class="p">{</span><span class="err">&#39;</span><span class="kc">fa</span><span class="err">ce_de</span><span class="kc">te</span><span class="err">c</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">No</span><span class="kc">ne</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;image_</span><span class="kc">na</span><span class="err">me&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;db</span><span class="mi">1</span><span class="err">c</span><span class="mi">21</span><span class="err">bc</span><span class="mf">8474.</span><span class="err">jpg&#39;</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;ma</span><span class="kc">t</span><span class="err">ched_sim&#39;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3234919607639313</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;ma</span><span class="kc">t</span><span class="err">ched_</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="err">_i</span><span class="kc">n</span><span class="err">dex&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                 </span><span class="err">&#39;raw_url&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;h</span><span class="kc">tt</span><span class="err">p</span><span class="p">:</span><span class="c1">//www.hfitinfo.com/honda_fit_pics/3/2/index.91.jpg&#39;}],</span>
-<span class="w"> </span><span class="err">&#39;similari</span><span class="kc">t</span><span class="err">y_ma</span><span class="kc">tr</span><span class="err">ix&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">0.24363446235656738</span><span class="p">,</span>
-<span class="w">                        </span><span class="mf">0.31758785247802734</span><span class="p">,</span>
-<span class="w">                        </span><span class="mf">0.27694183588027954</span><span class="p">],</span>
-<span class="w">                       </span><span class="p">[</span><span class="mf">0.2233106791973114</span><span class="p">,</span>
-<span class="w">                        </span><span class="mf">0.3234919607639313</span><span class="p">,</span>
-<span class="w">                        </span><span class="mf">0.26118797063827515</span><span class="p">]],</span>
-<span class="w"> </span><span class="err">&#39;</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="err">_lis</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">&#39;Whe</span><span class="kc">n</span><span class="w"> </span><span class="err">you</span><span class="w"> </span><span class="err">lock</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">door</span><span class="w"> </span><span class="err">usi</span><span class="kc">n</span><span class="err">g</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">lock</span><span class="w"> </span><span class="kc">ta</span><span class="err">b</span><span class="w"> </span><span class="err">o</span><span class="kc">n</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">driver’s</span><span class="w"> </span><span class="err">&#39;</span>
-<span class="w">               </span><span class="err">&#39;door</span><span class="p">,</span><span class="w"> </span><span class="err">all</span><span class="w"> </span><span class="err">o</span><span class="kc">f</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">o</span><span class="kc">t</span><span class="err">her</span><span class="w"> </span><span class="err">doors</span><span class="w"> </span><span class="err">a</span><span class="kc">n</span><span class="err">d</span><span class="w"> </span><span class="kc">ta</span><span class="err">ilga</span><span class="kc">te</span><span class="w"> </span><span class="err">lock</span><span class="w"> </span><span class="err">a</span><span class="kc">t</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">same</span><span class="w"> </span><span class="err">&#39;</span>
-<span class="w">               </span><span class="err">&#39;</span><span class="kc">t</span><span class="err">ime.&#39;</span><span class="p">,</span>
-<span class="w">               </span><span class="err">&#39;Press</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">mas</span><span class="kc">ter</span><span class="w"> </span><span class="err">door</span><span class="w"> </span><span class="err">lock</span><span class="w"> </span><span class="err">swi</span><span class="kc">t</span><span class="err">ch</span><span class="w"> </span><span class="err">i</span><span class="kc">n</span><span class="w"> </span><span class="err">as</span><span class="w"> </span><span class="err">show</span><span class="kc">n</span><span class="w"> </span><span class="kc">t</span><span class="err">o</span><span class="w"> </span><span class="err">lock</span><span class="w"> </span><span class="err">or</span><span class="w"> </span><span class="err">&#39;</span>
-<span class="w">               </span><span class="err">&#39;u</span><span class="kc">nl</span><span class="err">ock</span><span class="w"> </span><span class="err">all</span><span class="w"> </span><span class="err">doors</span><span class="w"> </span><span class="err">a</span><span class="kc">n</span><span class="err">d</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="kc">ta</span><span class="err">ilga</span><span class="kc">te</span><span class="err">.&#39;</span><span class="p">,</span>
-<span class="w">               </span><span class="err">&#39;Whe</span><span class="kc">n</span><span class="w"> </span><span class="err">you</span><span class="w"> </span><span class="err">lock/u</span><span class="kc">nl</span><span class="err">ock</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">driver’s</span><span class="w"> </span><span class="err">door</span><span class="w"> </span><span class="err">a</span><span class="kc">n</span><span class="err">d</span><span class="w"> </span><span class="kc">ta</span><span class="err">ilga</span><span class="kc">te</span><span class="w"> </span><span class="err">usi</span><span class="kc">n</span><span class="err">g</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">&#39;</span>
-<span class="w">               </span><span class="err">&#39;mas</span><span class="kc">ter</span><span class="w"> </span><span class="err">lock</span><span class="w"> </span><span class="err">swi</span><span class="kc">t</span><span class="err">ch</span><span class="p">,</span><span class="w"> </span><span class="err">all</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">o</span><span class="kc">t</span><span class="err">her</span><span class="w"> </span><span class="err">doors</span><span class="w"> </span><span class="err">lock/</span><span class="w"> </span><span class="err">u</span><span class="kc">nl</span><span class="err">ock</span><span class="w"> </span><span class="err">a</span><span class="kc">t</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">&#39;</span>
-<span class="w">               </span><span class="err">&#39;same</span><span class="w"> </span><span class="kc">t</span><span class="err">ime.&#39;</span><span class="p">],</span>
-<span class="w"> </span><span class="err">&#39;url&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;h</span><span class="kc">tt</span><span class="err">p</span><span class="p">:</span><span class="c1">//www.hfitinfo.com/hofi-48.html&#39;,</span>
-<span class="w"> </span><span class="err">&#39;could_have_url_duplica</span><span class="kc">te</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-json">{'image_info': [{'face_detections': None,
+                 'image_name': 'b9040a0dbb22.jpg',
+                 'matched_sim': 0.27694183588027954,
+                 'matched_text_index': 2,
+                 'raw_url': 'http://www.hfitinfo.com/honda_fit_pics/3/2/index.90.jpg'},
+                {'face_detections': None,
+                 'image_name': 'db1c21bc8474.jpg',
+                 'matched_sim': 0.3234919607639313,
+                 'matched_text_index': 1,
+                 'raw_url': 'http://www.hfitinfo.com/honda_fit_pics/3/2/index.91.jpg'}],
+ 'similarity_matrix': [[0.24363446235656738,
+                        0.31758785247802734,
+                        0.27694183588027954],
+                       [0.2233106791973114,
+                        0.3234919607639313,
+                        0.26118797063827515]],
+ 'text_list': ['When you lock the door using the lock tab on the driver’s '
+               'door, all of the other doors and tailgate lock at the same '
+               'time.',
+               'Press the master door lock switch in as shown to lock or '
+               'unlock all doors and the tailgate.',
+               'When you lock/unlock the driver’s door and tailgate using the '
+               'master lock switch, all the other doors lock/ unlock at the '
+               'same time.'],
+ 'url': 'http://www.hfitinfo.com/hofi-48.html',
+ 'could_have_url_duplicate': 0 }
+</code></pre>
 
 <blockquote>
 <p>text_list：文本句子列表</p>
@@ -193,47 +193,47 @@
 <p><img src="2.jpg" alt="2" style="zoom:80%;" /></p>
 <p>3.jpg</p>
 <p><img src="3.jpg" alt="3" style="zoom:80%;" /></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding:utf-8 -*-</span>
-<span class="c1"># @Author:      zp</span>
-<span class="c1"># @Time:        2023/9/26 17:11</span>
+<pre class="codehilite"><code class="language-python"># -*- coding:utf-8 -*-
+# @Author:      zp
+# @Time:        2023/9/26 17:11
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cn_clip.clip</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">clip</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">cn_clip.clip</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_from_name</span><span class="p">,</span> <span class="n">available_models</span><span class="p">,</span> <span class="n">model</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">linear_sum_assignment</span>
+import torch
+import cn_clip.clip as clip
+import numpy as np
+from cn_clip.clip import load_from_name, available_models, model
+from PIL import Image
+from scipy.optimize import linear_sum_assignment
 
-<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;float_kind&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:0.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">})</span>
+np.set_printoptions(suppress=True, formatter={'float_kind': '{:0.6f}'.format})
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available models:&quot;</span><span class="p">,</span> <span class="n">available_models</span><span class="p">())</span>
+print(&quot;Available models:&quot;, available_models())
 
-<span class="c1"># 加载模型和处理器</span>
-<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;use device&quot;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="n">model</span><span class="p">,</span> <span class="n">preprocess</span> <span class="o">=</span> <span class="n">load_from_name</span><span class="p">(</span><span class="s2">&quot;ViT-L-14&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">download_root</span><span class="o">=</span><span class="s1">&#39;./&#39;</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+# 加载模型和处理器
+device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;
+print(&quot;use device&quot;, device)
+model, preprocess = load_from_name(&quot;ViT-L-14&quot;, device=device, download_root='./')
+model.eval()
 
-<span class="c1"># 加载并处理多个图像</span>
-<span class="n">image_paths</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;2.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;3.jpg&quot;</span><span class="p">]</span>
-<span class="n">images</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">preprocess</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">image_paths</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+# 加载并处理多个图像
+image_paths = [&quot;1.jpg&quot;, &quot;2.jpg&quot;, &quot;3.jpg&quot;]
+images = torch.stack([preprocess(Image.open(path)) for path in image_paths]).to(device)
 
-<span class="c1"># 准备多段文本</span>
-<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;荷花&quot;</span><span class="p">,</span> <span class="s2">&quot;月亮&quot;</span><span class="p">,</span> <span class="s2">&quot;球&quot;</span><span class="p">,</span> <span class="s2">&quot;汽车&quot;</span><span class="p">,</span> <span class="s2">&quot;玩具&quot;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
-<span class="n">texts</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+# 准备多段文本
+texts = [&quot;荷花&quot;, &quot;月亮&quot;, &quot;球&quot;, &quot;汽车&quot;, &quot;玩具&quot;]
+print(texts)
+texts = clip.tokenize(texts).to(device)
 
-<span class="c1"># 通过模型获取图像和文本的特征</span>
-<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-    <span class="n">logits_per_image</span><span class="p">,</span> <span class="n">logits_per_text</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_similarity</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">texts</span><span class="p">)</span>
-    <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">logits_per_image</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+# 通过模型获取图像和文本的特征
+with torch.no_grad():
+    logits_per_image, logits_per_text = model.get_similarity(images, texts)
+    similarity_matrix = logits_per_image.softmax(dim=-1).cpu().numpy()
 
-<span class="nb">print</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">)</span>
+print(similarity_matrix)
 
-<span class="n">row_ind</span><span class="p">,</span> <span class="n">col_ind</span> <span class="o">=</span> <span class="n">linear_sum_assignment</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">similarity_matrix</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">row_ind</span><span class="p">,</span> <span class="n">col_ind</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</code></pre></div>
+row_ind, col_ind = linear_sum_assignment(1 - similarity_matrix)
+result = list(zip(row_ind, col_ind))
+print(result)
+</code></pre>
 
 <p><img src="image-20230926171506821.png" alt="image-20230926171506821" style="zoom:80%;" /></p>
                   </div>

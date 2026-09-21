@@ -145,21 +145,21 @@
 <h2 id="_1">安装卸载</h2>
 <p><strong>卸载旧版Docker</strong></p>
 <p>较旧的 Docker 版本称为 docker 或 docker-engine 。如果已安装这些程序，请卸载它们以及相关的依赖项。</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>remove<span class="w"> </span>docker<span class="w"> </span>docker-client<span class="w"> </span>docker-client-latest<span class="w"> </span>docker-common<span class="w"> </span>docker-latest<span class="w"> </span>docker-latest-logrotate<span class="w"> </span>docker-logrotate<span class="w"> </span>docker-engine
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell">sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+</code></pre>
 
 <p><strong>安装Docker</strong></p>
 <p>首次安装 Docker 之前，需要添加 Docker 安装源</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>yum-config-manager<span class="w"> </span>--add-repo<span class="w"> </span>https://download.docker.com/linux/centos/docker-ce.repo
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell">sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+</code></pre>
 
 <p>安装最新版本的 Docker</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker-ce<span class="w"> </span>docker-ce-cli<span class="w"> </span>containerd.io
-</code></pre></div>
+<pre class="codehilite"><code class="language-sh">sudo yum install -y docker-ce docker-ce-cli containerd.io
+</code></pre>
 
 <p><strong>启动docker</strong>，类似还有<strong>status</strong> <strong>stop restart</strong></p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>docker
-</code></pre></div>
+<pre class="codehilite"><code class="language-sh">sudo systemctl start docker
+</code></pre>
 
 <h2 id="hello-world">国际惯例，hello world</h2>
 <blockquote>
@@ -231,12 +231,12 @@
 </blockquote>
 <p>方法二，最重要也是最常用的镜像构建方式：Dockerfile</p>
 <p>Dockerfile文件这样写</p>
-<div class="codehilite"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.8-slim-buster</span>
-<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>/root/smallpy/
-<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/root/smallpy/</span>
-<span class="k">RUN</span><span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ln<span class="w"> </span>-sf<span class="w"> </span>/usr/share/zoneinfo/Asia/Shanghai<span class="w"> </span>/etc/localtime<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Asia/Shanghai&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/timezone
-<span class="k">CMD</span><span class="w"> </span>python3<span class="w"> </span>test.py
-</code></pre></div>
+<pre class="codehilite"><code class="language-dockerfile">FROM python:3.8-slim-buster
+COPY . /root/smallpy/
+WORKDIR /root/smallpy/
+RUN pip3 install -r requirements.txt &amp;&amp; ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; echo &quot;Asia/Shanghai&quot; &gt;&gt; /etc/timezone
+CMD python3 test.py
+</code></pre>
 
 <p>我们来逐行看一下</p>
 <blockquote>

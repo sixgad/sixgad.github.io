@@ -151,43 +151,43 @@
 <p>在chrome控制台设置XHR断点或者全局搜索sign,最终定位到参数加密生成位置，这段js代码未混淆，逻辑非常清晰</p>
 <p><img src="image-20210710131144187.png" alt="image-20210710131144187"  /></p>
 <h2 id="3python">3.python实现</h2>
-<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># @Time   : 2021/7/10 13:16</span>
-<span class="c1"># @Author : zp</span>
-<span class="c1"># @Python3.7</span>
+<pre class="codehilite"><code class="language-python"># -*- coding: utf-8 -*-
+# @Time   : 2021/7/10 13:16
+# @Author : zp
+# @Python3.7
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+import hashlib
+import time
+import random
 
-<span class="n">kwd</span> <span class="o">=</span> <span class="s1">&#39;你好&#39;</span>
-<span class="n">appversion</span> <span class="o">=</span> <span class="s1">&#39;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36&#39;</span>
-<span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">appversion</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-<span class="n">bv</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">lts</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="n">salt</span> <span class="o">=</span> <span class="n">lts</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">sign</span> <span class="o">=</span> <span class="s2">&quot;fanyideskweb&quot;</span> <span class="o">+</span> <span class="n">kwd</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">salt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Y2FYu%TNSbMCxc3t2u^XT&quot;</span>
-<span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sign</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-<span class="n">sign</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="n">kwd</span><span class="p">,</span>
-  <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="s1">&#39;AUTO&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="s1">&#39;AUTO&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;smartresult&#39;</span><span class="p">:</span> <span class="s1">&#39;dict&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;client&#39;</span><span class="p">:</span> <span class="s1">&#39;fanyideskweb&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;salt&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">salt</span><span class="p">),</span>
-  <span class="s1">&#39;sign&#39;</span><span class="p">:</span> <span class="n">sign</span><span class="p">,</span>
-  <span class="s1">&#39;lts&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">lts</span><span class="p">),</span>
-  <span class="s1">&#39;bv&#39;</span><span class="p">:</span> <span class="n">bv</span><span class="p">,</span>
-  <span class="s1">&#39;doctype&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;2.1&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;keyfrom&#39;</span><span class="p">:</span> <span class="s1">&#39;fanyi.web&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;FY_BY_REALTlME&#39;</span>
-<span class="p">}</span>
-</code></pre></div>
+kwd = '你好'
+appversion = '5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36'
+m = hashlib.md5()
+m.update(appversion.encode())
+bv = m.hexdigest()
+r = time.time()
+lts = int(r * 1000)
+salt = lts*10+random.randint(1,10)
+sign = &quot;fanyideskweb&quot; + kwd + str(salt) + &quot;Y2FYu%TNSbMCxc3t2u^XT&quot;
+m = hashlib.md5()
+m.update(sign.encode())
+sign = m.hexdigest()
+data = {
+  'i': kwd,
+  'from': 'AUTO',
+  'to': 'AUTO',
+  'smartresult': 'dict',
+  'client': 'fanyideskweb',
+  'salt': str(salt),
+  'sign': sign,
+  'lts': str(lts),
+  'bv': bv,
+  'doctype': 'json',
+  'version': '2.1',
+  'keyfrom': 'fanyi.web',
+  'action': 'FY_BY_REALTlME'
+}
+</code></pre>
 
 <p>最后使用requests发送请求返回结果{"translateResult":[[{"tgt":"hello","src":"你好"}]],"errorCode":0,"type":"zh-CHS2en"}</p>
                   </div>

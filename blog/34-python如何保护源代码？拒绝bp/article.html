@@ -182,15 +182,15 @@
 <blockquote>
 <p>python py2so.py -h</p>
 </blockquote>
-<div class="codehilite"><pre><span></span><code>py2so<span class="w"> </span>use<span class="w"> </span><span class="nb">help</span>
+<pre class="codehilite"><code class="language-shell">py2so use help
 
-optional<span class="w"> </span>arguments:
-<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">            </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
-<span class="w">  </span>-f<span class="w"> </span>FILE,<span class="w"> </span>--file<span class="w"> </span>FILE<span class="w">  </span>Python文件<span class="w"> </span><span class="o">(</span>如果使用-f,<span class="w"> </span>将编译单个Python文件<span class="o">)</span>
-<span class="w">  </span>-d<span class="w"> </span>DIRECTORY,<span class="w"> </span>--directory<span class="w"> </span>DIRECTORY<span class="w">  </span>Python项目路径<span class="w"> </span><span class="o">(</span>如果使用-d参数,<span class="w"> </span>将编译整个Python项目<span class="o">)</span>
-<span class="w">  </span>-i<span class="w"> </span>IGNORE,<span class="w"> </span>--ignore<span class="w"> </span>IGNORE<span class="w">  </span>标记你不想编译的文件或文件夹路径<span class="w"> </span>注意:<span class="w"> </span>文件夹需要以路径分隔符号（<span class="se">\`</span>/<span class="se">\`</span>或<span class="se">\`\\\`</span>，依据系统而定）结尾，并且需要和-d参数一起使用<span class="w"> </span>例:<span class="w"> </span>-i<span class="w"> </span>main.py,mod/__init__.py,exclude_dir/
-<span class="w">  </span>-r,<span class="w"> </span>--remove<span class="w">          </span>清除所有中间文件，只保留加密结果文件，默认False
-</code></pre></div>
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  Python文件 (如果使用-f, 将编译单个Python文件)
+  -d DIRECTORY, --directory DIRECTORY  Python项目路径 (如果使用-d参数, 将编译整个Python项目)
+  -i IGNORE, --ignore IGNORE  标记你不想编译的文件或文件夹路径 注意: 文件夹需要以路径分隔符号（\`/\`或\`\\\`，依据系统而定）结尾，并且需要和-d参数一起使用 例: -i main.py,mod/__init__.py,exclude_dir/
+  -r, --remove          清除所有中间文件，只保留加密结果文件，默认False
+</code></pre>
 
 <h2 id="3">3.具体示例</h2>
 <ol>

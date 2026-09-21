@@ -163,22 +163,22 @@
 </blockquote>
 <h2 id="_2"><strong>几种导入数据方法：</strong></h2>
 <p><strong><em>少量数据，创建节点和关系</em></strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">py2neo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Relationship</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">NEODB</span><span class="p">():</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="s2">&quot;http://***:7474&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;***&quot;</span><span class="p">,</span> <span class="s2">&quot;***&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;**&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">merge_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
-        <span class="c1"># 创建或获取节点</span>
-        <span class="n">node1</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
-        <span class="c1"># 创建或获取节点</span>
-        <span class="n">node2</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">child</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">node2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
-        <span class="c1"># 创建或获取关系</span>
-        <span class="n">rel</span> <span class="o">=</span> <span class="n">Relationship</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="s2">&quot;HAS_CHILD&quot;</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">rel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-python">from py2neo import Graph, Node, Relationship
+class NEODB():
+    def __init__(self):
+        self.graph = Graph(&quot;http://***:7474&quot;, auth=(&quot;***&quot;, &quot;***&quot;))
+        self.label = &quot;**&quot;
+    def merge_node(self, parent, child):
+        # 创建或获取节点
+        node1 = Node(self.label, name=parent)
+        self.graph.merge(node1, self.label, &quot;name&quot;)
+        # 创建或获取节点
+        node2 = Node(self.label, name=child)
+        self.graph.merge(node2, self.label, &quot;name&quot;)
+        # 创建或获取关系
+        rel = Relationship(node1, &quot;HAS_CHILD&quot;, node2)
+        self.graph.merge(rel, self.label, &quot;name&quot;)
+</code></pre>
 
 <p><strong><em>万级数据，使用LOAD CSV</em></strong></p>
 <p>生成节点和关系demo.csv</p>

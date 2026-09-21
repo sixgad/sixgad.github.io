@@ -150,136 +150,136 @@
 </blockquote>
 <h2 id="demo">二、Demo</h2>
 <p><strong>1.get请求</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+<pre class="codehilite"><code class="language-go">package main
 
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+import (
+    &quot;fmt&quot;
 
-<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+    &quot;github.com/sixgad/gorequests&quot;
+)
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/get?a=1&amp;b=2&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+func main() {
+    resp, err := gorequests.Get(&quot;https://www.httpbin.org/get?a=1&amp;b=2&quot;)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(resp.Text())
 
-<span class="w">    </span><span class="c1">// Params</span>
-<span class="w">    </span><span class="nx">params</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p">}</span>
-<span class="w">    </span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/get&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="p">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
-<span class="p">}</span>
-</code></pre></div>
+    // Params
+    params := gorequests.Params{&quot;a&quot;: &quot;1&quot;, &quot;b&quot;: &quot;2&quot;}
+    res, err := gorequests.Get(&quot;https://www.httpbin.org/get&quot;, params)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(res.Text())
+}
+</code></pre>
 
 <p><strong>2.post请求</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+<pre class="codehilite"><code class="language-go">package main
 
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+import (
+    &quot;fmt&quot;
 
-<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+    &quot;github.com/sixgad/gorequests&quot;
+)
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// form post</span>
-<span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Data</span><span class="p">{</span>
-<span class="w">        </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;xiaobulv&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+func main() {
+    // form post
+    data := gorequests.Data{
+        &quot;name&quot;: &quot;xiaobulv&quot;,
+    }
+    resp, _ := gorequests.Post(&quot;https://www.httpbin.org/post&quot;, data)
+    fmt.Println(resp.Text())
 
-<span class="w">    </span><span class="c1">// json post</span>
-<span class="w">    </span><span class="nx">jdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Json</span><span class="p">{</span><span class="s">&quot;AGE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;131&quot;</span><span class="p">}</span>
-<span class="w">    </span><span class="nx">respb</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">jdata</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">respb</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+    // json post
+    jdata := gorequests.Json{&quot;AGE&quot;: &quot;131&quot;}
+    respb, _ := gorequests.Post(&quot;https://www.httpbin.org/post&quot;, jdata)
+    fmt.Println(respb.Text())
 
-<span class="p">}</span>
-</code></pre></div>
+}
+</code></pre>
 
 <p><strong>3.put delete patch等</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+<pre class="codehilite"><code class="language-go">package main
 
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+import (
+    &quot;fmt&quot;
 
-<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+    &quot;github.com/sixgad/gorequests&quot;
+)
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// put</span>
-<span class="w">    </span><span class="nx">putdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Json</span><span class="p">{</span><span class="s">&quot;AGE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;131&quot;</span><span class="p">}</span>
-<span class="w">    </span><span class="nx">respp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Put</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/put&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">putdata</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">respp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
-<span class="p">}</span>
-</code></pre></div>
+func main() {
+    // put
+    putdata := gorequests.Json{&quot;AGE&quot;: &quot;131&quot;}
+    respp, _ := gorequests.Put(&quot;https://www.httpbin.org/put&quot;, putdata)
+    fmt.Println(respp.Text())
+}
+</code></pre>
 
 <p><strong>4.auth</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+<pre class="codehilite"><code class="language-go">package main
 
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+import (
+    &quot;github.com/sixgad/gorequests&quot;
+)
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">respa</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/basic-auth/admin/123456&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Auth</span><span class="p">{</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123456&quot;</span><span class="p">})</span>
-<span class="w">    </span><span class="nb">println</span><span class="p">(</span><span class="nx">respa</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
-<span class="p">}</span>
-</code></pre></div>
+func main() {
+    respa, _ := gorequests.Get(&quot;https://www.httpbin.org/basic-auth/admin/123456&quot;, gorequests.Auth{&quot;admin&quot;, &quot;123456&quot;})
+    println(respa.Text())
+}
+</code></pre>
 
 <p><strong>5.header, cookie, timeout, proxy, json等设置</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+<pre class="codehilite"><code class="language-go">package main
 
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+import (
+    &quot;fmt&quot;
 
-<span class="w">    </span><span class="s">&quot;github.com/sixgad/gorequests&quot;</span>
-<span class="p">)</span>
+    &quot;github.com/sixgad/gorequests&quot;
+)
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// 设置header</span>
-<span class="w">    </span><span class="nx">header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Header</span><span class="p">{</span><span class="s">&quot;user-agent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">}</span>
+func main() {
+    // 设置header
+    header := gorequests.Header{&quot;user-agent&quot;: &quot;hello&quot;}
 
-<span class="w">    </span><span class="c1">// post 请求参数</span>
-<span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Data</span><span class="p">{</span>
-<span class="w">        </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;xiaobulv&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="p">}</span>
+    // post 请求参数
+    data := gorequests.Data{
+        &quot;name&quot;: &quot;xiaobulv&quot;,
+    }
 
-<span class="w">    </span><span class="c1">// 设置cookie</span>
-<span class="w">    </span><span class="c1">// 当Header里有Cookie时, 此设置无效</span>
-<span class="w">    </span><span class="nx">ck</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span><span class="s">&quot;BIDUPSID&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;C855441CA6145FBB2741293580&quot;</span><span class="p">}</span>
+    // 设置cookie
+    // 当Header里有Cookie时, 此设置无效
+    ck := gorequests.Cookie{&quot;BIDUPSID&quot;: &quot;C855441CA6145FBB2741293580&quot;}
 
-<span class="w">    </span><span class="c1">// timeout</span>
-<span class="w">    </span><span class="nx">timeout</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">SetTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    // timeout
+    timeout := gorequests.SetTimeout(10)
 
-<span class="w">    </span><span class="c1">// 代理</span>
-<span class="w">    </span><span class="c1">// proxy := gorequests.Proxy(&quot;http://xxx.ip.com&quot;)</span>
+    // 代理
+    // proxy := gorequests.Proxy(&quot;http://xxx.ip.com&quot;)
 
-<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorequests</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;https://www.httpbin.org/post&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">header</span><span class="p">,</span><span class="w"> </span><span class="nx">ck</span><span class="p">,</span><span class="w"> </span><span class="nx">timeout</span><span class="p">)</span>
+    resp, _ := gorequests.Post(&quot;https://www.httpbin.org/post&quot;, data, header, ck, timeout)
 
-<span class="w">    </span><span class="c1">// content</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Content</span><span class="p">())</span>
+    // content
+    fmt.Println(resp.Content())
 
-<span class="w">    </span><span class="c1">// text</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Text</span><span class="p">())</span>
+    // text
+    fmt.Println(resp.Text())
 
-<span class="w">    </span><span class="c1">// response.Json</span>
-<span class="w">    </span><span class="nx">m</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
-<span class="w">    </span><span class="nx">resp</span><span class="p">.</span><span class="nx">Json</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">m</span><span class="p">[</span><span class="s">&quot;headers&quot;</span><span class="p">])</span>
-<span class="w">    </span><span class="nx">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">m</span><span class="p">[</span><span class="s">&quot;headers&quot;</span><span class="p">]</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">c</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})[</span><span class="s">&quot;Host&quot;</span><span class="p">])</span>
+    // response.Json
+    m := make(map[string]interface{})
+    resp.Json(&amp;m)
+    fmt.Println(m[&quot;headers&quot;])
+    c := m[&quot;headers&quot;]
+    fmt.Println(c.(map[string]interface{})[&quot;Host&quot;])
 
-<span class="w">    </span><span class="c1">// 状态码</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span><span class="p">)</span>
+    // 状态码
+    fmt.Println(resp.StatusCode)
 
-<span class="w">    </span><span class="c1">// 响应cookie</span>
-<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Cookies</span><span class="p">())</span>
-<span class="p">}</span>
-</code></pre></div>
+    // 响应cookie
+    fmt.Println(resp.Cookies())
+}
+</code></pre>
                   </div>
                   <!-- Blog Post End -->
                 </div>

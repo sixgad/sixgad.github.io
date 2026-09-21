@@ -158,46 +158,46 @@
 </ol>
 <p>以此图片为目标，2.png，需要依次找到“喉”“搓”“绸”</p>
 <p><img src="2.png" alt="2"/></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># -*- coding: UTF-8 -*-</span>
+<pre class="codehilite"><code class="language-python"># -*- coding: UTF-8 -*-
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">ddddocr</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+import ddddocr
+import cv2
+import base64
 
-<span class="n">det</span> <span class="o">=</span> <span class="n">ddddocr</span><span class="o">.</span><span class="n">DdddOcr</span><span class="p">(</span><span class="n">det</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">ocr</span> <span class="o">=</span> <span class="n">ddddocr</span><span class="o">.</span><span class="n">DdddOcr</span><span class="p">()</span>
+det = ddddocr.DdddOcr(det=True)
+ocr = ddddocr.DdddOcr()
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;2.png&quot;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+with open(&quot;2.png&quot;, 'rb') as f:
+    image = f.read()
 
-<span class="c1"># 目标检测</span>
-<span class="n">poses</span> <span class="o">=</span> <span class="n">det</span><span class="o">.</span><span class="n">detection</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">poses</span><span class="p">)</span>
+# 目标检测
+poses = det.detection(image)
+print(poses)
 
-<span class="n">im</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;2.png&quot;</span><span class="p">)</span>
+im = cv2.imread(&quot;2.png&quot;)
 
-<span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">poses</span><span class="p">:</span>
-    <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">box</span>
-    <span class="c1"># 标注画框</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;result.png&quot;</span><span class="p">,</span> <span class="n">im</span><span class="p">)</span>
+for box in poses:
+    x1, y1, x2, y2 = box
+    # 标注画框
+    im = cv2.rectangle(im, (x1, y1), (x2, y2), color=(0, 0, 255), thickness=2)
+cv2.imwrite(&quot;result.png&quot;, im)
 
-<span class="n">chars</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">poses</span><span class="p">:</span>
-    <span class="c1"># 对框内文字进行识别</span>
-    <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">box</span>
-    <span class="n">corp</span> <span class="o">=</span> <span class="n">im</span><span class="p">[</span><span class="n">y1</span><span class="p">:</span><span class="n">y2</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x2</span><span class="p">]</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">tmpimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imencode</span><span class="p">(</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">corp</span><span class="p">)</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmpimg</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">ocr</span><span class="o">.</span><span class="n">classification</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-    <span class="n">chars</span><span class="p">[</span><span class="n">result</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span>
+chars = {}
+for box in poses:
+    # 对框内文字进行识别
+    x1, y1, x2, y2 = box
+    corp = im[y1:y2, x1:x2]
+    _, tmpimg = cv2.imencode('.png', corp)
+    tmp = tmpimg.tobytes()
+    result = ocr.classification(tmp)
+    print(result)
+    chars[result] = [x1, y1, x2, y2]
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;请点击“喉”“搓”“绸”&#39;</span><span class="p">)</span>
+print('请点击“喉”“搓”“绸”')
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;喉&#39;</span><span class="p">,</span> <span class="s1">&#39;搓&#39;</span><span class="p">,</span> <span class="s1">&#39;绸&#39;</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-</code></pre></div>
+for i in ['喉', '搓', '绸']:
+    print(i, chars[i])
+</code></pre>
 
 <p>运行程序，生成result.png</p>
 <p><img src="result.png" alt="result"/></p>

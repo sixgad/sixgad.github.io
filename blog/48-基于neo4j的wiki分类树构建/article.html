@@ -152,11 +152,11 @@
 <p><img src="image-20230918135040064.png" alt="image-20230918135040064" style="zoom:80%;" /></p>
 <p><strong>数据存储：</strong></p>
 <p>在数据收集时，爬虫只需保留以下关系</p>
-<div class="codehilite"><pre><span></span><code><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;child&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;电影&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;parent&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;生活、艺术与文化&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-json">{
+    &quot;child&quot; : &quot;电影&quot;,
+    &quot;parent&quot; : &quot;生活、艺术与文化&quot;
+}
+</code></pre>
 
 <p>为了便于后期分类树的生成和分析，引入neo4j这个图数据库。</p>
 <p><em>遇到的挑战，当节点和关系较多时，如何快速导入neo4j？</em></p>

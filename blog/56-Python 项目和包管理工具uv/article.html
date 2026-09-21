@@ -143,70 +143,70 @@
                     <h1 id="python-uv">Python 项目和包管理工具uv</h1>
 <p><a href="https://docs.astral.sh/uv/">uv官方文档</a></p>
 <p>使用独立安装程序安装 uv：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># On macOS and Linux.</span>
-curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell"># On macOS and Linux.
+curl -LsSf https://astral.sh/uv/install.sh | sh
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code><span class="c1"># On Windows.</span>
-powershell<span class="w"> </span>-ExecutionPolicy<span class="w"> </span>ByPass<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span>
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell"># On Windows.
+powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;
+</code></pre>
 
 <p>或者，来自<a href="https://pypi.org/project/uv/">PyPI</a>：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># With pip.</span>
-pip<span class="w"> </span>install<span class="w"> </span>uv
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell"># With pip.
+pip install uv
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code><span class="c1"># Or pipx.</span>
-pipx<span class="w"> </span>install<span class="w"> </span>uv
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell"># Or pipx.
+pipx install uv
+</code></pre>
 
 <p>如果通过独立安装程序安装，uv 可以自行更新到最新版本：</p>
-<div class="codehilite"><pre><span></span><code>uv<span class="w"> </span>self<span class="w"> </span>update
-</code></pre></div>
+<pre class="codehilite"><code class="language-shell">uv self update
+</code></pre>
 
 <h2 id="_1">基本用法</h2>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 显示当前已经安装的和可供安装的Python版本</span>
-uv<span class="w"> </span>python<span class="w"> </span>list
+<pre class="codehilite"><code class="language-bash"># 显示当前已经安装的和可供安装的Python版本
+uv python list
 
 
-<span class="c1"># 安装多个 Python 版本</span>
-uv<span class="w"> </span>python<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.10<span class="w"> </span><span class="m">3</span>.11<span class="w"> </span><span class="m">3</span>.12
+# 安装多个 Python 版本
+uv python install 3.10 3.11 3.12
 
 
-<span class="c1"># 初始化项目并指定python版本</span>
-uv<span class="w"> </span>init<span class="w"> </span>demo_proj<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span>.11
+# 初始化项目并指定python版本
+uv init demo_proj -p 3.11
 
 
-<span class="c1"># 创建venv并激活</span>
-<span class="nb">cd</span><span class="w"> </span>demo_proj<span class="w"> </span>
-uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.11
-<span class="c1"># win </span>
-.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
-<span class="c1"># linux</span>
-<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+# 创建venv并激活
+cd demo_proj 
+uv venv --python 3.11
+# win 
+.venv\Scripts\activate
+# linux
+source .venv/bin/activate
 
 
-<span class="c1"># 装包</span>
-uv<span class="w"> </span>add<span class="w"> </span>lxml
+# 装包
+uv add lxml
 
-<span class="c1"># 卸载包</span>
-uv<span class="w"> </span>remove<span class="w"> </span>lxml
-
-
-<span class="c1"># 查看当前项目依赖</span>
-uv<span class="w"> </span>tree
+# 卸载包
+uv remove lxml
 
 
-<span class="c1"># 运行脚本</span>
-uv<span class="w"> </span>run<span class="w"> </span>example.py<span class="w"> </span>或<span class="w"> </span>python<span class="w"> </span>example.py
+# 查看当前项目依赖
+uv tree
 
 
-<span class="c1"># 打包</span>
-uv<span class="w"> </span>build
+# 运行脚本
+uv run example.py 或 python example.py
 
-<span class="c1"># 初始化项目依赖</span>
-uv<span class="w"> </span>sync<span class="w"> </span><span class="c1"># 默认读取 pyproject.toml 并安装依赖</span>
-</code></pre></div>
+
+# 打包
+uv build
+
+# 初始化项目依赖
+uv sync # 默认读取 pyproject.toml 并安装依赖
+</code></pre>
                   </div>
                   <!-- Blog Post End -->
                 </div>
