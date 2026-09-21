@@ -29,10 +29,11 @@
 
 ## 常用命令
 
-- `pip install -r requirements.txt`：安装生成博客页所需的 Python 依赖。
-- `python generate.py`：删除仓库根目录下所有以 `index` 开头且后缀为 `.html` 的文件后，扫描 `blog/` 中 Markdown，生成各篇 `article.html`，并重新生成分页首页、`index-list.html`、`index-acg.html` 与 `index-hub.html`。
+- 统一环境：仓库本地虚拟环境 `.venv` 已随仓库入库，不同机器一律直接用它运行生成脚本（Windows 解释器 `.venv/Scripts/python`）。venv 内含平台二进制与绝对路径：在其他平台、或检出路径变化导致解释器失效时，用 `python -m venv --clear .venv` 重建，再 `.venv/Scripts/python -m pip install -r requirements.txt` 重装钉版依赖。
+- `python generate.py`（须经 `.venv` 解释器运行）：删除仓库根目录下所有以 `index` 开头且后缀为 `.html` 的文件后，扫描 `blog/` 中 Markdown，生成各篇 `article.html`，并重新生成分页首页、`index-list.html`、`index-acg.html` 与 `index-hub.html`。
 
 ## 禁止事项
 
 - 勿向仓库提交密钥、令牌或本地 `.env`（`.gitignore` 已忽略 `.env` 与常见虚拟环境目录）。
+- 勿绕过 `.venv` 用系统 Python 运行 `generate.py`：依赖版本与 `requirements.txt` 钉版不一致（尤其 Pygments）会让重新生成的 HTML 产生大量版本漂移 diff。
 - 勿在文档中编造仓库未出现的依赖、脚本或 CI；技术栈与命令须能在 `requirements.txt`、`generate.py` 等文件中得到印证。
