@@ -11,6 +11,7 @@
   --v2-muted: #5f5a54;
   --v2-accent: #b9481f;
   --v2-accent-soft: rgba(185, 72, 31, 0.12);
+  --v2-accent-rule: rgba(185, 72, 31, 0.45);
   --v2-border: rgba(22, 19, 15, 0.1);
   /* 顶栏当前页：实心暖色块，轻于墨底、与赤陶同系 */
   --v2-nav-active-bg: #bba395;
@@ -100,7 +101,7 @@ body.site-v2 .site-nav-belt a.site-nav-belt__link {
   color: var(--v2-muted) !important;
   border: 1px solid transparent;
   transition: background var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition),
-    box-shadow var(--v2-transition);
+    box-shadow var(--v2-transition), transform var(--v2-transition);
 }
 
 body.site-v2 .site-nav-belt a.site-nav-belt__link:hover {
@@ -416,7 +417,8 @@ body.site-v2 .pagination > li > a {
   margin: 0 !important;
   padding: 0.5rem 0.65rem !important;
   background: var(--v2-surface-2) !important;
-  transition: background var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition);
+  transition: background var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition),
+    transform var(--v2-transition);
 }
 
 body.site-v2 .pagination > li > a:hover {
@@ -579,7 +581,7 @@ body.site-v2 .blog-cc pre {
 body.site-v2 .blog-cc blockquote {
   margin: 1.45rem 0;
   padding: 0.95rem 1rem 0.95rem 1.2rem;
-  border-left: 4px solid rgba(26, 188, 156, 0.55);
+  border-left: 4px solid var(--v2-accent-rule);
   background: rgba(247, 242, 234, 0.65);
   border-radius: 0 var(--v2-radius-sm) var(--v2-radius-sm) 0;
   color: var(--v2-muted);
@@ -1025,5 +1027,81 @@ body.site-v2 .scroll-to-top {
 
   body.site-v2 #main .container > .row > .col-md-9 {
     padding-left: 15px;
+  }
+}
+
+/* ================================================================
+   v2.1 细节打磨：焦点可见 / 按压反馈 / 文字与数字质感 / 降级
+   ================================================================ */
+
+/* 焦点可见：style.css 的 `*:focus { outline: 0 }` 抹掉了键盘焦点，
+   用 :focus-visible 仅对键盘聚焦恢复可见环（鼠标点击不出现） */
+body.site-v2 :is(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--v2-accent);
+  outline-offset: 2px;
+}
+
+/* 字体平滑 */
+body.site-v2 {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 换行：标题防孤字，正文防孤行 */
+body.site-v2 :is(h1, h2, h3, h4) {
+  text-wrap: balance;
+}
+
+body.site-v2 .blog-cc p {
+  text-wrap: pretty;
+}
+
+/* 数字：日期、分页、索引表与卡片编号用等宽数字，避免跳动 */
+body.site-v2 :is(.blog-post .post-info, .blog-cc__meta, .pagination > li > a,
+  .site-table-index td, .site-table-index th, .acg-card__id) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 图片：纯黑低透明 1px 描边，圆角内收保证任意底色下深度一致 */
+body.site-v2 .blog-cc img,
+body.site-v2 .my-pic img {
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  outline-offset: -1px;
+}
+
+/* 按压反馈：按钮与胶囊链接统一 scale(0.96)，卡片链接更轻 */
+body.site-v2 :is(.site-nav-belt a.site-nav-belt__link, .button.button-style,
+  .sub-title--detail a, .sub-title a[href*="index-list"], .social-icon li a,
+  .scroll-to-top, .pagination > li > a):active {
+  transform: scale(0.96);
+}
+
+body.site-v2 .hub-card:active {
+  transform: translateY(0) scale(0.99);
+}
+
+/* 遗留 transition: all 覆盖为具名属性（style.css .button / .scroll-to-top） */
+body.site-v2 .button,
+body.site-v2 .button:after {
+  transition: background-color var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition),
+    box-shadow var(--v2-transition), transform var(--v2-transition);
+}
+
+body.site-v2 .scroll-to-top {
+  transition: color var(--v2-transition), transform var(--v2-transition);
+}
+
+/* 减少动态效果偏好：关闭平滑滚动与一切过渡/动画 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body.site-v2 *,
+  body.site-v2 *::before,
+  body.site-v2 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
