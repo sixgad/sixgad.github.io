@@ -18,7 +18,7 @@
 
 - `blog/`：文章目录，子文件夹名为 `序号-标题`；内含源稿 `.md`（及图片等）、生成结果 `article.html`。
 - `blog/0-demo/` 是例外而非文章：其中 `acg.json` 被 `generate.py` 的 `deal_acg()` 按固定路径读取，缺失会导致 `index-acg.html` 生成失败，勿当文章目录删改。
-- `eli5/`：「小白图解」栏目内容目录，条目由 eli5 技能（用户级，位于 `~/.agents/skills/eli5/`，仓库外）按其 SKILL.md 约定生成。每篇一个 `序号-slug/` 子文件夹，内含自包含讲解页 `index.html`（不依赖站点资源，顶部带返回栏目页链接）与 `meta.json`（`title`/`date`/`desc`，可选 `draft: true` 暂不收录）。序号独立于 blog 文章编号。`deal_eli5()` 扫描该目录生成 `index-eli5.html`：目录缺失或为空时生成空状态页而不报错；坏条目（缺 `meta.json`、序号非数字）跳过并在控制台提示。
+- `eli5/`：「小白图解」栏目内容目录，条目由 eli5-to-blog 技能（用户级，位于 `~/.agents/skills/eli5-to-blog/`，仓库外）经用户确认后写入。每篇一个 `序号-slug/` 子文件夹，内含讲解页 `index.html`（按生成原样落盘，不依赖站点资源）与 `meta.json`（`title`/`date`/`desc`，可选 `draft: true` 暂不收录）。序号独立于 blog 文章编号。`deal_eli5()` 扫描该目录生成 `index-eli5.html`：目录缺失或为空时生成空状态页而不报错；坏条目（缺 `meta.json`、序号非数字、meta 损坏）跳过并在控制台提示。
 - `basetp/`：Jinja2 源模板——`ori_index.html`（首页分页）、`ori_detail.html`（文章页）、`ori_list.html`（索引）、`ori_acg.html`（ACG）、`ori_eli5.html`（小白图解）、`ori_hub.html`（导航聚合）、`frag_nav.html`（顶栏导航片段，被各页 `include`）。
 - `static/`：全站公共 CSS/JS/字体与图片（如 `static/css/`、`static/js/`、`static/fonts/`、`static/images/`）。
 - 仓库根目录：`generate.py` 为生成入口；`index.html`、`index2.html`… 为列表分页输出；`index-list.html`、`index-acg.html`、`index-hub.html` 为单页输出（运行生成脚本后更新）。
