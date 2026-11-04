@@ -15,6 +15,8 @@ default_config = {
     "base_template": "basetp",
     # 博客文件夹
     "blog_dir": "blog",
+    # 小白图解(eli5)文件夹
+    "eli5_dir": "eli5",
     # 生成列表页文件夹, 只能放最外层, 不能修改
     "index_dir": ".",
     # markdown插件配置,
@@ -169,6 +171,53 @@ def deal_acg():
         f'{default_config["index_dir"]}/index-acg.html', encoding='utf-8')
 
 
+def deal_eli5():
+    # 小白图解：eli5/ 下每篇一个 N-slug/ 文件夹(自包含 index.html + meta.json)
+    # 目录缺失或无合法条目时生成空状态页, 与 acg.json 缺失即崩的行为不同: 栏目可增量生长
+    env = Environment(loader=FileSystemLoader("basetp"))
+    eli5_template = env.get_template('ori_eli5.html')
+    eli5_dir = default_config["eli5_dir"]
+    entries = []
+    if os.path.isdir(eli5_dir):
+        for name in os.listdir(eli5_dir):
+            folder = f'{eli5_dir}/{name}'
+            meta_path = f'{folder}/meta.json'
+            # 坏条目(缺 meta.json / 序号非数字)跳过并提示, 不影响其余条目
+            if not (os.path.isdir(folder) and os.path.isfile(meta_path)
+                    and name.split("-")[0].isdigit()):
+                print("eli5 坏条目, 跳过", name)
+                continue
+            # meta.json 存在但损坏(BOM/语法错/非对象)同样按坏条目跳过, utf-8-sig 兼容记事本 BOM
+            try:
+                with open(meta_path, 'r', encoding='utf-8-sig') as f:
+                    meta = json.load(f)
+                if not isinstance(meta, dict):
+                    raise ValueError("meta 不是 JSON 对象")
+            except (ValueError, UnicodeDecodeError) as e:
+                print("eli5 坏条目, 跳过", name, "-", e)
+                continue
+            if str(meta.get('draft', False)).lower() in ('true', 'yes', '1'):
+                print("eli5 草稿, 跳过", name)
+                continue
+            try:
+                num = int(name.split("-")[0])
+            except ValueError:
+                print("eli5 坏条目, 跳过", name)
+                continue
+            entries.append({
+                "id": num,
+                "title": meta.get('title', name),
+                "date": meta.get('date', ''),
+                "desc": meta.get('desc', ''),
+                "href": f'./{eli5_dir}/{name}/index.html'
+            })
+    # 按序号倒序展示, 与文章列表一致
+    entries.sort(key=lambda x: x["id"], reverse=True)
+    print("deal eli5, 共", len(entries), "篇")
+    eli5_template.stream(eli5=entries, nav_prefix=".", nav_active="eli5").dump(
+        f'{default_config["index_dir"]}/index-eli5.html', encoding='utf-8')
+
+
 def deal_hub():
     env = Environment(loader=FileSystemLoader("basetp"))
     hub_template = env.get_template('ori_hub.html')
@@ -189,5 +238,7 @@ if __name__ == "__main__":
     print("success generate")
     # 其他-动漫、音乐、小说推荐
     deal_acg()
+    # 小白图解(eli5)
+    deal_eli5()
     # 站点导航聚合页
     deal_hub()

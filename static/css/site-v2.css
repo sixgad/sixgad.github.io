@@ -844,6 +844,27 @@ body.site-v2.site-tool .acg-card__desc {
   color: var(--v2-muted);
 }
 
+/* —— 小白图解：整卡可点的 ACG 卡片变体 —— */
+body.site-v2 .eli5-card {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+body.site-v2 .eli5-card:hover .acg-card__title {
+  color: var(--v2-accent);
+}
+
+body.site-v2 .eli5-empty {
+  padding: 2.6rem 1.6rem;
+  text-align: center;
+}
+
+body.site-v2 .eli5-empty p {
+  margin: 0;
+  color: var(--v2-muted);
+  font-size: 1.15rem;
+}
+
 /* —— Hub 导航聚合页 —— */
 body.site-v2.site-hub {
   min-height: 100vh;
@@ -913,23 +934,11 @@ body.site-v2 .hub-grid {
   justify-content: stretch;
 }
 
-/* 五入口：大屏 3+2 第二行居中，避免右下角空洞（见导航页截图） */
+/* 导航聚合页入口卡：大屏 3 列网格（入口数为 3 的倍数时两行齐整） */
 @media (min-width: 900px) {
-  body.site-v2 .hub-grid--five {
-    grid-template-columns: repeat(6, 1fr);
+  body.site-v2 .hub-grid--entry {
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.35rem;
-  }
-
-  body.site-v2 .hub-grid--five .hub-card {
-    grid-column: span 2;
-  }
-
-  body.site-v2 .hub-grid--five .hub-card:nth-child(4) {
-    grid-column: 2 / span 2;
-  }
-
-  body.site-v2 .hub-grid--five .hub-card:nth-child(5) {
-    grid-column: 4 / span 2;
   }
 }
 

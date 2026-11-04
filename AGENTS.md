@@ -3,7 +3,7 @@
 ## 概述
 
 - 本仓库为「爬客」博客的 GitHub Pages 站点（`sixgad.github.io`），对外说明见 `README.md`。
-- 内容以静态 HTML/CSS/JS 为主；本地用 Python 将各文章目录下的 Markdown 转为 `article.html`，并生成首页分页、文章索引、ACG 推荐页与导航聚合页（`index-hub.html`）。
+- 内容以静态 HTML/CSS/JS 为主；本地用 Python 将各文章目录下的 Markdown 转为 `article.html`，并生成首页分页、文章索引、ACG 推荐页、小白图解栏目页与导航聚合页（`index-hub.html`）。
 - **工程取向**：保持「纯静态 + 少量手写 CSS」与现有 Python 生成流程，不引入 Node/npm 构建链；全站导航与视觉增量集中在 `static/css/site-v2.css`，模板仍复用 `static/css/style.css`、`plugin.css` 等与旧版主题兼容的资源。
 
 ## 技术栈
@@ -18,7 +18,8 @@
 
 - `blog/`：文章目录，子文件夹名为 `序号-标题`；内含源稿 `.md`（及图片等）、生成结果 `article.html`。
 - `blog/0-demo/` 是例外而非文章：其中 `acg.json` 被 `generate.py` 的 `deal_acg()` 按固定路径读取，缺失会导致 `index-acg.html` 生成失败，勿当文章目录删改。
-- `basetp/`：Jinja2 源模板——`ori_index.html`（首页分页）、`ori_detail.html`（文章页）、`ori_list.html`（索引）、`ori_acg.html`（ACG）、`ori_hub.html`（导航聚合）、`frag_nav.html`（顶栏导航片段，被各页 `include`）。
+- `eli5/`：「小白图解」栏目内容目录，条目由 eli5 技能（用户级，位于 `~/.agents/skills/eli5/`，仓库外）按其 SKILL.md 约定生成。每篇一个 `序号-slug/` 子文件夹，内含自包含讲解页 `index.html`（不依赖站点资源，顶部带返回栏目页链接）与 `meta.json`（`title`/`date`/`desc`，可选 `draft: true` 暂不收录）。序号独立于 blog 文章编号。`deal_eli5()` 扫描该目录生成 `index-eli5.html`：目录缺失或为空时生成空状态页而不报错；坏条目（缺 `meta.json`、序号非数字）跳过并在控制台提示。
+- `basetp/`：Jinja2 源模板——`ori_index.html`（首页分页）、`ori_detail.html`（文章页）、`ori_list.html`（索引）、`ori_acg.html`（ACG）、`ori_eli5.html`（小白图解）、`ori_hub.html`（导航聚合）、`frag_nav.html`（顶栏导航片段，被各页 `include`）。
 - `static/`：全站公共 CSS/JS/字体与图片（如 `static/css/`、`static/js/`、`static/fonts/`、`static/images/`）。
 - 仓库根目录：`generate.py` 为生成入口；`index.html`、`index2.html`… 为列表分页输出；`index-list.html`、`index-acg.html`、`index-hub.html` 为单页输出（运行生成脚本后更新）。
 
@@ -30,7 +31,7 @@
 ## 常用命令
 
 - 统一环境：venv 内含平台二进制与绝对路径，无法跨机器复用，故 `.venv/` 不入库（已加入 `.gitignore`）；每台机器在项目根运行 `uv sync`，uv 即按 `uv.lock` 在本地创建 `.venv` 并装齐锁定依赖。若机器上没有 `uv`，先 `pip install uv`（或使用官方独立安装脚本）。
-- `uv run python generate.py`（运行前自动按 `uv.lock` 校验/补齐 `.venv`）：删除仓库根目录下所有以 `index` 开头且后缀为 `.html` 的文件后，扫描 `blog/` 中 Markdown，生成各篇 `article.html`，并重新生成分页首页、`index-list.html`、`index-acg.html` 与 `index-hub.html`。
+- `uv run python generate.py`（运行前自动按 `uv.lock` 校验/补齐 `.venv`）：删除仓库根目录下所有以 `index` 开头且后缀为 `.html` 的文件后，扫描 `blog/` 中 Markdown，生成各篇 `article.html`，并重新生成分页首页、`index-list.html`、`index-acg.html`、`index-eli5.html` 与 `index-hub.html`。
 
 ## 禁止事项
 

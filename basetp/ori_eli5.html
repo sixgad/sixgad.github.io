@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>小白图解 · 爬客</title>
+    <meta name="description" content="用大图和少少的字，把技术概念讲给完全不懂的人" />
+    <meta name="author" content="zp" />
+    <link rel="shortcut icon" href="./static/images/favicon/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./static/css/plugin.css" />
+    <link rel="stylesheet" type="text/css" href="./static/css/style.css" />
+    <link rel="stylesheet" href="./static/css/ft.css" />
+    <link rel="stylesheet" type="text/css" href="./static/css/site-v2.css" />
+  </head>
+  <body class="site-v2 site-tool site-eli5">
+    <header class="site-topbar site-topbar--entry" role="banner">
+      {% include 'frag_nav.html' %}
+    </header>
+
+    <div class="site-tool-wrap site-tool-wrap--wide">
+      <div class="site-tool-hero">
+        <h1>小白图解</h1>
+        <p>用大图和少少的字，把技术概念讲给完全不懂的人。持续更新。</p>
+      </div>
+
+      {% if eli5 %}
+      <div class="acg-grid eli5-grid" role="list">
+        {% for i in eli5 %}
+        <a class="acg-card eli5-card" href="{{ i.href }}" role="listitem">
+          <div class="acg-card__meta">
+            <span class="acg-card__id" aria-hidden="true">#{{ i.id }}</span>
+            <span class="acg-card__type">{{ i.date }}</span>
+          </div>
+          <h2 class="acg-card__title">{{ i.title }}</h2>
+          <p class="acg-card__desc">{{ i.desc }}</p>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="site-panel eli5-empty">
+        <p>还没有图解内容，敬请期待。</p>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
