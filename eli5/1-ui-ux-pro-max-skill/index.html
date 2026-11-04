@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ui-ux-pro-max-skill 是什么？—— 五岁图解</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --paper: #FFF8EC;
+    --ink: #4A3728;
+    --soft: #8A7158;
+    --accent: #E8734A;
+    --accent-soft: #F5C89A;
+    --blue: #4A90D9;
+    --blue-soft: #C7DFF5;
+    --green: #5BA85A;
+    --green-soft: #D3EBCF;
+    --purple: #8E6FC1;
+    --purple-soft: #E4D9F3;
+    --card: #FFFFFF;
+  }
+
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .kicker {
+    text-align: center;
+    letter-spacing: 0.35em;
+    font-size: 13px;
+    color: var(--soft);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: clamp(28px, 5.5vw, 44px);
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  h1 .hl { color: var(--accent); }
+  .subtitle {
+    text-align: center;
+    color: var(--soft);
+    font-size: 15px;
+    margin-bottom: 42px;
+  }
+  .subtitle b { color: var(--ink); }
+
+  .section { margin-bottom: 64px; }
+  .step-label {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    padding: 4px 14px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .lede { color: var(--soft); font-size: 16px; margin-bottom: 24px; }
+
+  .card {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 32px 28px;
+    box-shadow: 6px 6px 0 rgba(74,55,40,0.12);
+  }
+
+  svg { display: block; width: 100%; height: auto; }
+
+  .caption {
+    text-align: center;
+    font-size: 14px;
+    color: var(--soft);
+    margin-top: 14px;
+  }
+  .caption b { color: var(--ink); }
+
+  .quote {
+    margin-top: 40px;
+    background: linear-gradient(135deg, #FFF3DD, #FFE9CC);
+    border: 2px dashed var(--accent);
+    border-radius: 20px;
+    padding: 26px 30px;
+    font-size: 17px;
+    text-align: center;
+  }
+  .quote .big { font-size: 20px; font-weight: 800; display: block; margin-bottom: 6px; }
+
+  .footer {
+    text-align: center;
+    color: var(--soft);
+    font-size: 13px;
+    margin-top: 60px;
+    border-top: 1px solid rgba(74,55,40,0.15);
+    padding-top: 20px;
+  }
+
+  @media (max-width: 560px) {
+    .card { padding: 22px 16px; }
+    .section { margin-bottom: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="kicker">五 岁 图 解 · E L I 5</div>
+<h1><span class="hl">ui-ux-pro-max-skill</span> 是什么？</h1>
+<p class="subtitle">一个开源（MIT）的 Agent Skill，GitHub 上 <b>14 万+ Star</b> ⭐ —— 专门教 AI 写出「设计师水平」的界面</p>
+
+<!-- ================= 第 1 部分：问题 ================================== -->
+<section class="section">
+  <span class="step-label">先 看 一 个 痛 点</span>
+  <h2>会写代码的宝宝，不等于会配色</h2>
+  <p class="lede">让 AI 搭界面，功能都对，可出来的页面总像「程序员的审美」。</p>
+
+  <div class="card">
+    <svg viewBox="0 0 760 300" role="img" aria-label="机器人做出功能正确但配色辣眼睛的页面">
+      <!-- 左：机器人 -->
+      <g transform="translate(60,60)">
+        <rect x="0" y="0" width="120" height="100" rx="26" fill="#FFFFFF" stroke="#4A3728" stroke-width="3"/>
+        <circle cx="42" cy="42" r="10" fill="#4A3728"/>
+        <circle cx="78" cy="42" r="10" fill="#4A3728"/>
+        <path d="M 44 72 Q 60 82 76 72" stroke="#4A3728" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <line x1="60" y1="0" x2="60" y2="-18" stroke="#4A3728" stroke-width="3"/>
+        <circle cx="60" cy="-24" r="7" fill="#E8734A"/>
+        <rect x="15" y="112" width="90" height="70" rx="18" fill="#FFFFFF" stroke="#4A3728" stroke-width="3"/>
+        <circle cx="60" cy="145" r="14" fill="#F5C89A" stroke="#4A3728" stroke-width="2"/>
+      </g>
+      <text x="120" y="215" text-anchor="middle" font-size="13" fill="#8A7158">功能都写出来了 ✔</text>
+      <!-- 中：产出的丑页面 -->
+      <g transform="translate(280,40)">
+        <rect x="0" y="0" width="200" height="190" rx="12" fill="#FFFFFF" stroke="#4A3728" stroke-width="3"/>
+        <!-- 辣眼配色 header：荧光绿配亮粉 -->
+        <rect x="0" y="0" width="200" height="44" rx="12" fill="#39FF14"/>
+        <text x="100" y="28" text-anchor="middle" font-size="13" fill="#FF00CC" font-weight="bold">我 的 网 站</text>
+        <rect x="16" y="60" width="80" height="26" rx="5" fill="#FF00CC"/>
+        <rect x="104" y="60" width="80" height="26" rx="5" fill="#00F0FF"/>
+        <rect x="16" y="96" width="168" height="14" rx="4" fill="#FFFF00"/>
+        <rect x="16" y="118" width="120" height="14" rx="4" fill="#FF7B00"/>
+        <rect x="16" y="150" width="70" height="24" rx="12" fill="#8A2BE2"/>
+        <text x="51" y="167" text-anchor="middle" font-size="11" fill="#FFFFFF">点 击</text>
+        <rect x="96" y="150" width="88" height="24" rx="12" fill="#DC143C"/>
+        <text x="140" y="167" text-anchor="middle" font-size="11" fill="#FFFFFF">买 单</text>
+      </g>
+      <!-- 用户捂眼 -->
+      <g transform="translate(560,70)">
+        <circle cx="55" cy="55" r="34" fill="#F5C89A" stroke="#4A3728" stroke-width="3"/>
+        <!-- 捂眼的手（弧线） -->
+        <path d="M 22 55 Q 55 20 88 55" stroke="#4A3728" stroke-width="3" fill="#F5C89A"/>
+        <path d="M 40 88 Q 55 78 70 88" stroke="#4A3728" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <text x="55" y="125" text-anchor="middle" font-size="13" fill="#8A7158">眼睛瞎了 😵</text>
+      </g>
+      <text x="380" y="265" text-anchor="middle" font-size="14" fill="#B0523A" font-weight="bold">功能对了，美感没对 —— 这就是它要解决的问题</text>
+    </svg>
+  </div>
+  <p class="caption">AI 缺的不是代码能力，是<b>审美和设计经验</b>：什么产品该配什么色、什么字体、什么版式。</p>
+</section>
+
+<!-- ================= 第 2 部分：一句话 ================================== -->
+<section class="section">
+  <div class="quote">
+    <span class="big">ui-ux-pro-max = 给宝宝的一整套「设计学院教材」📚</span>
+    一个 Agent Skill 小书包，里面装着<b>一位资深设计师的全部套路</b>：<br>说明书（SKILL.md）＋ 设计数据库（CSV 素材册）＋ 检索引擎（Python 脚本）
+  </div>
+</section>
+
+<!-- ================= 第 3 部分：书包内部 ================================== -->
+<section class="section">
+  <span class="step-label">打 开 书 包 看 看</span>
+  <h2>三个格子，对应三种宝物</h2>
+
+  <div class="card">
+    <svg viewBox="0 0 760 380" role="img" aria-label="书包三个格子：说明书 SKILL.md、数据册 CSV、检索引擎 python 脚本">
+      <!-- 书包主体 -->
+      <rect x="30" y="70" width="480" height="290" rx="30" fill="#E8734A"/>
+      <path d="M 180 70 Q 270 0 360 70" fill="none" stroke="#4A3728" stroke-width="7"/>
+
+      <!-- 格子 1：说明书 -->
+      <g>
+        <rect x="60" y="110" width="130" height="230" rx="16" fill="#FFF8EC" stroke="#4A3728" stroke-width="3"/>
+        <rect x="82" y="135" width="86" height="100" rx="8" fill="#FFFFFF" stroke="#4A3728" stroke-width="2.5"/>
+        <line x1="92" y1="158" x2="158" y2="158" stroke="#8A7158" stroke-width="3"/>
+        <line x1="92" y1="178" x2="158" y2="178" stroke="#8A7158" stroke-width="3"/>
+        <line x1="92" y1="198" x2="140" y2="198" stroke="#8A7158" stroke-width="3"/>
+        <text x="125" y="270" text-anchor="middle" font-size="15" font-weight="bold" fill="#4A3728">说明书</text>
+        <text x="125" y="292" text-anchor="middle" font-size="12" fill="#8A7158">SKILL.md</text>
+        <text x="125" y="312" text-anchor="middle" font-size="12" fill="#8A7158">设计流程 + 交付检查单</text>
+      </g>
+
+      <!-- 格子 2：数据册 -->
+      <g>
+        <rect x="210" y="110" width="130" height="230" rx="16" fill="#FFF8EC" stroke="#4A3728" stroke-width="3"/>
+        <!-- 一摞卡片 -->
+        <g transform="translate(228,140)">
+          <rect x="0" y="60" width="74" height="16" rx="4" fill="#4A90D9"/>
+          <rect x="0" y="42" width="74" height="16" rx="4" fill="#5BA85A"/>
+          <rect x="0" y="24" width="74" height="16" rx="4" fill="#F5C89A"/>
+          <rect x="0" y="6"  width="74" height="16" rx="4" fill="#8E6FC1"/>
+        </g>
+        <text x="275" y="270" text-anchor="middle" font-size="15" font-weight="bold" fill="#4A3728">设计素材册</text>
+        <text x="275" y="292" text-anchor="middle" font-size="12" fill="#8A7158">data/*.csv</text>
+        <text x="275" y="312" text-anchor="middle" font-size="12" fill="#8A7158">配色·字体·版式·动效</text>
+      </g>
+
+      <!-- 格子 3：检索引擎 -->
+      <g>
+        <rect x="360" y="110" width="130" height="230" rx="16" fill="#FFF8EC" stroke="#4A3728" stroke-width="3"/>
+        <!-- 放大镜 -->
+        <g transform="translate(385,150)">
+          <circle cx="26" cy="26" r="22" fill="none" stroke="#4A90D9" stroke-width="6"/>
+          <line x1="42" y1="42" x2="62" y2="62" stroke="#4A90D9" stroke-width="7" stroke-linecap="round"/>
+        </g>
+        <text x="425" y="270" text-anchor="middle" font-size="15" font-weight="bold" fill="#4A3728">检索引擎</text>
+        <text x="425" y="292" text-anchor="middle" font-size="12" fill="#8A7158">scripts/*.py</text>
+        <text x="425" y="312" text-anchor="middle" font-size="12" fill="#8A7158">BM25 搜索 + 生成器</text>
+      </g>
+
+      <!-- 右侧标注 -->
+      <g transform="translate(580,120)" font-size="14" fill="#4A3728" font-weight="bold">
+        <text x="0" y="0">教「怎么做」</text>
+        <path d="M -14 8 Q -60 40 -66 74" stroke="#8A7158" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+      </g>
+      <g transform="translate(580,205)" font-size="14" fill="#4A3728" font-weight="bold">
+        <text x="0" y="0">存「用什么」</text>
+        <path d="M -14 8 Q -60 30 -66 60" stroke="#8A7158" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+      </g>
+      <g transform="translate(580,290)" font-size="14" fill="#4A3728" font-weight="bold">
+        <text x="0" y="0">帮你「找得快」</text>
+        <path d="M -14 8 Q -60 20 -66 40" stroke="#8A7158" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+      </g>
+    </svg>
+  </div>
+  <p class="caption">素材册里全是真家伙：<b>192 套配色、74 组字体搭配、79 种设计风格、119 条 UX 准则、192 条行业推理规则</b>。</p>
+</section>
+
+<!-- ================= 第 4 部分：工作流程 ================================== -->
+<section class="section">
+  <span class="step-label">它 是 怎 么 干 活 的</span>
+  <h2>四步流水线：从一句话到一套设计系统</h2>
+  <p class="lede">你说「帮我做个 SaaS 落地页」，它在幕后跑完这条流水线。</p>
+
+  <div class="card">
+    <svg viewBox="0 0 760 330" role="img" aria-label="四步流水线：听需求、并行搜素材、推理排序、输出设计系统">
+      <!-- 步骤 1 -->
+      <g transform="translate(30,30)">
+        <rect x="0" y="0" width="160" height="120" rx="16" fill="#FFF3DD" stroke="#4A3728" stroke-width="2.5"/>
+        <text x="80" y="34" text-anchor="middle" font-size="15" font-weight="bold" fill="#4A3728">① 听需求</text>
+        <!-- 气泡 -->
+        <rect x="26" y="52" width="108" height="44" rx="10" fill="#FFFFFF" stroke="#8A7158" stroke-width="2"/>
+        <text x="80" y="72" text-anchor="middle" font-size="12" fill="#4A3728">「金融科技</text>
+        <text x="80" y="88" text-anchor="middle" font-size="12" fill="#4A3728">银行 App」</text>
+      </g>
+      <!-- 箭头 -->
+      <path d="M 195 90 L 235 90" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="235,84 247,90 235,96" fill="#4A3728"/>
+
+      <!-- 步骤 2：五路并行搜索 -->
+      <g transform="translate(255,20)">
+        <rect x="0" y="10" width="170" height="140" rx="16" fill="#C7DFF5" stroke="#4A3728" stroke-width="2.5"/>
+        <text x="85" y="36" text-anchor="middle" font-size="15" font-weight="bold" fill="#2C5F94">② 五路搜素材</text>
+        <g font-size="11" fill="#4A3728">
+          <rect x="18" y="48"  width="134" height="16" rx="8" fill="#FFFFFF" stroke="#4A90D9" stroke-width="1.5"/>
+          <text x="85" y="60" text-anchor="middle">产品类型库 🔍</text>
+          <rect x="18" y="70"  width="134" height="16" rx="8" fill="#FFFFFF" stroke="#4A90D9" stroke-width="1.5"/>
+          <text x="85" y="82" text-anchor="middle">风格库 🎨</text>
+          <rect x="18" y="92"  width="134" height="16" rx="8" fill="#FFFFFF" stroke="#4A90D9" stroke-width="1.5"/>
+          <text x="85" y="104" text-anchor="middle">配色库 🌈</text>
+          <rect x="18" y="114" width="134" height="16" rx="8" fill="#FFFFFF" stroke="#4A90D9" stroke-width="1.5"/>
+          <text x="85" y="126" text-anchor="middle">版式 + 字体库 📐</text>
+        </g>
+      </g>
+      <!-- 箭头 -->
+      <path d="M 430 90 L 470 90" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="470,84 482,90 470,96" fill="#4A3728"/>
+
+      <!-- 步骤 3：推理引擎 -->
+      <g transform="translate(490,30)">
+        <rect x="0" y="0" width="130" height="120" rx="16" fill="#E4D9F3" stroke="#4A3728" stroke-width="2.5"/>
+        <text x="65" y="34" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B4390">③ 推理排序</text>
+        <!-- 大脑 -->
+        <g transform="translate(33,48)">
+          <path d="M 30 0 C 12 0 4 14 8 26 C 2 34 10 44 20 42 C 24 52 42 52 46 42 C 58 42 62 30 54 22 C 60 10 48 0 38 2 C 35 0 32 0 30 0 Z"
+                fill="#8E6FC1" stroke="#4A3728" stroke-width="2"/>
+        </g>
+        <text x="65" y="110" text-anchor="middle" font-size="11" fill="#5B4390">匹配行业 · BM25 打分</text>
+      </g>
+      <!-- 箭头向下 -->
+      <path d="M 555 155 L 555 190" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="549,190 555,202 561,190" fill="#4A3728"/>
+
+      <!-- 步骤 4：设计系统输出（横跨底部） -->
+      <g transform="translate(120,210)">
+        <rect x="0" y="0" width="520" height="96" rx="16" fill="#D3EBCF" stroke="#4A3728" stroke-width="2.5"/>
+        <text x="260" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#3E7D3E">④ 产出完整设计系统</text>
+        <!-- 色板 -->
+        <g transform="translate(50,44)">
+          <rect x="0" y="0" width="18" height="18" rx="4" fill="#1B2A4A"/>
+          <rect x="22" y="0" width="18" height="18" rx="4" fill="#2C5F94"/>
+          <rect x="44" y="0" width="18" height="18" rx="4" fill="#4A90D9"/>
+          <rect x="66" y="0" width="18" height="18" rx="4" fill="#C7DFF5"/>
+          <text x="42" y="38" text-anchor="middle" font-size="11" fill="#4A3728">配色方案</text>
+        </g>
+        <!-- 字体示例 -->
+        <g transform="translate(190,44)">
+          <text x="0" y="16" font-size="20" font-weight="bold" fill="#4A3728" font-family="Georgia, serif">Aa</text>
+          <text x="34" y="16" font-size="14" fill="#8A7158">Inter 正文</text>
+          <text x="20" y="38" text-anchor="middle" font-size="11" fill="#4A3728">字体搭配</text>
+        </g>
+        <!-- 版式 -->
+        <g transform="translate(330,44)">
+          <rect x="0" y="0" width="60" height="18" rx="4" fill="#FFFFFF" stroke="#5BA85A" stroke-width="1.5"/>
+          <line x1="6" y1="9" x2="30" y2="9" stroke="#5BA85A" stroke-width="3"/>
+          <line x1="36" y1="9" x2="54" y2="9" stroke="#8A7158" stroke-width="3"/>
+          <text x="30" y="38" text-anchor="middle" font-size="11" fill="#4A3728">布局版式</text>
+        </g>
+        <!-- 禁忌 -->
+        <g transform="translate(430,44)">
+          <text x="24" y="16" text-anchor="middle" font-size="16">🚫</text>
+          <text x="24" y="38" text-anchor="middle" font-size="11" fill="#B0523A">行业禁忌清单</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+  <p class="caption">最贴心的一格是 <b>🚫 禁忌清单</b>：金融 App 别用什么、医疗网站忌讳什么——先排雷，再设计。</p>
+</section>
+
+<!-- ================= 第 5 部分：怎么用 ================================== -->
+<section class="section">
+  <span class="step-label">怎 么 装 到 你 的 机 器 上</span>
+  <h2>两种上货方式，24 个平台都能装</h2>
+
+  <div class="card">
+    <svg viewBox="0 0 760 300" role="img" aria-label="两种安装方式：marketplace 插件安装或 npm CLI 安装，装好后两句话触发">
+      <!-- 方式 A -->
+      <g transform="translate(30,20)">
+        <rect x="0" y="0" width="340" height="130" rx="16" fill="#FFFFFF" stroke="#4A90D9" stroke-width="2.5"/>
+        <text x="170" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#2C5F94">方式 A：插件市场</text>
+        <g font-size="13" fill="#4A3728" font-family="Consolas, monospace">
+          <rect x="30" y="48" width="280" height="26" rx="6" fill="#F0F6FC" stroke="#C7DFF5" stroke-width="1.5"/>
+          <text x="170" y="66" text-anchor="middle">/plugin marketplace</text>
+          <rect x="30" y="82" width="280" height="26" rx="6" fill="#F0F6FC" stroke="#C7DFF5" stroke-width="1.5"/>
+          <text x="170" y="100" text-anchor="middle">/plugin install ui-ux-pro-max</text>
+        </g>
+      </g>
+
+      <!-- 方式 B -->
+      <g transform="translate(390,20)">
+        <rect x="0" y="0" width="340" height="130" rx="16" fill="#FFFFFF" stroke="#5BA85A" stroke-width="2.5"/>
+        <text x="170" y="32" text-anchor="middle" font-size="15" font-weight="bold" fill="#3E7D3E">方式 B：npm 命令行</text>
+        <g font-size="13" fill="#4A3728" font-family="Consolas, monospace">
+          <rect x="30" y="48" width="280" height="26" rx="6" fill="#F2F9EF" stroke="#D3EBCF" stroke-width="1.5"/>
+          <text x="170" y="66" text-anchor="middle">npm i -g ui-ux-pro-max-cli</text>
+          <rect x="30" y="82" width="280" height="26" rx="6" fill="#F2F9EF" stroke="#D3EBCF" stroke-width="1.5"/>
+          <text x="170" y="100" text-anchor="middle">uipro init --ai claude</text>
+        </g>
+      </g>
+
+      <!-- 支持平台 -->
+      <g transform="translate(30,175)">
+        <rect x="0" y="0" width="700" height="44" rx="12" fill="#FFF3DD" stroke="#F5C89A" stroke-width="2"/>
+        <text x="350" y="28" text-anchor="middle" font-size="14" fill="#4A3728">支持 <b>24 个</b> AI 助手：Claude Code · Cursor · Windsurf · Copilot · Codex · Kiro …</text>
+      </g>
+
+      <!-- 触发方式 -->
+      <g transform="translate(30,235)">
+        <rect x="0" y="0" width="700" height="52" rx="12" fill="#E4F1DE" stroke="#5BA85A" stroke-width="2"/>
+        <text x="350" y="24" text-anchor="middle" font-size="14" fill="#3E7D3E">自动触发：直接说「给我的 SaaS 产品做个落地页」</text>
+        <text x="350" y="44" text-anchor="middle" font-size="14" fill="#3E7D3E">手动触发：敲 <b>/ui-ux-pro-max</b></text>
+      </g>
+    </svg>
+  </div>
+  <p class="caption">装好后它就静静躺在技能列表里，<b>聊到 UI 就自动上岗</b>，不用天天念咒。</p>
+</section>
+
+<!-- ================= 第 6 部分：交付检查 ================================== -->
+<section class="section">
+  <span class="step-label">设 计 师 的 最 后 一 关</span>
+  <h2>交货前还要过「质检流水线」</h2>
+  <p class="lede">不光生成方案，还替你把好最后一道关。</p>
+
+  <div class="card">
+    <svg viewBox="0 0 760 230" role="img" aria-label="四项交付检查：对比度、键盘焦点、减少动效、响应式宽度">
+      <!-- 传送带 -->
+      <rect x="20" y="150" width="720" height="20" rx="10" fill="#8A7158"/>
+      <circle cx="60" cy="170" r="6" fill="#FFF8EC"/>
+      <circle cx="200" cy="170" r="6" fill="#FFF8EC"/>
+      <circle cx="340" cy="170" r="6" fill="#FFF8EC"/>
+      <circle cx="480" cy="170" r="6" fill="#FFF8EC"/>
+      <circle cx="620" cy="170" r="6" fill="#FFF8EC"/>
+
+      <!-- 检查站 1：对比度 -->
+      <g transform="translate(50,20)">
+        <rect x="0" y="0" width="150" height="110" rx="14" fill="#FFFFFF" stroke="#4A3728" stroke-width="2.5"/>
+        <!-- 半黑半白圆 -->
+        <circle cx="75" cy="42" r="24" fill="#1B2A4A"/>
+        <path d="M 75 18 A 24 24 0 0 1 75 66 Z" fill="#FFFFFF" stroke="#4A3728" stroke-width="2"/>
+        <text x="75" y="95" text-anchor="middle" font-size="13" fill="#4A3728" font-weight="bold">对比度够吗</text>
+      </g>
+      <!-- 检查站 2：键盘焦点 -->
+      <g transform="translate(220,20)">
+        <rect x="0" y="0" width="150" height="110" rx="14" fill="#FFFFFF" stroke="#4A3728" stroke-width="2.5"/>
+        <!-- 按钮带焦点圈 -->
+        <rect x="45" y="26" width="60" height="32" rx="8" fill="#4A90D9"/>
+        <rect x="39" y="20" width="72" height="44" rx="11" fill="none" stroke="#E8734A" stroke-width="3" stroke-dasharray="5 3"/>
+        <text x="75" y="95" text-anchor="middle" font-size="13" fill="#4A3728" font-weight="bold">键盘能操作吗</text>
+      </g>
+      <!-- 检查站 3：动效偏好 -->
+      <g transform="translate(390,20)">
+        <rect x="0" y="0" width="150" height="110" rx="14" fill="#FFFFFF" stroke="#4A3728" stroke-width="2.5"/>
+        <!-- 动效开关 -->
+        <text x="75" y="52" text-anchor="middle" font-size="30">🌀</text>
+        <line x1="52" y1="70" x2="98" y2="70" stroke="#8A7158" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="75" y="95" text-anchor="middle" font-size="13" fill="#4A3728" font-weight="bold">晕动症友好吗</text>
+      </g>
+      <!-- 检查站 4：响应式 -->
+      <g transform="translate(560,20)">
+        <rect x="0" y="0" width="150" height="110" rx="14" fill="#FFFFFF" stroke="#4A3728" stroke-width="2.5"/>
+        <!-- 大小屏幕 -->
+        <rect x="30" y="26" width="44" height="34" rx="4" fill="#FFF8EC" stroke="#4A3728" stroke-width="2"/>
+        <rect x="86" y="34" width="18" height="26" rx="4" fill="#FFF8EC" stroke="#4A3728" stroke-width="2"/>
+        <text x="75" y="95" text-anchor="middle" font-size="13" fill="#4A3728" font-weight="bold">手机上也好看吗</text>
+      </g>
+
+      <!-- 通过章 -->
+      <g transform="translate(330,186)">
+        <rect x="0" y="0" width="100" height="34" rx="17" fill="#5BA85A"/>
+        <text x="50" y="23" text-anchor="middle" font-size="14" fill="#FFFFFF" font-weight="bold">✓ 准予出厂</text>
+      </g>
+    </svg>
+  </div>
+  <p class="caption">对比度、键盘焦点、<b>prefers-reduced-motion</b>（尊重「减少动画」偏好）、窄屏适配——四关全过才算合格。</p>
+</section>
+
+<!-- ================= 第 7 部分：更多亮点 + 彩蛋 ================================== -->
+<section class="section">
+  <div class="quote">
+    <span class="big">还有这些小心思 🎁</span>
+    <b>MASTER.md</b>：把定稿的设计决策存成「大师笔记」，换页面不跑偏 ·
+    <b>RTL 模式</b>：阿拉伯语等从右到左的语言自动适配 ·
+    <b>旧主题迁移</b>：给已有应用换肤，先审计再动手<br>
+    <span style="font-size:14px; color:#8A7158;">（开源版 MIT 免费；品牌 LOGO 生成等进阶能力在付费 Premium 版里）</span>
+  </div>
+</section>
+
+<div class="footer">
+  ELI5 · ui-ux-pro-max-skill 图解 · 14 万颗星的设计小书包 🎒⭐
+</div>
+
+</body>
+</html>
