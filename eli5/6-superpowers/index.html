@@ -1,0 +1,84 @@
+<div id="superpowers-eli5">
+  <style>
+    #superpowers-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #superpowers-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 660px; text-align: center; }
+    #superpowers-eli5 .art { line-height: 1.15; }
+    #superpowers-eli5 .art-xl { font-size: 84px; }
+    #superpowers-eli5 .art-l { font-size: 56px; }
+    #superpowers-eli5 .words { max-width: 540px; }
+    #superpowers-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #superpowers-eli5 h2 { margin: 0; font-weight: 500; }
+    #superpowers-eli5 .flow { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #superpowers-eli5 .step { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 580px; }
+    #superpowers-eli5 .step .pic { font-size: 40px; width: 56px; flex: none; text-align: center; line-height: 1.1; }
+    #superpowers-eli5 .step .txt b { display: block; font-weight: 500; }
+    #superpowers-eli5 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 10px; width: 100%; }
+    #superpowers-eli5 .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; text-align: center; }
+    #superpowers-eli5 .cell .pic { font-size: 40px; }
+    #superpowers-eli5 .cells2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px 10px; width: 100%; }
+    #superpowers-eli5 .note { text-align: center; max-width: 540px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #superpowers-eli5 .down { animation: sp-nudge 1.8s ease-in-out infinite; }
+      @keyframes sp-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>Superpowers:教 AI 像正经团队一样干活</h2>
+  <p class="text-muted">obra/superpowers —— 不教新招式,教整套公司流程</p>
+
+  <div class="scene">
+    <div class="art art-xl">🦸💻</div>
+    <p class="words"><b>名字虽叫「超能力」,发的却是「员工手册」。</b><span class="text-muted">作者 Jesse Vincent 把软件工程的标准流程写成一套技能,<br>装进 AI 编码助手,让它不许上来就写代码,先想、先问、先画图纸。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>四条信条</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🧪</span><span><b>测试永远先行</b><span class="text-small text-muted">先写测试,再写代码</span></span></div>
+      <div class="cell"><span class="pic">📋</span><span><b>流程压倒拍脑袋</b><span class="text-small text-muted">按步骤来,不靠猜</span></span></div>
+      <div class="cell"><span class="pic">🧽</span><span><b>简单即正义</b><span class="text-small text-muted">能少写就少写</span></span></div>
+      <div class="cell"><span class="pic">🔍</span><span><b>拿证据说话</b><span class="text-small text-muted">验证过才算做完</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>一条标准流水线</h2>
+    <div class="flow">
+      <div class="step"><span class="pic">🧠</span><span class="txt"><b>brainstorming — 先聊明白</b><span class="text-muted">连环提问挖出你真正想要的,复述确认,大项目先出设计稿</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🌳</span><span class="txt"><b>git worktree — 搭独立工棚</b><span class="text-muted">新分支干活,先确认测试基线全绿</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🗺️</span><span class="txt"><b>writing-plans — 切小块</b><span class="text-muted">把工作切成 2~5 分钟一块的小任务,每块写清文件、代码、验收</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🤝</span><span class="txt"><b>subagent 干活 — 一人一活</b><span class="text-muted">每个小任务派一个新 AI,先查「合不合规格」再查「代码质量」</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🚦</span><span class="txt"><b>tdd — 红绿循环</b><span class="text-muted">测试先红后绿;谁敢先写代码没测试,代码直接删掉</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🏁</span><span class="txt"><b>收尾 — review 后交卷</b><span class="text-muted">对照计划评审(严重问题卡住不放),然后给你合并/开 PR/丢弃的选项</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>技能全部自动触发</h2>
+    <div class="cells2">
+      <div class="cell"><span class="pic">🩺</span><span><b>systematic-debugging</b><span class="text-small text-muted">四阶段找根因,不瞎试</span></span></div>
+      <div class="cell"><span class="pic">✅</span><span><b>verification-before-completion</b><span class="text-small text-muted">报捷前先跑一遍验证</span></span></div>
+      <div class="cell"><span class="pic">👥</span><span><b>dispatching-parallel-agents</b><span class="text-small text-muted">多个子 AI 同时开工</span></span></div>
+      <div class="cell"><span class="pic">✍️</span><span><b>writing-skills</b><span class="text-small text-muted">教你把新经验也写成技能卡</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧰⚡</div>
+    <p class="words"><b>装法:各家的插件市场都能搜到。</b><span class="text-muted">Claude Code、Codex、Cursor、Gemini、Copilot、Qwen Code 等十几个 agent 各有官方安装命令。MIT 开源,遥测可选可关。</span></p>
+    <p class="note text-small text-muted">一句话记忆:别的技能包教 AI「一招一式」,Superpowers 直接给 AI 发了整套「标准作业流程」。</p>
+  </div>
+</div>

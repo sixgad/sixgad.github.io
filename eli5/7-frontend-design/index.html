@@ -1,0 +1,96 @@
+<div id="fe-design-eli5">
+  <style>
+    #fe-design-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #fe-design-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 660px; text-align: center; }
+    #fe-design-eli5 .art { line-height: 1.15; }
+    #fe-design-eli5 .art-xl { font-size: 84px; }
+    #fe-design-eli5 .art-l { font-size: 56px; }
+    #fe-design-eli5 .words { max-width: 550px; }
+    #fe-design-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #fe-design-eli5 h2 { margin: 0; font-weight: 500; }
+    #fe-design-eli5 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px 10px; width: 100%; }
+    #fe-design-eli5 .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; text-align: center; }
+    #fe-design-eli5 .cell .pic { font-size: 40px; }
+    #fe-design-eli5 .flow { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #fe-design-eli5 .step { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 580px; }
+    #fe-design-eli5 .step .pic { font-size: 40px; width: 56px; flex: none; text-align: center; line-height: 1.1; }
+    #fe-design-eli5 .step .txt b { display: block; font-weight: 500; }
+    #fe-design-eli5 .masks { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 560px; }
+    #fe-design-eli5 .mask { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 96px; padding: 8px 4px; text-align: center; }
+    #fe-design-eli5 .mask .pic { font-size: 34px; }
+    #fe-design-eli5 .note { text-align: center; max-width: 550px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #fe-design-eli5 .down { animation: fd-nudge 1.8s ease-in-out infinite; }
+      @keyframes fd-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>frontend-design:让 AI 别再产出「模板脸」</h2>
+  <p class="text-muted">Anthropic 官方技能库 anthropics/skills 里的一张设计卡</p>
+
+  <div class="scene">
+    <div class="art art-xl">🎭😵‍💫</div>
+    <p class="words"><b>AI 生成的网页都长一张脸:</b><span class="text-muted">大数字 + 标语 + 渐变按钮,换个名字就能当别家官网。<br>这张技能卡让 AI 变身一家「有品味工作室」的设计总监:先定气质,再动手。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>第一忠告:从「物」出发</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🧸</span><span>给 8 岁女孩设计的玩具页<br><span class="text-small text-muted">应该花哨、大胆、好玩</span></span></div>
+      <div class="cell"><span class="pic">📉</span><span>给金融分析师做的仪表盘<br><span class="text-small text-muted">应该克制、密集、高效</span></span></div>
+      <div class="cell"><span class="pic">❓</span><span>需求没说产品是什么?<br><span class="text-small text-muted">先问清对象和正事,再谈风格</span></span></div>
+    </div>
+    <p class="words text-small text-muted">好品味不是「加装饰」,是从产品的行业、材料、黑话里长出来的。</p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>AI 生成脸的「五张面具」</h2>
+    <div class="masks">
+      <div class="mask"><span class="pic">🍦🧱</span><span class="text-small">奶油底+衬线大标题+陶土橙</span></div>
+      <div class="mask"><span class="pic">⬛🟢</span><span class="text-small">黑底配单一荧光绿</span></div>
+      <div class="mask"><span class="pic">📰</span><span class="text-small">报纸式细线密排</span></div>
+      <div class="mask"><span class="pic">🃏🃏🃏</span><span class="text-small">万物同圆角同阴影的卡片套</span></div>
+      <div class="mask"><span class="pic">🔠➡️</span><span class="text-small">全大写小标签·圆点分隔·箭头按钮</span></div>
+    </div>
+    <p class="words text-small text-muted">不禁用——但它们是顺手拿的默认款,不是为这个需求做的选择。没被点名的自由,别花在默认款上。</p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>两遍工作法</h2>
+    <div class="flow">
+      <div class="step"><span class="pic">📐</span><span class="txt"><b>第一遍:先出方案不出码</b><span class="text-muted">4~6 个带名字的颜色、字体分工、ASCII 草图、几条独特性原则</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🪞</span><span class="txt"><b>对着需求照镜子</b><span class="text-muted">方案里任何「放到别的项目也成立」的部分,删掉重来</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">⌨️</span><span class="txt"><b>第二遍:照着方案写代码</b><span class="text-muted">整页只留一个「记忆点」,其余全部安静;写完自己截图挑刺</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">💄</span><span class="txt"><b>出门前摘一件首饰</b><span class="text-muted">借香奈儿的规矩:再删一样装饰,页面更好看</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>文字也是设计</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🏷️</span><span><b>按用户的话命名</b><span class="text-small text-muted">是「消息通知」,不是 webhook 配置</span></span></div>
+      <div class="cell"><span class="pic">🔘</span><span><b>按钮直说结果</b><span class="text-small text-muted">「保存」而不是「提交」,全流程同名</span></span></div>
+      <div class="cell"><span class="pic">🚧</span><span><b>报错给出路</b><span class="text-small text-muted">说清坏在哪、怎么办,不卖萌不甩锅</span></span></div>
+      <div class="cell"><span class="pic">♿</span><span><b>质量地板</b><span class="text-small text-muted">手机上不乱、键盘有焦点、尊重减少动效</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧰⚡</div>
+    <p class="words"><b>怎么拿到它:</b><span class="text-muted">Claude Code 里 <code>/plugin marketplace add anthropics/skills</code> 安装;<br>这份库是 Apache 2.0 开源,技能本身就是给人改着用的。</span></p>
+    <p class="note text-small text-muted">一句话记忆:它不教 AI「做漂亮」,教 AI 先回答「这个东西该长什么脸」。</p>
+  </div>
+</div>

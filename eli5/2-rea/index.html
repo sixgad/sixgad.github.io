@@ -1,0 +1,85 @@
+<div id="rea-eli5">
+  <style>
+    #rea-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #rea-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 640px; text-align: center; }
+    #rea-eli5 .art { line-height: 1.15; }
+    #rea-eli5 .art-xl { font-size: 84px; }
+    #rea-eli5 .art-l { font-size: 56px; }
+    #rea-eli5 .words { max-width: 520px; }
+    #rea-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #rea-eli5 .flow { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #rea-eli5 .step { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 560px; }
+    #rea-eli5 .step .pic { font-size: 44px; width: 60px; flex: none; text-align: center; line-height: 1.1; }
+    #rea-eli5 .step .txt b { display: block; font-weight: 500; }
+    #rea-eli5 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px 10px; width: 100%; }
+    #rea-eli5 .tile { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; }
+    #rea-eli5 .tile .pic { font-size: 40px; }
+    #rea-eli5 h2 { margin: 0; font-weight: 500; }
+    #rea-eli5 .note { text-align: center; max-width: 520px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #rea-eli5 .down { animation: rea-nudge 1.8s ease-in-out infinite; }
+      @keyframes rea-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>REA:给 AI 的「拆软件」工具箱</h2>
+  <p class="text-muted">全称 Reverse Engineer Anything —— 什么软件都能拆开看看</p>
+
+  <div class="scene">
+    <div class="art art-xl">🎁❓</div>
+    <p class="words"><b>软件是个上锁的礼物盒。</b><span class="text-muted">你看到一个游戏、一个 App 里有超酷的功能,却看不见里面是怎么做的。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-xl">🤖🧰</div>
+    <p class="words"><b>REA 是一盒侦探工具,接到 AI 助手上。</b><span class="text-muted">接线的方式叫 MCP——就像 AI 和工具箱之间的电源插座。<br>装好后,Claude Code、Cursor、Codex 这些 AI 就会用这盒工具。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>怎么破案?</h2>
+    <div class="flow">
+      <div class="step"><span class="pic">💬</span><span class="txt"><b>你问 AI</b><span class="text-muted">「这个音效是怎么算出来的?」</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🔌</span><span class="txt"><b>AI 通过 MCP 呼叫 REA</b><span class="text-muted">「帮我拆开这个软件看看」</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">💻🩻</span><span class="txt"><b>REA 在你自己的电脑上拍 X 光</b><span class="text-muted">不上传,全程本地分析</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🔍📋</span><span class="txt"><b>带回证据</b><span class="text-muted">伪代码、汇编、字符串、函数调用关系——每条结论都有出处</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🤖💡</span><span class="txt"><b>AI 讲给你听,或照着做一个</b><span class="text-muted">把学到的功能写进你自己的项目里</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>几乎什么盒子都能拆</h2>
+    <div class="tiles">
+      <div class="tile"><span class="pic">⚙️</span><span>电脑原生程序<br><span class="text-small text-muted">配 Ghidra / IDA 用</span></span></div>
+      <div class="tile"><span class="pic">🌐</span><span>网页和 Electron 应用</span></div>
+      <div class="tile"><span class="pic">📱</span><span>安卓 APK</span></div>
+      <div class="tile"><span class="pic">🎮</span><span>游戏<br><span class="text-small text-muted">Godot / Unity IL2CPP</span></span></div>
+      <div class="tile"><span class="pic">📦</span><span>.NET / Go / Rust / WASM</span></div>
+      <div class="tile"><span class="pic">🗄️</span><span>数据库、固件、抓包文件</span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧑‍🔬✨</div>
+    <p class="words"><b>真的破过案:</b><span class="text-muted">比如把老游戏 DX-Ball 的立体声音效算法完整还原——连编译后的 63 个字节都一字不差。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧰⚡</div>
+    <p class="words"><b>装上一行命令就开工:</b><span class="text-muted"><code>npx rea-agents setup</code></span></p>
+    <p class="note text-small text-muted">⚖️ 用它做学习、研究、软件保护这些正经事,别拿去干坏事。</p>
+  </div>
+</div>

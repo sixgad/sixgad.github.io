@@ -1,0 +1,88 @@
+<div id="ponytail-eli5">
+  <style>
+    #ponytail-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #ponytail-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 660px; text-align: center; }
+    #ponytail-eli5 .art { line-height: 1.15; }
+    #ponytail-eli5 .art-xl { font-size: 84px; }
+    #ponytail-eli5 .art-l { font-size: 56px; }
+    #ponytail-eli5 .words { max-width: 540px; }
+    #ponytail-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #ponytail-eli5 h2 { margin: 0; font-weight: 500; }
+    #ponytail-eli5 .ladder { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #ponytail-eli5 .rung { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 560px; }
+    #ponytail-eli5 .rung .pic { font-size: 40px; width: 54px; flex: none; text-align: center; line-height: 1.1; }
+    #ponytail-eli5 .rung .txt b { display: block; font-weight: 500; }
+    #ponytail-eli5 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px 10px; width: 100%; }
+    #ponytail-eli5 .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; text-align: center; }
+    #ponytail-eli5 .cell .pic { font-size: 38px; }
+    #ponytail-eli5 .note { text-align: center; max-width: 540px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #ponytail-eli5 .down { animation: pt-nudge 1.8s ease-in-out infinite; }
+      @keyframes pt-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>ponytail:让 AI 学当「偷懒老师傅」</h2>
+  <p class="text-muted">口头禅:最好的代码,是你从没写过的那些</p>
+
+  <div class="scene">
+    <div class="art art-xl">🐴💨</div>
+    <p class="words"><b>AI 写代码爱写多、写复杂。</b><span class="text-muted">ponytail 给 AI 套上一个人设:办公室里最懒的资深工程师——<br>能用一行搞定的五十行,他会删到只剩一行。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>懒之前,先爬一级梯子 🪜</h2>
+    <div class="ladder">
+      <div class="rung"><span class="pic">👂</span><span class="txt"><b>先听懂问题</b><span class="text-muted">别急着动手</span></span></div>
+      <div class="down">↓</div>
+      <div class="rung"><span class="pic">📖</span><span class="txt"><b>读要改的代码</b><span class="text-muted">顺着真实调用流程走一遍</span></span></div>
+      <div class="down">↓</div>
+      <div class="rung"><span class="pic">✂️</span><span class="txt"><b>再选最简单的够用方案</b><span class="text-muted">只写这次任务需要的,「以后可能用得上」的东西一律不写</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>懒,但不误事</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🛡️</span><span><b>这些地方绝不省</b><span class="text-small text-muted">输入校验、数据不丢、安全、无障碍</span></span></div>
+      <div class="cell"><span class="pic">🧪</span><span><b>偷懒要留押金</b><span class="text-small text-muted">分支、循环、解析、钱、安全逻辑,必须留个小测试</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>偷懒的成绩单</h2>
+    <div class="viz-grid">
+      <div class="card viz-stat"><span class="text-muted text-small">代码量</span><span class="viz-stat-value">-53%</span></div>
+      <div class="card viz-stat"><span class="text-muted text-small">耗时</span><span class="viz-stat-value">-41%</span></div>
+      <div class="card viz-stat"><span class="text-muted text-small">成本</span><span class="viz-stat-value">-26%</span><span class="text-small text-muted">39 个任务实测</span></div>
+    </div>
+    <p class="text-small text-muted">外加 token 少 45%(Claude Code 基准)</p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>工具箱</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🎚️</span><span><b>/ponytail</b><span class="text-small text-muted">lite / full / ultra 三档懒度,off 关掉</span></span></div>
+      <div class="cell"><span class="pic">🔍</span><span><b>/ponytail-review</b><span class="text-small text-muted">盯当前改动:bug、安全、缺测试、可删的代码</span></span></div>
+      <div class="cell"><span class="pic">🏠</span><span><b>/ponytail-audit</b><span class="text-small text-muted">全屋大扫除:整个仓库按重要性排查</span></span></div>
+      <div class="cell"><span class="pic">📒</span><span><b>/ponytail-debt</b><span class="text-small text-muted">偷的懒记账,别忘了回头还</span></span></div>
+      <div class="cell"><span class="pic">🏆</span><span><b>/ponytail-gain</b><span class="text-small text-muted">晒成绩单</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧰⚡</div>
+    <p class="words"><b>本体就一个提示词文件。</b><span class="text-muted">Claude Code 两条插件命令装好;<br>其他 agent(Codex、Cursor、Gemini、Copilot…)把 <code>AGENTS.md</code> 抄进项目就能用。MIT 开源。</span></p>
+    <p class="note text-small text-muted">一句话记忆:它逼 AI 先想清楚,再理直气壮地少写。</p>
+  </div>
+</div>

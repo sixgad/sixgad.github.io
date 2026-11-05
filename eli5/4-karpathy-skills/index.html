@@ -1,0 +1,67 @@
+<div id="karpathy-skills-eli5">
+  <style>
+    #karpathy-skills-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #karpathy-skills-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 660px; text-align: center; }
+    #karpathy-skills-eli5 .art { line-height: 1.15; }
+    #karpathy-skills-eli5 .art-xl { font-size: 84px; }
+    #karpathy-skills-eli5 .art-l { font-size: 56px; }
+    #karpathy-skills-eli5 .words { max-width: 540px; }
+    #karpathy-skills-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #karpathy-skills-eli5 h2 { margin: 0; font-weight: 500; }
+    #karpathy-skills-eli5 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 10px; width: 100%; }
+    #karpathy-skills-eli5 .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; text-align: center; }
+    #karpathy-skills-eli5 .cell .pic { font-size: 42px; }
+    #karpathy-skills-eli5 .flow { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #karpathy-skills-eli5 .step { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 580px; }
+    #karpathy-skills-eli5 .step .pic { font-size: 42px; width: 58px; flex: none; text-align: center; line-height: 1.1; }
+    #karpathy-skills-eli5 .step .txt b { display: block; font-weight: 500; }
+    #karpathy-skills-eli5 .note { text-align: center; max-width: 540px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #karpathy-skills-eli5 .down { animation: kp-nudge 1.8s ease-in-out infinite; }
+      @keyframes kp-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>karpathy-skills:把大佬的吐槽变成 AI 家规</h2>
+  <p class="text-muted">andrej-karpathy-skills —— 一个文件,治 AI 写代码的老毛病</p>
+
+  <div class="scene">
+    <div class="art art-xl">🗣️📜🔥</div>
+    <p class="words"><b>故事很简单:</b><span class="text-muted">AI 大佬 Karpathy 发帖吐槽 AI 写代码的坏毛病,火遍全网。<br>有人把他的吐槽整理成一份 <code>CLAUDE.md</code>「家规」,扔进项目里,AI 就照着守规矩。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>大佬吐槽的四个坏毛病</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">👻</span><span><b>瞎猜不问</b><span class="text-small text-muted">带着错误假设闷头就跑</span></span></div>
+      <div class="cell"><span class="pic">🎈</span><span><b>过度设计</b><span class="text-small text-muted">简单功能写成复杂城堡</span></span></div>
+      <div class="cell"><span class="pic">✂️</span><span><b>误伤路人</b><span class="text-small text-muted">顺手删看不懂的注释和代码</span></span></div>
+      <div class="cell"><span class="pic">🌫️</span><span><b>目标模糊</b><span class="text-small text-muted">没有验收标准,跑偏没人知</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>对症下药的四条家规</h2>
+    <div class="flow">
+      <div class="step"><span class="pic">🤔</span><span class="txt"><b>动手前先想</b><span class="text-muted">假设写明白,不确定就问;有更简单的办法要顶回来</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🧽</span><span class="txt"><b>只写刚好够用的代码</b><span class="text-muted">不搞脑补功能、不为一次性代码搭抽象。自检:老工程师会说「过度复杂」吗?</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🔬</span><span class="txt"><b>外科手术式改动</b><span class="text-muted">只碰你要求的地方,不顺手重构、不改成自己喜欢的风格</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🏁</span><span class="txt"><b>按目标循环干活</b><span class="text-muted">「修 bug」改成「先写个复现测试,再让它变绿」;每步都验证。LLM 最擅长朝着明确目标反复试</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧰⚡</div>
+    <p class="words"><b>用法:一个文件的事。</b><span class="text-muted">用 Claude Code 插件命令安装,或 <code>curl</code> 把 CLAUDE.md 下到项目里;Cursor 用户有现成规则文件。MIT 开源。</span></p>
+    <p class="note text-small text-muted">⚖️ 小提醒:这套规矩偏「稳」不偏「快」,改个错别字这种小事不必全套上阵。</p>
+  </div>
+</div>

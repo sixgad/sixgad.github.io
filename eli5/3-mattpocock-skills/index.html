@@ -1,0 +1,102 @@
+<div id="mp-skills-eli5">
+  <style>
+    #mp-skills-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #mp-skills-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 660px; text-align: center; }
+    #mp-skills-eli5 .art { line-height: 1.15; }
+    #mp-skills-eli5 .art-xl { font-size: 84px; }
+    #mp-skills-eli5 .art-l { font-size: 56px; }
+    #mp-skills-eli5 .words { max-width: 540px; }
+    #mp-skills-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #mp-skills-eli5 h2 { margin: 0; font-weight: 500; }
+    #mp-skills-eli5 .fails { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 10px; width: 100%; }
+    #mp-skills-eli5 .fail { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; }
+    #mp-skills-eli5 .fail .pic { font-size: 42px; }
+    #mp-skills-eli5 .flow { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #mp-skills-eli5 .step { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 580px; }
+    #mp-skills-eli5 .step .pic { font-size: 42px; width: 58px; flex: none; text-align: center; line-height: 1.1; }
+    #mp-skills-eli5 .step .txt b { display: block; font-weight: 500; }
+    #mp-skills-eli5 .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; width: 100%; max-width: 580px; }
+    #mp-skills-eli5 .col { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+    #mp-skills-eli5 .col .pic { font-size: 52px; }
+    #mp-skills-eli5 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px 10px; width: 100%; }
+    #mp-skills-eli5 .cell { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; text-align: center; }
+    #mp-skills-eli5 .cell .pic { font-size: 36px; }
+    #mp-skills-eli5 .note { text-align: center; max-width: 540px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #mp-skills-eli5 .down { animation: mp-nudge 1.8s ease-in-out infinite; }
+      @keyframes mp-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>mattpocock/skills:给 AI 程序员的「工作手册」</h2>
+  <p class="text-muted">作者 Matt Pocock(TypeScript 名师),直接公开自己每天在用的 .agents 目录</p>
+
+  <div class="scene">
+    <div class="art art-xl">🤖💥</div>
+    <p class="words"><b>AI 写代码,常踩四个坑:</b></p>
+    <div class="fails">
+      <div class="fail"><span class="pic">👂❌</span><span>没听懂你要什么<br><span class="text-small text-muted">做出来不是那回事</span></span></div>
+      <div class="fail"><span class="pic">🗣️💬</span><span>废话太多<br><span class="text-small text-muted">20 个词说 1 件事</span></span></div>
+      <div class="fail"><span class="pic">🧨</span><span>代码是坏的<br><span class="text-small text-muted">没有测试兜底</span></span></div>
+      <div class="fail"><span class="pic">🏚️</span><span>越写越乱<br><span class="text-small text-muted">架构加速腐烂</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-xl">🃏📖</div>
+    <p class="words"><b>解法:把工作习惯拆成一张张「技能卡」。</b><span class="text-muted">每张卡 = 一小段纪律,小巧、可拼、换任何模型都能用。<br>不是抢你方向盘的框架,是随取随用的招式。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>招式分两种角色</h2>
+    <div class="two">
+      <div class="col"><span class="pic">🎖️</span><span><b>你主动召唤的</b><span class="text-small text-muted">输入 /grill-me 这种,当「指挥官」,编排流程</span></span></div>
+      <div class="col"><span class="pic">🧰</span><span><b>AI 自己会拿的</b><span class="text-small text-muted">干活时自动触发,是「基本功」:tdd、code-review…</span></span></div>
+    </div>
+    <p class="words text-small text-muted">规矩:指挥官可以叫基本功,指挥官之间不互相叫。</p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>一条标准流水线</h2>
+    <div class="flow">
+      <div class="step"><span class="pic">🔥🍖</span><span class="txt"><b>/grill-me — 先「拷问」你</b><span class="text-muted">AI 连环追问,把方案的每个分支问清楚才动手</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">📝</span><span class="txt"><b>/to-spec → /to-tickets</b><span class="text-muted">聊天变规格书,再切成一张张带依赖的小票</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">⚒️</span><span class="txt"><b>/implement — 边测边写</b><span class="text-muted">红-绿-重构循环,写完自动双轴 code-review</span></span></div>
+      <div class="down">↓</div>
+      <div class="step"><span class="pic">🪞</span><span class="txt"><b>/retro — 干完复盘</b><span class="text-muted">反过来改进你的环境和规范</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>百宝箱里还有什么</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🏃📄</span><span><b>handoff</b><span class="text-small text-muted">对话压缩成交接文档,换个 AI 接着干</span></span></div>
+      <div class="cell"><span class="pic">🩺</span><span><b>diagnosing-bugs</b><span class="text-small text-muted">先造复现环,再假设、下探针、修复</span></span></div>
+      <div class="cell"><span class="pic">📚</span><span><b>research</b><span class="text-small text-muted">查一手资料,产出带引用的笔记</span></span></div>
+      <div class="cell"><span class="pic">🧱</span><span><b>prototype</b><span class="text-small text-muted">一个 HTML 快速验证设计问题,用完就扔</span></span></div>
+      <div class="cell"><span class="pic">🗂️</span><span><b>domain-modeling</b><span class="text-small text-muted">维护术语表 GLOSSARY.md,少说废话</span></span></div>
+      <div class="cell"><span class="pic">🧙</span><span><b>wizard</b><span class="text-small text-muted">生成交互脚本,带你做只有人能做的步骤</span></span></div>
+      <div class="cell"><span class="pic">❓</span><span><b>wait-what</b><span class="text-small text-muted">AI 说人话听不懂时,用术语表重讲一遍</span></span></div>
+      <div class="cell"><span class="pic">🧭</span><span><b>ask-matt / wayfinder</b><span class="text-small text-muted">不知道用哪张卡?跨会话大计划?</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">🧰⚡</div>
+    <p class="words"><b>装上就能用,每个仓库先跑一次配置:</b></p>
+    <p><code>claude plugin install mattpocock-skills@claude-plugins-official</code><br><span class="text-small text-muted">Codex / Copilot / Gemini CLI 也支持;通用装法:<code>npx skills@latest add mattpocock/skills</code>,然后跑 <code>/setup-matt-pocock-skills</code></span></p>
+    <p class="note text-small text-muted">一句话记忆:它把「老工程师的纪律」印成卡片,AI 照着出牌。</p>
+  </div>
+</div>
