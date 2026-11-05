@@ -1,0 +1,19 @@
+<script>
+  /* 防白闪：首帧前决定主题。storage 被禁时退回系统偏好判定（而非强制亮色）。 */
+  (function () {
+    var t = null;
+    try {
+      t = localStorage.getItem('pk-theme');
+    } catch (e) {
+      t = null; /* 存储被禁（隐私模式/受限嵌入）：按未选择处理 */
+    }
+    if (t !== 'light' && t !== 'dark') {
+      try {
+        t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      } catch (e2) {
+        t = 'light';
+      }
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>

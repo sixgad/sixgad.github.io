@@ -10,6 +10,9 @@
   --v2-ink: #16130f;
   --v2-muted: #5f5a54;
   --v2-accent: #b9481f;
+  /* 文本强调色：深赤陶，文字场景专用（链接/按钮文字/悬停文字），对纸底与表面 ≥4.5:1；
+     --v2-accent 只留给装饰场景（边框、渐变、竖条、悬浮底、白字胶囊） */
+  --v2-accent-text: #9c3b16;
   --v2-accent-soft: rgba(185, 72, 31, 0.12);
   --v2-accent-rule: rgba(185, 72, 31, 0.45);
   --v2-border: rgba(22, 19, 15, 0.1);
@@ -20,8 +23,9 @@
   --v2-radius: 14px;
   --v2-radius-sm: 10px;
   --v2-radius-lg: 22px;
-  --v2-font-sans: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --v2-font-display: ui-serif, Georgia, "Noto Serif SC", "Songti SC", serif;
+  /* 黑体系系统栈：零远程字体、跨平台一致；标题层级由字重与字号建立 */
+  --v2-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+  --v2-font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif;
   --v2-transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -41,7 +45,7 @@ body.site-v2 ::selection {
 }
 
 body.site-v2 a {
-  color: var(--v2-accent);
+  color: var(--v2-accent-text);
 }
 
 body.site-v2 a:hover,
@@ -105,7 +109,7 @@ body.site-v2 .site-nav-belt a.site-nav-belt__link {
 }
 
 body.site-v2 .site-nav-belt a.site-nav-belt__link:hover {
-  color: var(--v2-accent) !important;
+  color: var(--v2-accent-text) !important;
   background: var(--v2-accent-soft);
   border-color: rgba(185, 72, 31, 0.2);
 }
@@ -131,6 +135,39 @@ body.site-v2 .site-nav-belt a.site-nav-belt__link--ext {
 }
 
 body.site-v2 .site-nav-belt a.site-nav-belt__link:focus-visible {
+  outline: 2px solid var(--v2-accent);
+  outline-offset: 2px;
+}
+
+/* 主题切换按钮：与导航胶囊同族的圆钮 */
+body.site-v2 .site-nav-belt button.site-nav-belt__theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  width: 46px;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--v2-border);
+  color: var(--v2-muted);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition),
+    transform var(--v2-transition);
+}
+
+body.site-v2 .site-nav-belt button.site-nav-belt__theme:hover {
+  color: var(--v2-accent-text);
+  background: var(--v2-accent-soft);
+  border-color: rgba(185, 72, 31, 0.25);
+}
+
+body.site-v2 .site-nav-belt button.site-nav-belt__theme:active {
+  transform: scale(0.96);
+}
+
+body.site-v2 .site-nav-belt button.site-nav-belt__theme:focus-visible {
   outline: 2px solid var(--v2-accent);
   outline-offset: 2px;
 }
@@ -226,7 +263,7 @@ body.site-v2 .social-icon li a {
 
 body.site-v2 .social-icon li a:hover {
   background: var(--v2-accent-soft);
-  color: var(--v2-accent) !important;
+  color: var(--v2-accent-text) !important;
   transform: translateY(-2px);
 }
 
@@ -293,10 +330,10 @@ body.site-v2 .sub-title--detail a {
 body.site-v2 .sub-title--detail a:hover {
   background: var(--v2-accent-soft);
   border-color: rgba(185, 72, 31, 0.28);
-  color: var(--v2-accent) !important;
+  color: var(--v2-accent-text) !important;
 }
 
-body.site-v2 .sub-title--detail h1 {
+body.site-v2 .sub-title--detail .back-text {
   font-family: var(--v2-font-sans);
   font-size: 0.92rem;
   font-weight: 600;
@@ -304,7 +341,7 @@ body.site-v2 .sub-title--detail h1 {
   margin: 0;
 }
 
-body.site-v2 .sub-title--detail a:hover h1 {
+body.site-v2 .sub-title--detail a:hover .back-text {
   color: inherit;
 }
 
@@ -327,8 +364,9 @@ body.site-v2 .content-page {
   padding-top: 1.5rem;
 }
 
-/* 文章卡片 */
+/* 文章卡片：整卡可点——标题链接 ::after 覆盖整卡，「阅读全文」按钮常显但点击穿透 */
 body.site-v2 div.blog-post {
+  position: relative;
   padding: 1.5rem 1.75rem;
   margin-bottom: 1rem;
   border-radius: var(--v2-radius-sm);
@@ -351,8 +389,14 @@ body.site-v2 .blog-post .post-title h2 {
   color: var(--v2-ink);
 }
 
+body.site-v2 .blog-post .post-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
 body.site-v2 .blog-post .post-title a:hover h2 {
-  color: var(--v2-accent);
+  color: var(--v2-accent-text);
 }
 
 body.site-v2 .blog-post .post-info {
@@ -365,11 +409,16 @@ body.site-v2 .blog-post .post-info a {
   color: var(--v2-muted) !important;
 }
 
+/* 按钮点击穿透到整卡拉伸链接，避免双重可点区；视觉仍常显 */
+body.site-v2 .blog-post .button.button-style {
+  pointer-events: none;
+}
+
 body.site-v2 .button.button-style {
   border-radius: 999px;
   padding: 0.55rem 1.35rem;
   background: transparent;
-  color: var(--v2-accent) !important;
+  color: var(--v2-accent-text) !important;
   font-weight: 500;
   letter-spacing: 0.02em;
   border: 1.5px solid var(--v2-accent);
@@ -423,7 +472,7 @@ body.site-v2 .pagination > li > a {
 
 body.site-v2 .pagination > li > a:hover {
   background: var(--v2-accent-soft) !important;
-  color: var(--v2-accent) !important;
+  color: var(--v2-accent-text) !important;
   border-color: rgba(185, 72, 31, 0.35) !important;
 }
 
@@ -433,12 +482,15 @@ body.site-v2 .pagination > li > a.active {
   border-color: var(--v2-accent) !important;
 }
 
-/* 详情正文（Markdown 输出）：覆盖 github.css 固定 15px 间距与 legacy 的 break-all */
+/* 详情正文（Markdown 输出）：覆盖 github.css 固定 15px 间距与 legacy 的 break-all；
+   限宽约 50rem（45–50 汉字）居中，窄屏由列宽自然收窄为全宽 */
 body.site-v2 .blog-cc {
   font-size: 1.05rem;
   line-height: 1.78;
   color: var(--v2-ink);
-  max-width: 100%;
+  max-width: 50rem;
+  margin-left: auto;
+  margin-right: auto;
   word-break: normal;
   overflow-wrap: break-word;
 }
@@ -608,6 +660,121 @@ body.site-v2 .blog-cc img {
   border-radius: var(--v2-radius-sm);
 }
 
+/* 回到顶部：base 的 display:none 原由 jQuery fadeIn 翻动，现由脚本挂 .is-visible */
+body.site-v2 .scroll-to-top.is-visible {
+  display: inline-block;
+}
+
+/* 代码块复制按钮：绝对定位零布局跳动；hover/聚焦出现，触屏常显半透 */
+body.site-v2 .blog-cc pre {
+  position: relative;
+}
+
+body.site-v2 .blog-cc .v2-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78rem;
+  font-family: inherit;
+  line-height: 1.4;
+  border-radius: 8px;
+  border: 1px solid var(--v2-border);
+  background: var(--v2-surface);
+  color: var(--v2-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition);
+}
+
+body.site-v2 .blog-cc pre:hover .v2-copy-btn,
+body.site-v2 .blog-cc .v2-copy-btn:focus-visible,
+body.site-v2 .blog-cc .v2-copy-btn.is-ok,
+body.site-v2 .blog-cc .v2-copy-btn.is-fail {
+  opacity: 1;
+}
+
+body.site-v2 .blog-cc .v2-copy-btn.is-ok {
+  color: #2e7d32;
+  border-color: rgba(46, 125, 50, 0.4);
+}
+
+body.site-v2 .blog-cc .v2-copy-btn.is-fail {
+  color: var(--v2-accent-text);
+}
+
+@media (hover: none) {
+  body.site-v2 .blog-cc .v2-copy-btn {
+    opacity: 0.85;
+  }
+}
+
+/* 详情目录：折叠面板（生成期按 level 2-3 标题数 ≥2 注入，见 generate.py） */
+body.site-v2 .blog-cc__toc {
+  margin: 0 0 1.5rem;
+  padding: 0.1rem 0.95rem 0.2rem;
+  border: 1px solid var(--v2-border);
+  border-radius: var(--v2-radius-sm);
+  background: var(--v2-surface-2);
+}
+
+body.site-v2 .blog-cc__toc summary {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--v2-muted);
+  list-style: none;
+}
+
+body.site-v2 .blog-cc__toc summary::-webkit-details-marker {
+  display: none;
+}
+
+body.site-v2 .blog-cc__toc summary::before {
+  content: "▸";
+  color: var(--v2-accent-text);
+  transition: transform var(--v2-transition);
+}
+
+body.site-v2 .blog-cc__toc[open] summary::before {
+  transform: rotate(90deg);
+}
+
+body.site-v2 .blog-cc__toc ul {
+  margin: 0 0 0.8rem;
+  padding-left: 1.35rem;
+}
+
+body.site-v2 .blog-cc__toc li {
+  margin: 0.3em 0;
+  line-height: 1.65;
+}
+
+body.site-v2 .blog-cc__toc a {
+  color: var(--v2-accent-text);
+  text-decoration: none;
+}
+
+body.site-v2 .blog-cc__toc a:hover {
+  color: var(--v2-ink);
+  text-decoration: underline;
+}
+
+/* 锚点滚动补偿：目标标题不被吸顶顶栏遮挡。桌面顶栏实测约 98px；
+   窄屏导航胶囊折行变高，改用更大偏移 */
+body.site-v2 .blog-cc :is(h1, h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 108px;
+}
+
+@media (max-width: 767px) {
+  body.site-v2 .blog-cc :is(h1, h2, h3, h4, h5, h6)[id] {
+    scroll-margin-top: 240px;
+  }
+}
+
 /* 页脚 */
 body.site-v2 .footer {
   background: transparent;
@@ -620,7 +787,7 @@ body.site-v2 .footer a {
 }
 
 body.site-v2 .footer a:hover {
-  color: var(--v2-accent);
+  color: var(--v2-accent-text);
 }
 
 /* —— 工具页（索引 / ACG）—— */
@@ -851,7 +1018,7 @@ body.site-v2 .eli5-card {
 }
 
 body.site-v2 .eli5-card:hover .acg-card__title {
-  color: var(--v2-accent);
+  color: var(--v2-accent-text);
 }
 
 body.site-v2 .eli5-empty {
@@ -1003,7 +1170,7 @@ body.site-v2 .hub-card__go {
   margin-top: 1.25rem;
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--v2-accent);
+  color: var(--v2-accent-text);
   letter-spacing: 0.04em;
 }
 
@@ -1114,3 +1281,177 @@ body.site-v2 .scroll-to-top {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ================================================================
+   v2.2 暗色主题：html[data-theme="dark"]
+   token 覆盖组 + github.css / pygments.css 的暗色语法覆盖
+   （亮色方案原样保留；主题判定见 head 内联防闪脚本与 site.js）
+   ================================================================ */
+html[data-theme="dark"] {
+  --v2-bg: #17130e;
+  --v2-bg-deep: #100d09;
+  --v2-surface: #201b14;
+  --v2-surface-2: #282118;
+  --v2-ink: #ece4d6;
+  --v2-muted: #b0a694;
+  --v2-accent: #d97748;
+  --v2-accent-text: #e89a72;
+  --v2-accent-soft: rgba(217, 119, 72, 0.16);
+  --v2-accent-rule: rgba(217, 119, 72, 0.5);
+  --v2-border: rgba(236, 228, 214, 0.14);
+  --v2-nav-active-bg: #5d452f;
+  --v2-nav-active-fg: #f4ecdf;
+  --v2-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+/* —— 硬编码色组件的暗色覆盖 —— */
+html[data-theme="dark"] .site-topbar {
+  background: rgba(32, 27, 20, 0.92);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+html[data-theme="dark"] .site-nav-belt__track {
+  background: linear-gradient(180deg, rgba(40, 33, 24, 0.98), rgba(32, 27, 20, 0.94));
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+html[data-theme="dark"] .site-nav-belt a.site-nav-belt__link--ext {
+  border-color: rgba(236, 228, 214, 0.18);
+}
+
+/* 亮字压亮底不达标处（白字胶囊/按钮悬停），暗态改为深字 */
+html[data-theme="dark"] body.site-v2 .button.button-style:hover,
+html[data-theme="dark"] body.site-v2 .pagination > li > a.active,
+html[data-theme="dark"] body.site-v2 .site-nav-belt a.site-nav-belt__link.is-active:hover {
+  color: #17130e !important;
+}
+
+html[data-theme="dark"] body.site-v2 .blog-cc blockquote {
+  background: rgba(40, 33, 24, 0.7);
+}
+
+html[data-theme="dark"] body.site-v2 .site-panel .table tbody tr:nth-child(even) {
+  background: rgba(40, 33, 24, 0.55);
+}
+
+/* style.css 的 tr>td:nth-child(1) 硬编码白底（索引表首列），暗态交还表面色 */
+html[data-theme="dark"] body.site-v2 tr > td:nth-child(1) {
+  background-color: transparent;
+  color: var(--v2-muted);
+}
+
+/* github.css 的 table tr 白底/#f8f8f8 斑马与浅边框：正文 md 表格暗态覆盖 */
+html[data-theme="dark"] body.site-v2 .blog-cc table tr {
+  background-color: transparent;
+}
+
+html[data-theme="dark"] body.site-v2 .blog-cc table tr:nth-child(2n) {
+  background-color: rgba(40, 33, 24, 0.55);
+}
+
+html[data-theme="dark"] body.site-v2 .blog-cc table tr th,
+html[data-theme="dark"] body.site-v2 .blog-cc table tr td {
+  border-color: var(--v2-border);
+}
+
+/* 代码块表面：覆盖 bootstrap 的 pre #f8f8f8/#333；行内 code 选择器避开 pre>code（github.css 依赖其透明底） */
+html[data-theme="dark"] body.site-v2 .blog-cc pre {
+  background: #14110b;
+  color: #d8d2c4;
+}
+
+html[data-theme="dark"] body.site-v2 .blog-cc :not(pre) > code,
+html[data-theme="dark"] body.site-v2 .blog-cc :not(pre) > tt {
+  background: #2c251b;
+  border-color: rgba(236, 228, 214, 0.2);
+  color: #e89a72;
+}
+
+html[data-theme="dark"] body.site-v2 .blog-cc .v2-copy-btn.is-ok {
+  color: #9cc37a;
+  border-color: rgba(156, 195, 122, 0.4);
+}
+
+/* 侧栏个人卡：style.css 的 .my-detail 硬编码白底，暗态交给 about-fixed 表面色 */
+html[data-theme="dark"] body.site-v2 .about-fixed .my-detail {
+  background: transparent;
+}
+
+/* ACG/图解类型药丸的暗态前景 */
+html[data-theme="dark"] body.site-v2 .acg-card[data-acg-type="动漫"] {
+  --acg-pill-bg: rgba(196, 92, 38, 0.2);
+  --acg-pill-fg: #e89a72;
+}
+
+html[data-theme="dark"] body.site-v2 .acg-card[data-acg-type="音乐"] {
+  --acg-pill-bg: rgba(42, 125, 143, 0.24);
+  --acg-pill-fg: #7fc4d6;
+}
+
+html[data-theme="dark"] body.site-v2 .acg-card[data-acg-type="小说"] {
+  --acg-pill-bg: rgba(107, 77, 138, 0.3);
+  --acg-pill-fg: #c2a3da;
+}
+
+html[data-theme="dark"] body.site-v2 .acg-card[data-acg-type="韩剧"] {
+  --acg-pill-bg: rgba(184, 74, 98, 0.24);
+  --acg-pill-fg: #ee93a8;
+}
+
+/* —— pygments 语法色暗色覆盖组（复用原令牌名，作用域限正文代码块） —— */
+html[data-theme="dark"] body.site-v2 .blog-cc .hll { background: rgba(217, 119, 72, 0.12); }
+html[data-theme="dark"] body.site-v2 .blog-cc .c,
+html[data-theme="dark"] body.site-v2 .blog-cc .ch,
+html[data-theme="dark"] body.site-v2 .blog-cc .cm,
+html[data-theme="dark"] body.site-v2 .blog-cc .c1,
+html[data-theme="dark"] body.site-v2 .blog-cc .cs,
+html[data-theme="dark"] body.site-v2 .blog-cc .cpf { color: #8f947f; font-style: italic; }
+html[data-theme="dark"] body.site-v2 .blog-cc .cp { color: #c9a468; }
+html[data-theme="dark"] body.site-v2 .blog-cc .err { color: #f08080; border: 1px solid rgba(240, 128, 128, 0.4); }
+html[data-theme="dark"] body.site-v2 .blog-cc .k,
+html[data-theme="dark"] body.site-v2 .blog-cc .kc,
+html[data-theme="dark"] body.site-v2 .blog-cc .kd,
+html[data-theme="dark"] body.site-v2 .blog-cc .kn,
+html[data-theme="dark"] body.site-v2 .blog-cc .kp,
+html[data-theme="dark"] body.site-v2 .blog-cc .kr { color: #e08a5e; font-weight: bold; }
+html[data-theme="dark"] body.site-v2 .blog-cc .kt { color: #6fc0ad; }
+html[data-theme="dark"] body.site-v2 .blog-cc .o,
+html[data-theme="dark"] body.site-v2 .blog-cc .ow { color: #b8ae9c; }
+html[data-theme="dark"] body.site-v2 .blog-cc .s,
+html[data-theme="dark"] body.site-v2 .blog-cc .sa,
+html[data-theme="dark"] body.site-v2 .blog-cc .sb,
+html[data-theme="dark"] body.site-v2 .blog-cc .sc,
+html[data-theme="dark"] body.site-v2 .blog-cc .sd,
+html[data-theme="dark"] body.site-v2 .blog-cc .se,
+html[data-theme="dark"] body.site-v2 .blog-cc .sh,
+html[data-theme="dark"] body.site-v2 .blog-cc .si,
+html[data-theme="dark"] body.site-v2 .blog-cc .sx,
+html[data-theme="dark"] body.site-v2 .blog-cc .sr,
+html[data-theme="dark"] body.site-v2 .blog-cc .s1,
+html[data-theme="dark"] body.site-v2 .blog-cc .ss { color: #a9c877; }
+html[data-theme="dark"] body.site-v2 .blog-cc .m,
+html[data-theme="dark"] body.site-v2 .blog-cc .mb,
+html[data-theme="dark"] body.site-v2 .blog-cc .mf,
+html[data-theme="dark"] body.site-v2 .blog-cc .mh,
+html[data-theme="dark"] body.site-v2 .blog-cc .mi,
+html[data-theme="dark"] body.site-v2 .blog-cc .mo,
+html[data-theme="dark"] body.site-v2 .blog-cc .il { color: #d9a95f; }
+html[data-theme="dark"] body.site-v2 .blog-cc .na,
+html[data-theme="dark"] body.site-v2 .blog-cc .nt { color: #e08a5e; }
+html[data-theme="dark"] body.site-v2 .blog-cc .nb,
+html[data-theme="dark"] body.site-v2 .blog-cc .no { color: #6fc0ad; }
+html[data-theme="dark"] body.site-v2 .blog-cc .nc,
+html[data-theme="dark"] body.site-v2 .blog-cc .nd,
+html[data-theme="dark"] body.site-v2 .blog-cc .nn { color: #e5c37e; }
+html[data-theme="dark"] body.site-v2 .blog-cc .nf,
+html[data-theme="dark"] body.site-v2 .blog-cc .fm { color: #8fb4e8; }
+html[data-theme="dark"] body.site-v2 .blog-cc .nv,
+html[data-theme="dark"] body.site-v2 .blog-cc .vc,
+html[data-theme="dark"] body.site-v2 .blog-cc .vg,
+html[data-theme="dark"] body.site-v2 .blog-cc .vi,
+html[data-theme="dark"] body.site-v2 .blog-cc .vm { color: #d8d2c4; }
+html[data-theme="dark"] body.site-v2 .blog-cc .gd { color: #e08080; }
+html[data-theme="dark"] body.site-v2 .blog-cc .gi { color: #9cc37a; }
+html[data-theme="dark"] body.site-v2 .blog-cc .gh { color: #e5c37e; font-weight: bold; }
+html[data-theme="dark"] body.site-v2 .blog-cc .gu { color: #c2a3da; }

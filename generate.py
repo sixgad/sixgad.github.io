@@ -27,6 +27,47 @@ default_config = {
 collect_list = []
 
 
+def collect_toc_tokens(tokens):
+    # 展平 toc 扩展的标题树, 仅保留 level 2-3 (h2/h3), 重排为 h2>h3 两级;
+    # 过滤后条目不足 2 个返回空 (详情页不出目录)
+    items = []
+
+    def walk(toks):
+        for t in toks:
+            if t["level"] in (2, 3):
+                items.append(t)
+            walk(t["children"])
+
+    walk(tokens)
+    root = []
+    last_h2 = None
+    for t in items:
+        node = {"name": t["name"], "id": t["id"], "children": []}
+        if t["level"] == 2:
+            root.append(node)
+            last_h2 = node
+        elif last_h2 is not None:
+            last_h2["children"].append(node)
+        else:
+            # 未出现 h2 前就是 h3: 提为顶层, 避免同级 h3 被误挂为前一个 h3 的子级
+            root.append(node)
+    return root if len(items) >= 2 else []
+
+
+def build_toc_html(nodes):
+    if not nodes:
+        return ""
+
+    def render(nodelist):
+        lis = []
+        for n in nodelist:
+            sub = render(n["children"]) if n["children"] else ""
+            lis.append('<li><a href="#%s">%s</a>%s</li>' % (n["id"], n["name"], sub))
+        return "<ul>%s</ul>" % "".join(lis)
+
+    return render(nodes)
+
+
 def clear_index():
     for ht in os.listdir(default_config["index_dir"]):
         if ht.endswith(".html") and ht.startswith("index"):
@@ -73,11 +114,14 @@ def deal_blogs():
                     #         src.attrib['src'] = new_src
                     #         html = lxhtml.tostring(shtml, encoding='utf-8').decode('utf-8')
 
+                    # 目录: toc 扩展已给标题加 id, 这里取 level 2-3 生成折叠面板数据
+                    toc_html = build_toc_html(collect_toc_tokens(getattr(mdobj, "toc_tokens", [])))
                     b_data = {
                         "tags": tags,
                         "date": date,
                         "title": title,
-                        "content": html
+                        "content": html,
+                        "toc": toc_html
                     }
                     detail_template.stream(blog=b_data, nav_prefix="../..").dump(
                         f'{default_config["blog_dir"]}/{blog}/article.html', encoding='utf-8')

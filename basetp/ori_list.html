@@ -9,8 +9,8 @@
     <link rel="shortcut icon" href="./static/images/favicon/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="./static/css/plugin.css" />
     <link rel="stylesheet" type="text/css" href="./static/css/style.css" />
-    <link rel="stylesheet" href="./static/css/ft.css" />
     <link rel="stylesheet" type="text/css" href="./static/css/site-v2.css" />
+    {% include 'frag_theme.html' %}
   </head>
   <body class="site-v2 site-tool">
     <header class="site-topbar site-topbar--entry" role="banner">
@@ -45,5 +45,7 @@
         </table>
       </div>
     </div>
+    <!-- 站点原生脚本（回到顶部 / 代码复制 / 主题切换） -->
+    <script type="text/javascript" src="./static/js/site.js"></script>
   </body>
 </html>

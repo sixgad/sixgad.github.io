@@ -9,8 +9,26 @@
     <link rel="shortcut icon" href="./static/images/favicon/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="./static/css/plugin.css" />
     <link rel="stylesheet" type="text/css" href="./static/css/style.css" />
-    <link rel="stylesheet" href="./static/css/ft.css" />
     <link rel="stylesheet" type="text/css" href="./static/css/site-v2.css" />
+    <script>
+  /* 防白闪：首帧前决定主题。storage 被禁时退回系统偏好判定（而非强制亮色）。 */
+  (function () {
+    var t = null;
+    try {
+      t = localStorage.getItem('pk-theme');
+    } catch (e) {
+      t = null; /* 存储被禁（隐私模式/受限嵌入）：按未选择处理 */
+    }
+    if (t !== 'light' && t !== 'dark') {
+      try {
+        t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      } catch (e2) {
+        t = 'light';
+      }
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
   </head>
   <body class="site-v2 site-tool site-eli5">
     <header class="site-topbar site-topbar--entry" role="banner">
@@ -23,6 +41,9 @@
     <a class="site-nav-belt__link is-active" href="./index-eli5.html" aria-current="page">小白图解</a>
     <a class="site-nav-belt__link site-nav-belt__link--ext" href="https://github.com/sixgad" target="_blank" rel="noopener noreferrer">GitHub</a>
     <a class="site-nav-belt__link site-nav-belt__link--ext" href="mailto:278270230@qq.com">邮箱</a>
+    <button type="button" class="site-nav-belt__theme" aria-label="切换到暗色模式" aria-pressed="false">
+      <i class="fa fa-moon-o" aria-hidden="true"></i>
+    </button>
   </div>
 </nav>
     </header>
@@ -48,5 +69,7 @@
       </div>
       
     </div>
+    <!-- 站点原生脚本（回到顶部 / 代码复制 / 主题切换） -->
+    <script type="text/javascript" src="./static/js/site.js"></script>
   </body>
 </html>
