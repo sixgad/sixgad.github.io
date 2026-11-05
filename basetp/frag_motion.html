@@ -1,0 +1,10 @@
+<script>
+  /* 动效总开关：与防闪片段同机制于首帧前挂类；系统请求减少动效或环境不支持时不挂，页面回到无动效现状 */
+  (function () {
+    try {
+      if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+        document.documentElement.classList.add('v2-motion');
+      }
+    } catch (e) { /* 判定不可用：保守起见不挂 */ }
+  })();
+</script>

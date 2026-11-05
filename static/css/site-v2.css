@@ -1283,6 +1283,261 @@ body.site-v2 .scroll-to-top {
 }
 
 /* ================================================================
+   v2.3 动效体系（inspector 美学）
+   总开关：html.v2-motion 由 frag_motion.html 于首帧前挂载；
+   reduced-motion / 无 JS / 判定失败时不挂，本段全部规则落空、页面回到无动效现状。
+   ================================================================ */
+
+/* —— 入场编排（每文档一次；bfcache 恢复不重放）—— */
+/* 顶栏胶囊下落 */
+@keyframes v2-topbar-in {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: none; }
+}
+html.v2-motion .site-nav-belt__track {
+  animation: v2-topbar-in 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 页标题扫描线擦入：逐页枚举 首页/索引/ACG/图解/Hub（详情页正文 h1 除外，阅读区安静） */
+@keyframes v2-title-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes v2-scan-sweep {
+  from { transform: translateX(-120%); opacity: 0; }
+  15%  { opacity: 0.9; }
+  85%  { opacity: 0.9; }
+  to   { transform: translateX(240%); opacity: 0; }
+}
+html.v2-motion .sub-title h1,
+html.v2-motion .site-tool-hero h1,
+html.v2-motion .hub-hero h1 {
+  position: relative;
+  animation: v2-title-in 0.42s ease-out both;
+}
+html.v2-motion .sub-title h1::after,
+html.v2-motion .site-tool-hero h1::after,
+html.v2-motion .hub-hero h1::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 0;
+  width: 46%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--v2-accent-soft) 40%, var(--v2-accent) 50%, var(--v2-accent-soft) 60%, transparent);
+  animation: v2-scan-sweep 0.6s cubic-bezier(0.3, 0.2, 0.2, 1) 0.1s both;
+  pointer-events: none;
+}
+
+/* 首屏卡片级联：site.js 只标记首屏批次，其余卡片不被触碰 */
+html.v2-motion .v2-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+html.v2-motion .v2-enter.v2-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.42s ease var(--v2-enter-delay, 0s),
+    transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1) var(--v2-enter-delay, 0s);
+}
+
+/* —— 签名 · 元素 inspector 悬停：四角选区括号 + 实时尺寸 chip（装饰件，aria-hidden） —— */
+/* 防御带：v2-motion 缺席时（运行期被移除等异常路径）overlay 整体隐藏 */
+html:not(.v2-motion) .v2-inspect {
+  display: none !important;
+}
+html.v2-motion [data-v2-inspect] {
+  position: relative;
+}
+html.v2-motion .v2-inspect {
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  z-index: 4;
+}
+html.v2-motion .v2-ib {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transform: scale(0.55);
+  transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+html.v2-motion .v2-ib-tl { top: 0; left: 0; border-top: 2px solid var(--v2-accent); border-left: 2px solid var(--v2-accent); }
+html.v2-motion .v2-ib-tr { top: 0; right: 0; border-top: 2px solid var(--v2-accent); border-right: 2px solid var(--v2-accent); }
+html.v2-motion .v2-ib-bl { bottom: 0; left: 0; border-bottom: 2px solid var(--v2-accent); border-left: 2px solid var(--v2-accent); }
+html.v2-motion .v2-ib-br { bottom: 0; right: 0; border-bottom: 2px solid var(--v2-accent); border-right: 2px solid var(--v2-accent); }
+html.v2-motion .v2-ichip {
+  position: absolute;
+  top: -9px;
+  right: 6px;
+  padding: 1px 7px 2px;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--v2-surface);
+  background: var(--v2-ink);
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.18s ease 0.04s, transform 0.18s ease 0.04s;
+}
+html.v2-motion .v2-inspected .v2-ib {
+  opacity: 1;
+  transform: none;
+}
+html.v2-motion .v2-inspected .v2-ichip {
+  opacity: 1;
+  transform: none;
+}
+@media (max-width: 480px) {
+  html.v2-motion .v2-ichip {
+    display: none;
+  }
+}
+
+/* —— 微交互套件 —— */
+/* 「阅读全文」流光高光：按钮 pointer-events:none，由父卡悬停驱动；@property 缺失引擎中
+   自定义属性未注册，引用它的 background 声明 IACVT 失效 → 高光不出现，按钮维持现状反色 */
+@property --v2-flow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes v2-flow {
+  to { --v2-flow-angle: 360deg; }
+}
+html.v2-motion .blog-post .button.button-style::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(from var(--v2-flow-angle), transparent 0 56%, var(--v2-accent-soft) 66%, var(--v2-accent-soft) 74%, transparent 84%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+html.v2-motion .blog-post:hover .button.button-style::before {
+  opacity: 0.9;
+  animation: v2-flow 1.15s linear infinite;
+}
+
+/* 导航胶囊 hover 下划线自中心展开（活动页胶囊不加，避免与实心底打架） */
+html.v2-motion .site-nav-belt a.site-nav-belt__link:not(.is-active) {
+  position: relative;
+}
+html.v2-motion .site-nav-belt a.site-nav-belt__link:not(.is-active)::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  bottom: 8px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.18s ease;
+}
+html.v2-motion .site-nav-belt a.site-nav-belt__link:not(.is-active):hover::after,
+html.v2-motion .site-nav-belt a.site-nav-belt__link:not(.is-active):focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* 索引表格行 hover 一次性扫光 */
+@keyframes v2-row-scan {
+  from { transform: translateX(-100%); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+html.v2-motion .site-table-index tbody tr {
+  position: relative;
+}
+html.v2-motion .site-table-index tbody tr::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--v2-accent-soft) 45%, var(--v2-accent-soft) 55%, transparent);
+  transform: translateX(-100%);
+  opacity: 0;
+}
+html.v2-motion .site-table-index tbody tr:hover::after {
+  animation: v2-row-scan 0.7s ease-out both;
+}
+
+/* 作者头像鼠标微浮（位移由 site.js 写入 transform，JS 缺席时自然静止） */
+html.v2-motion .my-pic img {
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+/* 回到顶部点击脉冲环（一次性，JS 挂类、animationend 摘类） */
+@keyframes v2-pulse-ring {
+  0%   { opacity: 0.9; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+html.v2-motion .scroll-to-top::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 2px solid var(--v2-accent);
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+}
+html.v2-motion .scroll-to-top.v2-pulse::after {
+  animation: v2-pulse-ring 0.55s ease-out;
+}
+
+/* —— 主题切换 morph 与回退过渡 —— */
+html.v2-motion .site-nav-belt button.site-nav-belt__theme i {
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+@keyframes v2-icon-morph {
+  50% { transform: rotate(80deg) scale(0.35); opacity: 0.25; }
+}
+html.v2-motion .site-nav-belt button.site-nav-belt__theme i.v2-morph {
+  animation: v2-icon-morph 0.3s ease;
+}
+/* 无 View Transitions 时的回退：一次性颜色过渡，JS 于 ~240ms 后摘类，不常驻 */
+html.v2-motion body.v2-theme-fade {
+  transition: background-color 0.18s linear, color 0.18s linear;
+}
+
+/* —— 阅读进度束带（site.js 仅于详情页注入） —— */
+html.v2-motion .v2-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--v2-accent), #d4784a);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  border-radius: 0 2px 2px 0;
+}
+html:not(.v2-motion) .v2-progress {
+  display: none;
+}
+
+/* —— 页面转场（cross-document View Transitions）——
+   规格豁免条款：纯 CSS 渐进增强，独立于 v2-motion 总开关，仅受 reduce 媒体门控制。
+   实测（Chrome 152）：顶层 @view-transition 解析为 CSSViewTransitionRule 生效；
+   但 @media (prefers-reduced-motion) 包裹内层解析为 CSSUnknownRule（门不合法）——
+   按规格降级：移除 reduce 包裹，150ms 交叉淡入对动效敏感者近于无感，已记 Rulings。
+   不支持的浏览器本 at-rule 整体忽略、零影响。 */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.15s;
+}
+
+/* ================================================================
    v2.2 暗色主题：html[data-theme="dark"]
    token 覆盖组 + github.css / pygments.css 的暗色语法覆盖
    （亮色方案原样保留；主题判定见 head 内联防闪脚本与 site.js）
