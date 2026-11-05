@@ -1288,13 +1288,18 @@ body.site-v2 .scroll-to-top {
    reduced-motion / 无 JS / 判定失败时不挂，本段全部规则落空、页面回到无动效现状。
    ================================================================ */
 
-/* —— 入场编排（每文档一次；bfcache 恢复不重放）—— */
+/* —— 入场编排（每标签页首文档一次，由 frag_motion 的 v2-intro 门控；
+   页间跳转不重放：否则跨文档 View Transition 会把入场的全透明首帧当作新页快照淡入 = 整屏白闪）—— */
+/* 画布定色：显式 html 背景锁定画布，主题两态均不再依赖 body 传播的时序边缘（白闪的次因防线） */
+html {
+  background: var(--v2-bg);
+}
 /* 顶栏胶囊下落 */
 @keyframes v2-topbar-in {
   from { opacity: 0; transform: translateY(-14px); }
   to   { opacity: 1; transform: none; }
 }
-html.v2-motion .site-nav-belt__track {
+html.v2-motion.v2-intro .site-nav-belt__track {
   animation: v2-topbar-in 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
@@ -1306,15 +1311,15 @@ html.v2-motion .site-nav-belt__track {
   85%  { opacity: 0.9; }
   to   { transform: translateX(240%); opacity: 0; }
 }
-html.v2-motion .sub-title h1,
-html.v2-motion .site-tool-hero h1,
-html.v2-motion .hub-hero h1 {
+html.v2-motion.v2-intro .sub-title h1,
+html.v2-motion.v2-intro .site-tool-hero h1,
+html.v2-motion.v2-intro .hub-hero h1 {
   position: relative;
   animation: v2-title-in 0.42s ease-out both;
 }
-html.v2-motion .sub-title h1::after,
-html.v2-motion .site-tool-hero h1::after,
-html.v2-motion .hub-hero h1::after {
+html.v2-motion.v2-intro .sub-title h1::after,
+html.v2-motion.v2-intro .site-tool-hero h1::after,
+html.v2-motion.v2-intro .hub-hero h1::after {
   content: "";
   position: absolute;
   top: -2px;

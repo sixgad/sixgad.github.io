@@ -47,11 +47,21 @@
   })();
 </script>
   <script>
-  /* 动效总开关：与防闪片段同机制于首帧前挂类；系统请求减少动效或环境不支持时不挂，页面回到无动效现状 */
+  /* 动效总开关：与防闪片段同机制于首帧前挂类；系统请求减少动效或环境不支持时不挂，页面回到无动效现状。
+     v2-intro：入场编排只属于每标签页的"首个文档"——页间跳转若也重放入场，
+     跨文档 View Transition 会把"全透明的入场首帧"当成新页快照淡入，形成整屏白闪（用户实报缺陷）。 */
   (function () {
     try {
       if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
         document.documentElement.classList.add('v2-motion');
+        var seen = false;
+        try {
+          seen = sessionStorage.getItem('pk-intro') === '1';
+          if (!seen) { sessionStorage.setItem('pk-intro', '1'); }
+        } catch (e2) {
+          seen = true; /* 存储不可用：宁可不重放入场，也不引入白闪 */
+        }
+        if (!seen) { document.documentElement.classList.add('v2-intro'); }
       }
     } catch (e) { /* 判定不可用：保守起见不挂 */ }
   })();

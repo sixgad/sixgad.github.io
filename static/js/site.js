@@ -161,9 +161,9 @@
     pre.appendChild(btn);
   });
 
-  /* —— v2.3 入场编排：首屏卡片批次级联浮现（仅 v2-motion 挂载时执行；其余卡片不被触碰） —— */
+  /* —— v2.3 入场编排：首屏卡片批次级联浮现（仅 v2-motion + v2-intro 会话首文档执行；其余卡片不被触碰） —— */
   var motionOn = document.documentElement.classList.contains('v2-motion');
-  if (motionOn) {
+  if (motionOn && document.documentElement.classList.contains('v2-intro')) {
     var cascadeSel = '.content-page > .blog-post, .acg-grid > .acg-card, .hub-grid > .hub-card';
     var vh0 = window.innerHeight || document.documentElement.clientHeight;
     var v2items = [];
