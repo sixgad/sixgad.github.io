@@ -27,10 +27,7 @@
       rootEl.setAttribute('data-theme', mode);
       themeBtn.setAttribute('aria-pressed', String(isDark));
       themeBtn.setAttribute('aria-label', isDark ? '切换到亮色模式' : '切换到暗色模式');
-      var icon = themeBtn.querySelector('i');
-      if (icon) {
-        icon.className = 'fa ' + (isDark ? 'fa-sun-o' : 'fa-moon-o');
-      }
+      /* 图标切换改由双图标 CSS 交叉淡换驱动（data-theme 属性即状态源），JS 不再改写图标 class */
     };
 
     applyTheme(rootEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
@@ -43,13 +40,6 @@
         } catch (e) { /* 隐私模式等场景静默降级为不记忆 */ }
         userPinned = true;
         applyTheme(next);
-        var icon = themeBtn.querySelector('i');
-        if (icon && rootEl.classList.contains('v2-motion')) {
-          icon.classList.remove('v2-morph');
-          void icon.offsetWidth; /* 重启一次性形变动画 */
-          icon.classList.add('v2-morph');
-          window.setTimeout(function () { icon.classList.remove('v2-morph'); }, 400); /* 动画不运行环境的兜底摘类 */
-        }
       };
       /* v2.3 主题 morph：仅包裹点击路径（初始应用由 frag_theme 先行定值，包裹徒增空快照）；
          三分支统一门控口径：motionOn（v2-motion 总开关）且非 reduce 才有过渡，

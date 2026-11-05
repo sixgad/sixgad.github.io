@@ -251,6 +251,7 @@ body.site-v2 .my-detail .white-spacing .my-sub-title:nth-child(3) {
 }
 
 body.site-v2 .social-icon li a {
+  position: relative;
   background: var(--v2-surface-2);
   color: var(--v2-ink) !important;
   border-radius: 50%;
@@ -259,6 +260,20 @@ body.site-v2 .social-icon li a {
   height: 2.65rem !important;
   line-height: 2.65rem !important;
   transition: transform var(--v2-transition), background var(--v2-transition);
+}
+
+/* 热区扩展：可见 42px 不变，点击区补足 ≥42；li 外边距同步拉开，保证相邻热区不重叠（质感审查） */
+body.site-v2 .social-icon li {
+  margin: 0 7px;
+}
+body.site-v2 .social-icon li a::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 42px;
+  height: 42px;
+  transform: translate(-50%, -50%);
 }
 
 body.site-v2 .social-icon li a:hover {
@@ -458,6 +473,10 @@ body.site-v2 .pagination {
 }
 
 body.site-v2 .pagination > li > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
   border-radius: 10px !important;
   border: 1px solid var(--v2-border) !important;
   color: var(--v2-muted) !important;
@@ -687,6 +706,13 @@ body.site-v2 .blog-cc .v2-copy-btn {
   transition: opacity var(--v2-transition), color var(--v2-transition), border-color var(--v2-transition);
 }
 
+/* 复制钮热区：视觉 32×18 不变，隐形扩展至 ~54×40（质感审查）；仅按钮显形时生效，避免隐藏态截走代码选择 */
+body.site-v2 .blog-cc pre:hover .v2-copy-btn::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+}
+
 body.site-v2 .blog-cc pre:hover .v2-copy-btn,
 body.site-v2 .blog-cc .v2-copy-btn:focus-visible,
 body.site-v2 .blog-cc .v2-copy-btn.is-ok,
@@ -721,8 +747,9 @@ body.site-v2 .blog-cc__toc {
 body.site-v2 .blog-cc__toc summary {
   display: flex;
   align-items: center;
+  min-height: 40px;
   gap: 0.45rem;
-  padding: 0.6rem 0.1rem;
+  padding: 0.85rem 0.1rem;
   cursor: pointer;
   font-weight: 600;
   color: var(--v2-muted);
@@ -1497,15 +1524,33 @@ html.v2-motion .scroll-to-top.v2-pulse::after {
   animation: v2-pulse-ring 0.55s ease-out;
 }
 
-/* —— 主题切换 morph 与回退过渡 —— */
-html.v2-motion .site-nav-belt button.site-nav-belt__theme i {
-  transition: transform 0.25s ease, opacity 0.2s ease;
+/* —— 主题切换 morph：双图标同驻交叉淡换（skill 形态：opacity/scale/blur + cubic-bezier(.2,0,0,1)，进出境都有过程） —— */
+body.site-v2 .site-nav-belt button.site-nav-belt__theme {
+  position: relative;
 }
-@keyframes v2-icon-morph {
-  50% { transform: rotate(80deg) scale(0.35); opacity: 0.25; }
+body.site-v2 .site-nav-belt .v2-ico {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.22s cubic-bezier(0.2, 0, 0, 1), transform 0.22s cubic-bezier(0.2, 0, 0, 1),
+    filter 0.22s cubic-bezier(0.2, 0, 0, 1);
 }
-html.v2-motion .site-nav-belt button.site-nav-belt__theme i.v2-morph {
-  animation: v2-icon-morph 0.3s ease;
+body.site-v2 .site-nav-belt .v2-ico-sun {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
+}
+html[data-theme="dark"] body.site-v2 .site-nav-belt .v2-ico-sun {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+html[data-theme="dark"] body.site-v2 .site-nav-belt .v2-ico-moon {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
 }
 /* 无 View Transitions 时的回退：一次性颜色过渡，JS 于 ~240ms 后摘类，不常驻 */
 html.v2-motion body.v2-theme-fade {
@@ -1604,6 +1649,12 @@ html[data-theme="dark"] body.site-v2 tr > td:nth-child(1) {
 /* github.css 的 table tr 白底/#f8f8f8 斑马与浅边框：正文 md 表格暗态覆盖 */
 html[data-theme="dark"] body.site-v2 .blog-cc table tr {
   background-color: transparent;
+}
+
+/* 图片描边暗态适配：纯白低透明（黑色描边在暗底上吃底色显脏，质感审查） */
+html[data-theme="dark"] body.site-v2 .blog-cc img,
+html[data-theme="dark"] body.site-v2 .my-pic img {
+  outline-color: rgba(255, 255, 255, 0.1);
 }
 
 html[data-theme="dark"] body.site-v2 .blog-cc table tr:nth-child(2n) {
