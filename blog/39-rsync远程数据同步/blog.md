@@ -9,7 +9,7 @@ private: false
 
 > rsync -avuP root@123.1.2.3:/root/targetdir ./
 >
-> #注：如果以“/”结尾/root/targetdir/，拉取的机器不会创建targetdir文件夹
+> \#注：如果以“/”结尾/root/targetdir/，拉取的机器不会创建targetdir文件夹
 
 **从目标主机123.1.2.3拉取文件**
 
@@ -23,7 +23,7 @@ private: false
 
 > sshpass -p "pwd***" ssh root@123.1.2.3 "cd /root/targetdir && find -L . " |  xargs  -L 1 -I% -P5  sshpass -p "pwdpwdpwd"  rsync -avuP "root@123.1.2.3:/root/targetdir/%" ./ 
 >
-> #修改-P后的数字
+> \#修改-P后的数字
 
 **软链接情况处理**
 

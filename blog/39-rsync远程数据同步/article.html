@@ -158,7 +158,7 @@
 <p><strong>从目标主机123.1.2.3拉取文件夹</strong></p>
 <blockquote>
 <p>rsync -avuP root@123.1.2.3:/root/targetdir ./</p>
-<h1 id="roottargetdirtargetdir">注：如果以“/”结尾/root/targetdir/，拉取的机器不会创建targetdir文件夹</h1>
+<p>#注：如果以“/”结尾/root/targetdir/，拉取的机器不会创建targetdir文件夹</p>
 </blockquote>
 <p><strong>从目标主机123.1.2.3拉取文件</strong></p>
 <blockquote>
@@ -171,7 +171,7 @@
 <p><strong>并发同步的思路</strong></p>
 <blockquote>
 <p>sshpass -p "pwd***" ssh root@123.1.2.3 "cd /root/targetdir &amp;&amp; find -L . " |  xargs  -L 1 -I% -P5  sshpass -p "pwdpwdpwd"  rsync -avuP "root@123.1.2.3:/root/targetdir/%" ./ </p>
-<h1 id="-p">修改-P后的数字</h1>
+<p>#修改-P后的数字</p>
 </blockquote>
 <p><strong>软链接情况处理</strong></p>
 <blockquote>
