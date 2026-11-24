@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给小白的 Hermes API Server 图解:把你的 AI 管家变成外卖店</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: #faf7f2; color: #3d3229; line-height: 1.8;
+    max-width: 860px; margin: 0 auto; padding: 32px 20px 80px;
+  }
+  h1 { font-size: 1.9em; text-align: center; margin: 24px 0 8px; line-height: 1.4; }
+  .sub { text-align: center; color: #8a7d6e; margin-bottom: 48px; font-size: 0.95em; }
+  h2 { font-size: 1.35em; margin: 64px 0 24px; padding-left: 14px; border-left: 6px solid #d98e32; }
+  p { margin: 14px 0; font-size: 1.05em; }
+  .box { background: #fff; border: 1px solid #e8e0d4; border-radius: 14px; padding: 24px 28px; margin: 24px 0; box-shadow: 0 2px 10px rgba(61,50,41,0.05); }
+  .key { background: #fff6e6; border-left: 5px solid #d98e32; border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 20px 0; }
+  .key b { color: #b06a10; }
+  code { background: #f1eadf; border-radius: 6px; padding: 2px 8px; font-family: Consolas, "Courier New", monospace; font-size: 0.92em; color: #6b4d1e; }
+  pre { background: #2d2a26; color: #f5efe6; border-radius: 12px; padding: 20px 24px; overflow-x: auto; margin: 16px 0; line-height: 1.6; }
+  pre code { background: none; color: #f5efe6; padding: 0; font-size: 0.88em; }
+  .pic { margin: 28px 0; text-align: center; }
+  .pic svg { max-width: 100%; height: auto; }
+  .cap { text-align: center; color: #8a7d6e; font-size: 0.9em; margin-top: 10px; }
+  .num { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: #d98e32; color: #fff; font-weight: bold; margin-right: 10px; flex-shrink: 0; }
+  .row { display: flex; align-items: center; margin: 10px 0; }
+  .tag { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 0.85em; margin: 0 3px; }
+  .t-g { background: #e3f2e1; color: #2e6b2a; } .t-r { background: #fde3e3; color: #a63c3c; } .t-y { background: #fff3d6; color: #96690f; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 0.98em; }
+  th, td { border: 1px solid #e8e0d4; padding: 10px 14px; text-align: left; }
+  th { background: #f5efe4; }
+  footer { margin-top: 72px; text-align: center; color: #b0a696; font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<h1>给小白的 Hermes API Server 图解<br>——把你的 AI 管家变成外卖店</h1>
+<div class="sub">只讲人话,6 分钟看懂:远程调用 · 并发 · 那些看不懂的日志</div>
+
+<!-- ========== 第 1 部分 ========== -->
+<h2>一、Hermes 本来长什么样?</h2>
+
+<p><b>Hermes Agent</b> 是一个很能干的 AI 管家:它会聊天、跑命令、读写文件、搜网页。但它平时只跟你一个人说话——你在电脑上打开它,像用微信一样打字。</p>
+
+<div class="box">
+  <div class="row"><span class="num">你</span> <span style="font-size:1.6em">💬 ➜</span> <span class="num">Hermes</span></div>
+  <p style="color:#8a7d6e;margin-top:10px">一个人对一个人,别人插不进来。</p>
+</div>
+
+<p>问题是:<b>程序不会打字</b>。你的 Python 脚本、公司的系统、别人的电脑,想找 Hermes 帮忙时,没法「打开窗口聊天」。</p>
+
+<div class="key"><b>解决办法:</b>给 Hermes 开一家「外卖店」——API Server。程序们像点外卖一样下单,Hermes 在后厨做好,打包返回。</div>
+
+<!-- ========== 第 2 部分 ========== -->
+<h2>二、开店三步</h2>
+
+<div class="pic">
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="40" width="220" height="120" rx="14" fill="#fff" stroke="#e8e0d4"/>
+  <text x="120" y="80" text-anchor="middle" font-size="16" fill="#3d3229" font-weight="bold">后厨</text>
+  <text x="120" y="108" text-anchor="middle" font-size="13" fill="#8a7d6e">你的电脑 / 服务器</text>
+  <text x="120" y="132" text-anchor="middle" font-size="13" fill="#8a7d6e">Hermes 真身在干活</text>
+
+  <rect x="250" y="40" width="220" height="120" rx="14" fill="#fff6e6" stroke="#d98e32" stroke-width="2"/>
+  <text x="360" y="80" text-anchor="middle" font-size="16" fill="#b06a10" font-weight="bold">🏪 外卖店</text>
+  <text x="360" y="108" text-anchor="middle" font-size="13" fill="#8a7d6e">API Server</text>
+  <text x="360" y="132" text-anchor="middle" font-size="13" fill="#8a7d6e">门牌:端口 8642</text>
+
+  <rect x="490" y="10" width="220" height="80" rx="14" fill="#fff" stroke="#e8e0d4"/>
+  <text x="600" y="45" text-anchor="middle" font-size="15" fill="#3d3229">🐍 Python 脚本</text>
+  <rect x="490" y="110" width="220" height="80" rx="14" fill="#fff" stroke="#e8e0d4"/>
+  <text x="600" y="145" text-anchor="middle" font-size="15" fill="#3d3229">📊 Open WebUI 网页</text>
+  <rect x="490" y="210" width="220" height="80" rx="14" fill="#fff" stroke="#e8e0d4"/>
+  <text x="600" y="245" text-anchor="middle" font-size="15" fill="#3d3229">💻 同事的电脑</text>
+
+  <line x1="230" y1="100" x2="250" y2="100" stroke="#d98e32" stroke-width="3"/>
+  <line x1="470" y1="100" x2="490" y2="100" stroke="#d98e32" stroke-width="3"/>
+  <line x1="470" y1="150" x2="490" y2="150" stroke="#d98e32" stroke-width="3"/>
+  <line x1="470" y1="200" x2="490" y2="245" stroke="#d98e32" stroke-width="3"/>
+  <text x="360" y="340" text-anchor="middle" font-size="13" fill="#8a7d6e">菜单样式长得很像 ChatGPT 的 API,所以大家都会点单</text>
+  <text x="360" y="365" text-anchor="middle" font-size="13" fill="#8a7d6e">(OpenAI 兼容格式)</text>
+</svg>
+</div>
+
+<p>开店只要三条命令(在跑 Hermes 的那台机器上):</p>
+
+<pre><code>hermes config set API_SERVER_ENABLED true   # ① 开店
+hermes config set API_SERVER_KEY 我的暗号    # ② 定暗号
+hermes gateway                               # ③ 开门营业</code></pre>
+
+<p>点单(任何机器上):</p>
+
+<pre><code>from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://服务器IP:8642/v1",   # 店门口,别忘 /v1
+    api_key="我的暗号",                    # 对上暗号才卖
+)
+
+# 完整点单写法:model 就是菜单上的菜名
+resp = client.chat.completions.create(
+    model="hermes-agent",                # 明确点"管家默认"这道菜
+    messages=[{"role": "user", "content": "帮我列出当前目录下的文件"}],
+)
+print(resp.choices[0].message.content)</code></pre>
+
+<p>点完单在门口等(Hermes 会真的去干活,可能要几分钟),菜好了端回来。想看菜单上有什么菜:</p>
+
+<pre><code>models = client.models.list()            # GET /v1/models
+for m in models.data:
+    print(m.id)                          # → "hermes-agent"(加菜后还会更多)</code></pre>
+
+<div class="key"><b>两个最容易踩的坑:</b><br>
+① 默认只绑 <code>127.0.0.1</code>(只有本机能点),要让别人点得改成 <code>API_SERVER_HOST=0.0.0.0</code>;<br>
+② 地址必须带 <code>/v1</code> 尾巴,少了它「连接测试通过但就是没模型」。</div>
+
+<!-- ========== 第 3 部分 ========== -->
+<h2>三、外卖店的「后厨规则」:并发 = 灶台数</h2>
+
+<p>这家店<b>默认只有 10 个灶台</b>(一次最多同时炒 10 单)。第 11 个单子进来,店员直接说:<b>「人太多了,稍后再来」</b>——这就是日志里的 <span class="tag t-r">429 Too many concurrent runs</span>。</p>
+
+<div class="pic">
+<svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+  <text x="360" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#3d3229">同一时间冲进来 50 单,只有 10 个灶台</text>
+  <g>
+    <rect x="40" y="60" width="56" height="56" rx="10" fill="#e3f2e1" stroke="#2e6b2a"/>
+    <rect x="108" y="60" width="56" height="56" rx="10" fill="#e3f2e1" stroke="#2e6b2a"/>
+    <rect x="176" y="60" width="56" height="56" rx="10" fill="#e3f2e1" stroke="#2e6b2a"/>
+    <text x="232" y="95" font-size="20" fill="#8a7d6e">…</text>
+    <rect x="264" y="60" width="56" height="56" rx="10" fill="#e3f2e1" stroke="#2e6b2a"/>
+    <text x="180" y="145" text-anchor="middle" font-size="13" fill="#2e6b2a">✓ 10 单正在炒</text>
+  </g>
+  <g>
+    <rect x="360" y="60" width="56" height="56" rx="10" fill="#fde3e3" stroke="#a63c3c"/>
+    <rect x="428" y="60" width="56" height="56" rx="10" fill="#fde3e3" stroke="#a63c3c"/>
+    <text x="492" y="95" font-size="20" fill="#8a7d6e">…</text>
+    <rect x="520" y="60" width="56" height="56" rx="10" fill="#fde3e3" stroke="#a63c3c"/>
+    <text x="480" y="145" text-anchor="middle" font-size="13" fill="#a63c3c">✗ 其余 40 单被拒:稍后再来(429)</text>
+  </g>
+  <text x="360" y="200" text-anchor="middle" font-size="13" fill="#8a7d6e">不排队、不等待,直接礼貌拒绝 —— 这是设计,不是故障</text>
+</svg>
+</div>
+
+<p>想多炒几单?改配置加灶台:</p>
+
+<pre><code>gateway:
+  api_server:
+    max_concurrent_runs: 100   # 灶台从 10 加到 100;写 0 = 不限</code></pre>
+
+<div class="key"><b>但灶台不是越多越好:</b>每一单背后都是 Hermes 动真格地干活(调 AI、跑工具),真正的天花板是<b>上游 AI 模型的吞吐</b>和<b>那台服务器的 CPU/内存</b>。实测:100 并发下全部成功、零拒绝,但每单平均 18 秒——因为每道「菜」都在深度思考(<code>reasoning_effort: xhigh</code>)。想让店更快,先把思考档位调低,比加灶台管用得多。</div>
+
+<!-- ========== 第 4 部分 ========== -->
+<h2>四、那条吓人的日志:BLOCKED 不是出错</h2>
+
+<p>日志里刷屏的这段,读起来像出了大事:</p>
+
+<pre><code>WARNING ... BLOCKED: execute_code runs arbitrary local Python
+(including subprocess calls that bypass shell-string approval
+checks). This session runs on an unattended platform (api_...</code></pre>
+
+<p><b>翻译成人话:</b></p>
+
+<div class="box">
+  <p>Hermes 想用「亲手写代码精确计算」这个本领(execute_code),但保安拦住了:</p>
+  <p><b>保安的理由:</b>外卖单子来的渠道(API server)是「无人值守」的——出了事<b>没有人能当场按「同意」</b>。一个能跑任意代码的本领,没人盯着就放行,太危险。所以:宁可拦下,让它换个笨办法。</p>
+</div>
+
+<div class="pic">
+<svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="70" width="170" height="110" rx="14" fill="#fff6e6" stroke="#d98e32" stroke-width="2"/>
+  <text x="115" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#b06a10">Hermes</text>
+  <text x="115" y="130" text-anchor="middle" font-size="12" fill="#8a7d6e">我想写代码</text>
+  <text x="115" y="150" text-anchor="middle" font-size="12" fill="#8a7d6e">算得更准</text>
+
+  <rect x="275" y="60" width="170" height="130" rx="14" fill="#fff" stroke="#e8e0d4"/>
+  <text x="360" y="90" text-anchor="middle" font-size="20">🛡️</text>
+  <text x="360" y="115" text-anchor="middle" font-size="14" font-weight="bold" fill="#3d3229">保安</text>
+  <text x="360" y="140" text-anchor="middle" font-size="12" fill="#8a7d6e">这条渠道没人值班</text>
+  <text x="360" y="160" text-anchor="middle" font-size="12" fill="#8a7d6e">危险本领 → 拦!</text>
+  <text x="360" y="180" text-anchor="middle" font-size="12" fill="#a63c3c">(BLOCKED 警告)</text>
+
+  <line x1="200" y1="110" x2="275" y2="110" stroke="#8a7d6e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="445" y1="140" x2="520" y2="140" stroke="#2e6b2a" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <rect x="520" y="70" width="170" height="110" rx="14" fill="#e3f2e1" stroke="#2e6b2a"/>
+  <text x="605" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6b2a">Hermes 改口算</text>
+  <text x="605" y="130" text-anchor="middle" font-size="12" fill="#8a7d6e">照样给出答案</text>
+  <text x="605" y="152" text-anchor="middle" font-size="12" fill="#2e6b2a">✓ 任务成功</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8a7d6e"/></marker>
+    <marker id="arrow2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2e6b2a"/></marker>
+  </defs>
+  <text x="360" y="235" text-anchor="middle" font-size="13" fill="#8a7d6e">所以压测 100 单全部成功 —— WARNING 只是保安的记录,不是菜做砸了</text>
+</svg>
+</div>
+
+<p>放行的开关(想清楚再开!):</p>
+
+<pre><code>approvals:
+  unattended_mode: approve   # 默认 deny;⚠️ 必须写在 YAML 顶层</code></pre>
+
+<div class="key"><b>血泪教训:</b>这个块要写在配置文件的<b>顶层</b>。第一次写的时候缩进多了一层,变成 <code>display.approvals</code>——Hermes 根本不看那里,等于白写。YAML 的缩进 = 归属,差一格就是另一个抽屉。<b>改完任何配置都要重启 gateway 才生效。</b></div>
+
+<div class="key"><b>安全提醒:</b>放行之后,任何拿到暗号(API key)的人,都能在这台服务器上跑任意代码。所以:暗号要够长、要常换、端口只对可信网络开门。</div>
+
+<!-- ========== 第 5 部分 ========== -->
+<h2>五、菜单上为什么只有一个菜?</h2>
+
+<p>刚开店时查菜单(<code>GET /v1/models</code>),只看到一个菜:</p>
+
+<pre><code>["hermes-agent"]   ← 就这一个?</code></pre>
+
+<p>这也是<b>故意的</b>。这家外卖店卖的其实是「让 Hermes 干活」这一个服务,菜名 <code>hermes-agent</code> 的意思是「管家默认配置,看着办」。后厨用什么 AI 模型,是店长(你)在 <code>model:</code> 里定的,客人不用管。</p>
+
+<p>想让菜单丰富点?加「别名菜」——每个名字对应后厨的一种做法:</p>
+
+<pre><code>platforms:
+  api_server:
+    extra:
+      model_routes:
+        qwen:                    # 客人点 "qwen" →
+          model: "qwen3.8-flash-next"
+        glm:                     # 客人点 "glm" →
+          model: "glm-4.7"
+          provider: "zai"</code></pre>
+
+<p>重启后菜单变成:<code>["hermes-agent", "qwen", "glm"]</code>。客人点单时把菜名换掉即可:</p>
+
+<pre><code>resp = client.chat.completions.create(
+    model="qwen",                            # ← 点"qwen"这道别名菜
+    messages=[{"role": "user", "content": "查一下今天的新闻并总结"}],
+)</code></pre>
+
+<!-- ========== 第 6 部分 ========== -->
+<h2>六、一张卡片带走全部</h2>
+
+<table>
+  <tr><th>你看到的</th><th>真相</th><th>怎么办</th></tr>
+  <tr><td>429 Too many concurrent runs</td><td>灶台满了(默认 10),礼貌拒单</td><td>调大 <code>max_concurrent_runs</code>,重启</td></tr>
+  <tr><td>BLOCKED: execute_code …</td><td>保安拦下危险本领(无人值守渠道没人审批),不是故障</td><td>无害可忽略;确需放行 → 顶层 <code>approvals.unattended_mode: approve</code></td></tr>
+  <tr><td>菜单只有 hermes-agent</td><td>设计如此,一个名字代表「默认整套服务」</td><td>想加菜用 <code>model_routes</code> 别名</td></tr>
+  <tr><td>改了配置没效果</td><td>没重启,或缩进错了位置</td><td>检查缩进 → <code>hermes gateway stop && hermes gateway</code></td></tr>
+  <tr><td>并发通了但慢</td><td>瓶颈在单单耗时(深度思考)不在灶台数</td><td>调低 <code>reasoning_effort</code>,优先于加并发</td></tr>
+  <tr><td>连不上 / 连上没模型</td><td>默认只绑本机 / 地址少了 <code>/v1</code></td><td><code>API_SERVER_HOST=0.0.0.0</code> / 补上尾巴</td></tr>
+</table>
+
+<p>核心心法一句话:</p>
+
+<div class="key" style="text-align:center;font-size:1.15em"><b>API Server = 外卖店 · 并发 = 灶台 · 429 = 拒单 · BLOCKED = 保安 · 配置 = 菜单<br>改配置三件套:写对缩进、放对层级、重启生效</b></div>
+
+<footer>图解 by eli5 · 2026-11</footer>
+</body>
+</html>

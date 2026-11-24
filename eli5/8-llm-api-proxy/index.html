@@ -1,0 +1,92 @@
+<div id="llm-proxy-eli5">
+  <style>
+    #llm-proxy-eli5 { display: flex; flex-direction: column; align-items: center; gap: 34px; padding: 10px 0 22px; color: var(--foreground); }
+    #llm-proxy-eli5 .scene { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 660px; text-align: center; }
+    #llm-proxy-eli5 .art { line-height: 1.15; }
+    #llm-proxy-eli5 .art-xl { font-size: 84px; }
+    #llm-proxy-eli5 .art-l { font-size: 56px; }
+    #llm-proxy-eli5 .words { max-width: 550px; }
+    #llm-proxy-eli5 .down { font-size: 26px; color: var(--muted-foreground); }
+    #llm-proxy-eli5 h2 { margin: 0; font-weight: 500; }
+    #llm-proxy-eli5 .chain { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+    #llm-proxy-eli5 .chain .pic { font-size: 44px; }
+    #llm-proxy-eli5 .chain .lbl { font-weight: 500; }
+    #llm-proxy-eli5 .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; width: 100%; max-width: 580px; }
+    #llm-proxy-eli5 .col { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+    #llm-proxy-eli5 .col .pic { font-size: 52px; }
+    #llm-proxy-eli5 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 14px 10px; width: 100%; }
+    #llm-proxy-eli5 .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; text-align: center; }
+    #llm-proxy-eli5 .cell .pic { font-size: 40px; }
+    #llm-proxy-eli5 .flow { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+    #llm-proxy-eli5 .step { display: flex; align-items: center; gap: 14px; text-align: left; width: 100%; max-width: 580px; }
+    #llm-proxy-eli5 .step .pic { font-size: 40px; width: 56px; flex: none; text-align: center; line-height: 1.1; }
+    #llm-proxy-eli5 .step .txt b { display: block; font-weight: 500; }
+    #llm-proxy-eli5 .note { text-align: center; max-width: 550px; }
+    @media (prefers-reduced-motion: no-preference) {
+      #llm-proxy-eli5 .down { animation: lp-nudge 1.8s ease-in-out infinite; }
+      @keyframes lp-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+    }
+  </style>
+
+  <h2>大模型 API 反代:给 AI 大脑配个前台</h2>
+  <p class="text-muted">「反代」= 反向代理,_reverse proxy_,一句话:中间人</p>
+
+  <div class="scene">
+    <div class="art art-xl">🧠📞❌</div>
+    <p class="words"><b>你想直接给「AI 大脑」(OpenAI、Claude……)打电话,常有麻烦:</b><span class="text-muted">线路不通、限流挤爆、一堆 key 管不过来、格式各家不兼容、团队没法记账。</span></p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>反代就是中间那栋小屋</h2>
+    <div class="chain">
+      <div class="pic">👨‍💻📱</div><div class="lbl">你 / 你的应用</div>
+      <div class="down">↓ 只认这一个地址</div>
+      <div class="pic">🛖🧾</div><div class="lbl">反代服务器(自己搭的小中转站)</div>
+      <div class="down">↓ 转发给真正的大脑</div>
+      <div class="pic">🧠☁️</div><div class="lbl">OpenAI / Claude / Gemini / 国产模型</div>
+    </div>
+    <p class="words text-small text-muted">你从头到尾只对着「小屋」说话,小屋替你跑腿。<br>正向外送:你雇跑腿出门;反向代理:店家门口的接待台——见的是同一张脸,后厨换人你不知道。</p>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>小屋会四样本事</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🔑🔄</span><span><b>换班钥匙</b><span class="text-small text-muted">一堆 key 轮着用,不怕单个被限流</span></span></div>
+      <div class="cell"><span class="pic">🔌🧩</span><span><b>万能转接头</b><span class="text-small text-muted">各家 API 统一成一种格式,应用只写一遍</span></span></div>
+      <div class="cell"><span class="pic">📒</span><span><b>记账本</b><span class="text-small text-muted">发子 key、设额度、团队谁用了多少一清二楚</span></span></div>
+      <div class="cell"><span class="pic">🛟</span><span><b>备胎自动切换</b><span class="text-small text-muted">OpenAI 挂了秒切 Claude,重试排队全自动</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>两种玩法</h2>
+    <div class="two">
+      <div class="col"><span class="pic">🛠️</span><span><b>自己搭</b><span class="text-small text-muted">开源工具一条 Docker 命令:one-api、new-api、LiteLLM……<br>数据和 key 都在自己手里</span></span></div>
+      <div class="col"><span class="pic">🌐</span><span><b>用别人搭的</b><span class="text-small text-muted">网上有「中转站」卖或送接入地址,便宜省事<br>但——你的每句话都过别人家服务器</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <h2>⚠️ 过马路要看灯</h2>
+    <div class="grid">
+      <div class="cell"><span class="pic">🔓</span><span><b>隐私</b><span class="text-small text-muted">聊天全文明文过中转,敏感内容别走陌生反代</span></span></div>
+      <div class="cell"><span class="pic">📜</span><span><b>规矩</b><span class="text-muted">拿反代绕地区限制、倒卖额度,可能违反厂商条款,封号自负</span></span></div>
+      <div class="cell"><span class="pic">🏃</span><span><b>跑路</b><span class="text-muted">公共中转说关就关,充值容易退款难</span></span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <div class="scene">
+    <div class="art art-l">💡</div>
+    <p class="words"><b>一句话记住:</b><span class="text-muted">反代不改 AI 的脑子,只是把「打电话」这件事变得更快、更稳、更好管。</span></p>
+  </div>
+</div>

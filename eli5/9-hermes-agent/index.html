@@ -1,0 +1,170 @@
+<div id="eli5-hermes" role="article" aria-label="Hermes Agent 图解说明">
+<style>
+  #eli5-hermes { width: 100%; max-width: 860px; margin: 0 auto; color: var(--foreground, #18181b); }
+  #eli5-hermes .hero { text-align: center; padding: 8px 0 4px; }
+  #eli5-hermes .hero-emoji { font-size: 3.5rem; line-height: 1.2; }
+  #eli5-hermes .hero p { margin: 0; }
+  #eli5-hermes .big { font-size: 2.5rem; line-height: 1.25; }
+  #eli5-hermes h2 { margin: 8px 0 6px; font-weight: 500; }
+  #eli5-hermes h3 { margin: 0 0 12px; font-weight: 500; }
+  #eli5-hermes section { margin-top: 28px; }
+  #eli5-hermes .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  #eli5-hermes .tile { background: var(--card, #ffffff); color: var(--card-foreground, inherit); border: 1px solid var(--border, #e4e4e7); border-radius: 12px; padding: 14px 12px; }
+  #eli5-hermes .tile-title { margin-top: 8px; }
+  #eli5-hermes .plain { text-align: center; padding: 10px 4px; }
+  #eli5-hermes .num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; margin-right: 6px; font-size: 12px; }
+  #eli5-hermes .n1 { background: color-mix(in srgb, var(--viz-series-1, #3b82f6) 16%, transparent); }
+  #eli5-hermes .n2 { background: color-mix(in srgb, var(--viz-series-2, #f97316) 16%, transparent); }
+  #eli5-hermes .n3 { background: color-mix(in srgb, var(--viz-series-3, #22c55e) 16%, transparent); }
+  #eli5-hermes .n4 { background: color-mix(in srgb, var(--viz-series-4, #a855f7) 16%, transparent); }
+  #eli5-hermes .loop-note { text-align: center; margin-top: 12px; }
+  #eli5-hermes .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  #eli5-hermes .badge { display: inline-block; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--viz-series-1, #3b82f6) 12%, transparent); }
+  #eli5-hermes .cap { margin-top: 10px; }
+  #eli5-hermes .small { font-size: 12px; line-height: 1.55; }
+  #eli5-hermes .muted { color: var(--muted-foreground, #52525b); }
+  #eli5-hermes pre { white-space: pre; overflow-x: auto; padding: 12px; border-radius: 10px; background: var(--muted, #f4f4f5); margin: 0; }
+  #eli5-hermes code { font-family: ui-monospace, Consolas, Menlo, monospace; }
+  #eli5-hermes hr { border: 0; border-top: 1px solid var(--border, #e4e4e7); margin: 28px 0 0; }
+  @media (max-width: 520px) {
+    #eli5-hermes .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+
+<div class="hero">
+  <div class="hero-emoji" aria-hidden="true">🤖</div>
+  <h2>Hermes Agent：越用越聪明的 AI 助手</h2>
+  <p class="small muted">Nous Research 出品 · MIT 开源 · 口号是 "the agent that grows with you"（和你一起成长的 agent）· GitHub 26 万+ ⭐</p>
+</div>
+
+<section aria-label="和普通聊天机器人的区别">
+  <h3>🥊 它和普通聊天机器人有什么不同？</h3>
+  <div class="grid">
+    <div class="tile">
+      <div class="big" aria-hidden="true">🗣️</div>
+      <div class="tile-title"><strong>普通聊天机器人</strong></div>
+      <div class="small muted">问一句、答一句，转头就忘，也不会动手。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">🛠️</div>
+      <div class="tile-title"><strong>Hermes 会干活</strong></div>
+      <div class="small muted">写代码、查资料、跑命令、管文件，是给你打工的"数字员工"。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">🌱</div>
+      <div class="tile-title"><strong>它会自己变强</strong></div>
+      <div class="small muted">干完一件事会记笔记、攒经验，下次做得又快又好。</div>
+    </div>
+  </div>
+</section>
+
+<section aria-label="学习循环">
+  <h3>🌀 核心卖点：自带"学习循环"</h3>
+  <div class="grid">
+    <div class="tile">
+      <span class="num n1" aria-hidden="true">1</span><strong>做一次</strong>
+      <div class="big" aria-hidden="true">💬</div>
+      <div class="small muted">你交代一件事，它尝试、犯错、搞定。</div>
+    </div>
+    <div class="tile">
+      <span class="num n2" aria-hidden="true">2</span><strong>记下来</strong>
+      <div class="big" aria-hidden="true">📔</div>
+      <div class="small muted">把经验整理进记忆库，旧对话也能全文搜出来。</div>
+    </div>
+    <div class="tile">
+      <span class="num n3" aria-hidden="true">3</span><strong>变成技能卡</strong>
+      <div class="big" aria-hidden="true">🃏</div>
+      <div class="small muted">把做法总结成可复用的"技能"，越用还会自己改进。</div>
+    </div>
+    <div class="tile">
+      <span class="num n4" aria-hidden="true">4</span><strong>越来越懂你</strong>
+      <div class="big" aria-hidden="true">🧠</div>
+      <div class="small muted">跨会话记住你的习惯和偏好，越聊越默契。</div>
+    </div>
+  </div>
+  <div class="loop-note small muted">↺ 每用一次就转一圈 —— 官方称它是"唯一自带学习循环的 agent"。</div>
+</section>
+
+<section aria-label="运行位置">
+  <h3>📍 它住在哪里？—— 哪都行</h3>
+  <div class="grid">
+    <div class="plain"><div class="big" aria-hidden="true">💻</div><div>你的旧电脑</div></div>
+    <div class="plain"><div class="big" aria-hidden="true">📦</div><div>Docker 容器</div></div>
+    <div class="plain"><div class="big" aria-hidden="true">🖥️</div><div>5 美元/月的小服务器</div></div>
+    <div class="plain"><div class="big" aria-hidden="true">🌙</div><div>云端睡眠模式（Modal / Daytona 等，闲着不花钱）</div></div>
+  </div>
+  <div class="cap muted">典型玩法：人在 Telegram 上发条消息，机器人在远方服务器上把活干了。</div>
+</section>
+
+<section aria-label="聊天入口">
+  <h3>💬 在哪能找到它？你常用的聊天软件里</h3>
+  <div class="chips">
+    <span class="badge">Telegram</span><span class="badge">Discord</span><span class="badge">Slack</span>
+    <span class="badge">WhatsApp</span><span class="badge">Signal</span><span class="badge">邮件</span>
+    <span class="badge">终端 TUI</span>
+  </div>
+  <div class="cap muted">一个网关进程全部接通；发条语音留言，它也会转成文字来理解。</div>
+</section>
+
+<section aria-label="模型切换">
+  <h3>🔋 大脑随便换，不被厂商绑架</h3>
+  <div class="chips">
+    <span class="badge">Nous Portal（300+ 模型 + 工具网关）</span>
+    <span class="badge">OpenRouter</span>
+    <span class="badge">OpenAI</span>
+    <span class="badge">自定义 / 本地接口</span>
+  </div>
+  <div class="cap muted">换脑子像换电池：一条 <code>hermes model</code> 命令随时切换。</div>
+</section>
+
+<section aria-label="其他能力">
+  <h3>🎒 背包里还有什么？</h3>
+  <div class="grid">
+    <div class="tile">
+      <div class="big" aria-hidden="true">👥</div>
+      <div class="tile-title"><strong>分身术</strong></div>
+      <div class="small muted">派多个隔离的"小自己"并行干活，互不打架。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">⏰</div>
+      <div class="tile-title"><strong>定闹钟</strong></div>
+      <div class="small muted">说一句"每周一早上发周报"，到点自动做好发给你。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">🧰</div>
+      <div class="tile-title"><strong>40+ 工具</strong></div>
+      <div class="small muted">内置工具集，还能装插件、接 MCP 服务器。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">🔒</div>
+      <div class="tile-title"><strong>安全阀</strong></div>
+      <div class="small muted">危险命令要你点头、私聊要配对、跑在隔离容器里。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">🔁</div>
+      <div class="tile-title"><strong>一键搬家</strong></div>
+      <div class="small muted">能从 Claude Code / Codex CLI / Cursor 导入记忆和技能。</div>
+    </div>
+    <div class="tile">
+      <div class="big" aria-hidden="true">🔬</div>
+      <div class="tile-title"><strong>科研彩蛋</strong></div>
+      <div class="small muted">批量生成任务"轨迹"数据，可用来训练会调工具的模型。</div>
+    </div>
+  </div>
+</section>
+
+<section aria-label="快速开始">
+  <h3>🚀 怎么把它领回家？</h3>
+  <pre><code># Linux / macOS / WSL2
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+
+# Windows（PowerShell）
+iex (irm https://hermes-agent.nousresearch.com/install.ps1)</code></pre>
+  <div class="cap">
+    装完就四句咒语：<code>hermes</code> 开聊 · <code>hermes model</code> 换模型 · <code>hermes setup</code> 配置 · <code>hermes doctor</code> 体检
+  </div>
+</section>
+
+<hr>
+<div class="small muted" style="margin-top:12px;">内容整理自 github.com/NousResearch/hermes-agent（2026-11）。</div>
+</div>
