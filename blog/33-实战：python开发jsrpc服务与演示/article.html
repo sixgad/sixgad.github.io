@@ -190,16 +190,16 @@
 <p>pip install -r requirements.txt</p>
 </blockquote>
 <h2 id="2">2.模块说明</h2>
-<p><img alt="image-websocket" src="image-websocket.png" /></p>
+<p><img alt="image-websocket" src="image-websocket.png" loading="lazy" decoding="async" /></p>
 <p>因为是协程，选择了支持asyncio的sanic这个web开发框架，websockets这个websocket包</p>
 <h2 id="3">3.实战</h2>
 <p>以反爬演示平台下的示例2为例，地址：https://paker.net.cn/anti/2</p>
 <p>数据是从这个接口返回，post请求</p>
-<p><img alt="image-20220509104156226" src="image-20220509104156226.png" /></p>
+<p><img alt="image-20220509104156226" src="image-20220509104156226.png" loading="lazy" decoding="async" /></p>
 <p>请求数据如下，page为页码，t为时间戳，sign为加密数据</p>
-<p><img alt="image-20220509104209816" src="image-20220509104209816.png" /></p>
+<p><img alt="image-20220509104209816" src="image-20220509104209816.png" loading="lazy" decoding="async" /></p>
 <p>js请求是从这里发出的</p>
-<p><img alt="image-20220509104420067" src="image-20220509104420067.png" /></p>
+<p><img alt="image-20220509104420067" src="image-20220509104420067.png" loading="lazy" decoding="async" /></p>
 <p>其中encry(String(num))返回了post请求需要的参数</p>
 <p>按照以前的方法，追进encry方法里还原加密逻辑算法，或者把encry方法js全部扣下来，用node环境执行。</p>
 <p>使用rpc调用+<a href="https://github.com/sixgad/py-jsrpc">py-jsrpc</a>，只能说不要太简单，具体操作如下：</p>
@@ -230,12 +230,12 @@ client.registerAction(&quot;encry&quot;,function(request,resolve,reject){
 <p>python web_server.py</p>
 </blockquote>
 <p>浏览器注入js，在目标网站https://paker.net.cn/anti/2，打开控制台(F12), Console下注入client.js</p>
-<p><img alt="image-20220509110412875" src="image-20220509110412875.png" /></p>
+<p><img alt="image-20220509110412875" src="image-20220509110412875.png" loading="lazy" decoding="async" /></p>
 <p>jsclient open a connection, 说明已经连接成功，可以调用请求http接口获取在浏览器内js执行返回的结果</p>
 <p><strong>3.调用接口，获取js执行结果</strong></p>
 <p>http接口：http://127.0.0.1:5000/send?group=ws-group&amp;action=encry&amp;num=2</p>
 <p>接口里的action，num对应第一步 client.js。</p>
-<p><img alt="image-20220509110712819" src="image-20220509110712819.png" /></p>
+<p><img alt="image-20220509110712819" src="image-20220509110712819.png" loading="lazy" decoding="async" /></p>
 <p>本文只是提供了最简单的demo，jsrpc可以使用的场景很多，比如某数的cookie，某音，98k等等</p>
                   </div>
                   <!-- Blog Post End -->

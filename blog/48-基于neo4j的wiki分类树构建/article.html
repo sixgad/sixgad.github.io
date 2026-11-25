@@ -184,7 +184,7 @@
 <p><strong>采集wiki分类信息：</strong></p>
 <p>中文分类首页：https://zh.wikipedia.org/wiki/Wikipedia:%E5%88%86%E9%A1%9E%E7%B4%A2%E5%BC%95</p>
 <p>首页展示了一级和二级分类，内部更深层次分类采用爬虫收集</p>
-<p><img src="image-20230918135040064.png" alt="image-20230918135040064" style="zoom:80%;" /></p>
+<p><img src="image-20230918135040064.png" alt="image-20230918135040064" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p><strong>数据存储：</strong></p>
 <p>在数据收集时，爬虫只需保留以下关系</p>
 <pre class="codehilite"><code class="language-json">{
@@ -195,7 +195,7 @@
 
 <p>为了便于后期分类树的生成和分析，引入neo4j这个图数据库。</p>
 <p><em>遇到的挑战，当节点和关系较多时，如何快速导入neo4j？</em></p>
-<p><img alt="image-20230918140024469" src="image-20230918140024469.png" /></p>
+<p><img alt="image-20230918140024469" src="image-20230918140024469.png" loading="lazy" decoding="async" /></p>
 <blockquote>
 <p>采用neo4j-admin import，命令如下，“啪就站起来了，很快啊!”</p>
 <p>./neo4j-admin import --database=wikicnen --nodes=../import/cnwk_nodes.csv --nodes=../import/enwk_nodes.csv --relationships=../import/cnwk_rels.csv --relationships=../import/enwk_rels.csv </p>
@@ -203,10 +203,10 @@
 <p><strong>实体分类树构建：</strong></p>
 <p>小试牛刀，查找前两层节点，可以看到，分类最后应该是一个关系网。</p>
 <blockquote>
-<p>MATCH (root:cnwk {name: 'cnwkdataset'})-[:HAS_CHILD]-&gt;(level1)-[:HAS_CHILD]-&gt;(level2) RETURN root, level1, level2<img alt="image-20230918140458750" src="image-20230918140458750.png" /></p>
+<p>MATCH (root:cnwk {name: 'cnwkdataset'})-[:HAS_CHILD]-&gt;(level1)-[:HAS_CHILD]-&gt;(level2) RETURN root, level1, level2<img alt="image-20230918140458750" src="image-20230918140458750.png" loading="lazy" decoding="async" /></p>
 </blockquote>
 <p>导出excel，通过kutools插件，合并</p>
-<p><img src="image-20230918140751661.png" alt="image-20230918140751661" style="zoom:80%;" /></p>
+<p><img src="image-20230918140751661.png" alt="image-20230918140751661" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>最后通过子节点向上查找，构建完成百万级实体分类树。</p>
 <blockquote>
 <p><code>MATCH path = (child:cnwk {name:"篮球"})-[:HAS_PARENT*..25]-&gt;(parent:cnwk {name:"cnwkdataset"}) with path limit 100</code></p>

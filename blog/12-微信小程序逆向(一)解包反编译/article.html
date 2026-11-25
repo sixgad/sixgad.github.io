@@ -187,7 +187,7 @@
 <p>/data/data/com.tencent.mm/MicroMsg/{这是一串hash，每个人不一样}/appbrand/pkg</p>
 </blockquote>
 <p>在pkg文件夹下，我们可能发现多个.wxapkg文件，如果你是刚点开过微信小程序，那么就选择时间最近的那个文件（大小一般在1-2M）</p>
-<p><img alt="image-20210819214912070" src="image-20210819214912070.png" /></p>
+<p><img alt="image-20210819214912070" src="image-20210819214912070.png" loading="lazy" decoding="async" /></p>
 <p>可以运行adb命令，将整个pkg文件夹拷贝到电脑上来</p>
 <blockquote>
 <p>adb pull /data/data/com.tencent.mm/MicroMsg/{这是一串hash，每个人不一样}/appbrand/pkg ./</p>
@@ -270,7 +270,7 @@ if __name__ == '__main__':
 </li>
 <li>
 <p>点击目标小程序，查看输出结果，大功告成</p>
-<p><img alt="image-20210819215926160" src="image-20210819215926160.png" /></p>
+<p><img alt="image-20210819215926160" src="image-20210819215926160.png" loading="lazy" decoding="async" /></p>
 </li>
 </ul>
 <p>注意，可能有多个.wxapkg文件，主要关注__APP__.wxapkg文件即可</p>
@@ -280,7 +280,7 @@ if __name__ == '__main__':
 <p>运行命令 node wuWxapkg.js  ./xhs.wxapkg</p>
 </blockquote>
 <p>就会在当前文件夹生成解包后的文件夹 xhs</p>
-<p><img alt="image-20210819220402038" src="image-20210819220402038.png" /></p>
+<p><img alt="image-20210819220402038" src="image-20210819220402038.png" loading="lazy" decoding="async" /></p>
 <p><strong>可能遇到的坑</strong><strong>，</strong><strong>因为反编译的问题，有时解析失败，比如文件夹名plugin变为plugin:，导致解包失败</strong></p>
 <pre class="codehilite"><code>D:\worksoft\nodeworkspace\wxappunpacker\wuLib.js:91
         if (err) throw Error(&quot;Save file error: &quot; + err);
@@ -290,7 +290,7 @@ Error: Save file error: Error: ENOENT: no such file or directory, open
 </code></pre>
 
 <p><strong>根据报错信息修改wuLib.js这个文件即可，比如这样</strong></p>
-<p><img alt="image-20210819220838517" src="image-20210819220838517.png" /></p>
+<p><img alt="image-20210819220838517" src="image-20210819220838517.png" loading="lazy" decoding="async" /></p>
 <h2 id="4">4.静态查看</h2>
 <p>可以用vscode打开解包反编译后的文件夹，已知xhs小程序header里有X-sign参数加密，我们先全局搜索定位</p>
 <blockquote>
@@ -301,7 +301,7 @@ Error: Save file error: Error: ENOENT: no such file or directory, open
 <p>t.header[u.DEFAULT_SIGN_HEADER] = (0, u.encryptFeApiToken)(g);</p>
 </blockquote>
 <p>encryptFeApiToken方法看起来就是加密函数了，ctrl+左键跳转过去</p>
-<p><img alt="image-20210819221521363" src="image-20210819221521363.png" /></p>
+<p><img alt="image-20210819221521363" src="image-20210819221521363.png" loading="lazy" decoding="async" /></p>
 <p>到此结束，静态分析我们猜测不到传入的参数和加密逻辑，下一篇我们把它运行起来，动态调试看看</p>
                   </div>
                   <!-- Blog Post End -->

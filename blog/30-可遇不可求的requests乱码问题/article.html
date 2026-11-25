@@ -195,7 +195,7 @@ print(res.text)
 </code></pre>
 
 <p>打印结果，啥呀这是</p>
-<p><img src="image-20220222210501658.png" alt="image-20220222210501658" style="zoom:80%;" /></p>
+<p><img src="image-20220222210501658.png" alt="image-20220222210501658" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>首先想到encoding设置是否正确，原网页html源码</p>
 <pre class="codehilite"><code class="language-html">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=gb2312&quot;&gt;
 </code></pre>
@@ -212,7 +212,7 @@ print(res.text)
 res.encoding = res.apparent_encoding
 </code></pre>
 
-<p><img src="image-20220222213141286.png" alt="image-20220222213141286" style="zoom:80%;" /></p>
+<p><img src="image-20220222213141286.png" alt="image-20220222213141286" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>看看代码为什么默认res.encoding这么重要的设置，还能识别错误</p>
 <pre class="codehilite"><code class="language-python"># package requests utils
 def get_encoding_from_headers(headers):
@@ -241,7 +241,7 @@ def get_encoding_from_headers(headers):
 </code></pre>
 
 <p>原来是人家网站返回的response headers没有设置charset</p>
-<p><img src="image-20220222212300912.png" alt="image-20220222212300912" style="zoom:80%;" /></p>
+<p><img src="image-20220222212300912.png" alt="image-20220222212300912" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p><strong>为什么apparent_encoding能正确识别网页编码？</strong></p>
 <pre class="codehilite"><code class="language-python"># package requests models
 @property
@@ -253,7 +253,7 @@ def apparent_encoding(self):
 <p>chardet是python的一个第三方编码检测模块，通过它对网页编码进行检测</p>
 <h2 id="2gb2312gb18030">2.GB2312&amp;GB18030</h2>
 <p>在（一）中通过设置res.encoding = 'GB2312'已经解决部分问题，实际上还有部分乱码，比如网页中的“ –”显示为乱码了</p>
-<p><img alt="image-20220222212911654" src="image-20220222212911654.png" /></p>
+<p><img alt="image-20220222212911654" src="image-20220222212911654.png" loading="lazy" decoding="async" /></p>
 <p>原因</p>
 <ul>
 <li>GB2312：基本满足了汉字的计算机处理需要，对于人名、古汉语等方面出现的罕用字，GB 2312不能处理。</li>
@@ -265,10 +265,10 @@ def apparent_encoding(self):
     res.encoding = 'GB18030'
 </code></pre>
 
-<p><img src="image-20220222214010191.png" alt="image-20220222214010191" style="zoom:80%;" /></p>
+<p><img src="image-20220222214010191.png" alt="image-20220222214010191" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <h2 id="3gzip-deflate-br">3.gzip, deflate, br压缩</h2>
 <p>基本遇不到，因为requests使用的urllib3已经处理了服务端返回压缩文本</p>
-<p><img src="image-20220222214336183.png" alt="image-20220222214336183" style="zoom:80%;" /></p>
+<p><img src="image-20220222214336183.png" alt="image-20220222214336183" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>其他的一些库，如urllib就没有处理</p>
 <pre class="codehilite"><code class="language-python">import urllib.request
 url = 'https://paker.net.cn/anti/charset'
@@ -284,7 +284,7 @@ content = f.read()
 print(content)
 </code></pre>
 
-<p><img alt="image-20220222214537112" src="image-20220222214537112.png" /></p>
+<p><img alt="image-20220222214537112" src="image-20220222214537112.png" loading="lazy" decoding="async" /></p>
 <p><strong>可能会遇到，requests请求不能处自动解压的情况，如</strong></p>
 <pre class="codehilite"><code class="language-python">import requests
 
@@ -299,11 +299,11 @@ response = requests.get(url, headers=headers)
 print(response.text)
 </code></pre>
 
-<p><img src="image-20220222214812534.png" alt="image-20220222214812534" style="zoom:80%;" /></p>
+<p><img src="image-20220222214812534.png" alt="image-20220222214812534" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p><strong>解决方案：</strong></p>
 <p>方法一、headers里的Accept-Encoding告诉服务端我支持这几种压缩，把它去掉就好了，浏览器是默认支持的</p>
 <p>方法二、通过阅读代码我们知道是根据urllib3是根据response headers里的<strong>content-encoding</strong>来选择对应的解压方法</p>
-<p><img src="image-20220222215217189.png" alt="image-20220222215217189" style="zoom:80%;" /></p>
+<p><img src="image-20220222215217189.png" alt="image-20220222215217189" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>如果服务端识别出你是一个爬虫请求，比如UA不是正常的浏览器，服务端不设置response headers里的<strong>content-encoding</strong>，</p>
 <p>这样requests就没办法自己解压了，可以自己调用gzip解压，或者模拟请求更加真实一点</p>
                   </div>

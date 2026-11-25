@@ -184,11 +184,11 @@
 <p>微信开发者工具下载地址：https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html</p>
 <h2 id="1">1.导入项目</h2>
 <p>选择上一篇解包得到的xhs文件夹，使用测试号即可</p>
-<p><img alt="image-20210821125702908" src="image-20210821125702908.png" /></p>
+<p><img alt="image-20210821125702908" src="image-20210821125702908.png" loading="lazy" decoding="async" /></p>
 <p>一个重要的设置：设置-》项目设置-》不校验合法域名，这个要勾选上</p>
-<p><img alt="image-20210821125904271" src="image-20210821125904271.png" /></p>
+<p><img alt="image-20210821125904271" src="image-20210821125904271.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.常见的编译报错</h2>
-<p><img alt="image-20210821130004168" src="image-20210821130004168.png" /></p>
+<p><img alt="image-20210821130004168" src="image-20210821130004168.png" loading="lazy" decoding="async" /></p>
 <p>当点了编译后，在控制台一般会输出几种报错，需要自己处理一下</p>
 <p><strong>报错一</strong></p>
 <blockquote>
@@ -233,11 +233,11 @@ module.exports[&quot;default&quot;] = module.exports, module.exports.__esModule 
 
 <h2 id="3">3.调试</h2>
 <p>正常会在network下看到请求的数据包</p>
-<p><img alt="image-20210821132549355" src="image-20210821132549355.png" /></p>
+<p><img alt="image-20210821132549355" src="image-20210821132549355.png" loading="lazy" decoding="async" /></p>
 <p>上一篇静态分析，根据字符串搜索我们已经定位到了x-sign加密函数的位置，下个断点看看</p>
-<p><img alt="image-20210821133013802" src="image-20210821133013802.png" /></p>
+<p><img alt="image-20210821133013802" src="image-20210821133013802.png" loading="lazy" decoding="async" /></p>
 <p>传入的参数e</p>
-<p><img alt="image-20210821133052728" src="image-20210821133052728.png" /></p>
+<p><img alt="image-20210821133052728" src="image-20210821133052728.png" loading="lazy" decoding="async" /></p>
 <p>追到这 s + p + "WSUDD"，发现和pc web端一模一样的加密方式，就是做了"X"+md5(api+"WSUDD")</p>
 <pre class="codehilite"><code class="language-python">import hashlib
 x_sign = &quot;X&quot;
@@ -248,9 +248,9 @@ x_sign = x_sign + m.hexdigest()
 
 <h2 id="4fiddler">4.fiddler如何抓到微信开发者工具调试的包</h2>
 <p>微信开发者工具-》设置-》代理设置（默认是使用系统代理），打开fiddler，修改为手动设置代理</p>
-<p><img alt="image-20210821133700086" src="image-20210821133700086.png" /></p>
+<p><img alt="image-20210821133700086" src="image-20210821133700086.png" loading="lazy" decoding="async" /></p>
 <p>这样就能在fiddler抓到微信开发者调试工具的包了</p>
-<p><img alt="image-20210821133748240" src="image-20210821133748240.png" /></p>
+<p><img alt="image-20210821133748240" src="image-20210821133748240.png" loading="lazy" decoding="async" /></p>
                   </div>
                   <!-- Blog Post End -->
                 </div>

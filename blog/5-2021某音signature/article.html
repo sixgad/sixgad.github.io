@@ -186,7 +186,7 @@
 </blockquote>
 <h2 id="1">1.跳过抓包分析，不会的可以看上一篇某日头条，基本差不多</h2>
 <p>很熟悉的acrawler.js</p>
-<p><img alt="image-20210719224717497" src="image-20210719224717497.png" /></p>
+<p><img alt="image-20210719224717497" src="image-20210719224717497.png" loading="lazy" decoding="async" /></p>
 <p>搞过头条的都知道，要找到 window.byted_acrawler.init，全局搜索在indexjs中找到，其中变量可以打断点调试</p>
 <pre class="codehilite"><code class="language-javascript">window.byted_acrawler.init({
     aid: U,
@@ -198,7 +198,7 @@
 </code></pre>
 
 <p>按照套路，全局搜索_signature ，结果是<strong>找不到！！！</strong>，设置个XHR断点看看</p>
-<p><img alt="image-20210719225239741" src="image-20210719225239741.png" /></p>
+<p><img alt="image-20210719225239741" src="image-20210719225239741.png" loading="lazy" decoding="async" /></p>
 <p>重写了XMLHttpRequest的一些方法，此时t=this里面的_url已经有了signature参数了，顺着Call Stack往回找找看看,在acrawler.js中调用了e()函数</p>
 <pre class="codehilite"><code class="language-javascript">(U = function e() {
     var f = arguments;
@@ -210,26 +210,26 @@
 </code></pre>
 
 <p>在控制台上会看到如下输出</p>
-<p><img alt="image-20210719230744626" src="image-20210719230744626.png" /></p>
+<p><img alt="image-20210719230744626" src="image-20210719230744626.png" loading="lazy" decoding="async" /></p>
 <p>熟悉的朋友应该知道，这不就是构造XMLHttpRequest请求的过程吗,在arguments为null的时候，XMLHttpRequest里已经有_signature参数了。把头条的那套环境拿过来用一下代码如下：</p>
-<p><img alt="image-20210719231012409" src="image-20210719231012409.png" /></p>
+<p><img alt="image-20210719231012409" src="image-20210719231012409.png" loading="lazy" decoding="async" /></p>
 <p>结果：Need Verifying，虽然程序不报错，但是没通过人家的后端校验啊，就是说我们模拟的环境被检测或者不够全，与真实浏览器相差很多。由于字节系列使用了jsvm技术，硬刚跟代码不太可能。应对方法就是插桩：代码里的这个String.fromCharCode字符串生成的地方 都插个桩，eg.</p>
-<p><img alt="image-20210719231724985" src="image-20210719231724985.png" /></p>
+<p><img alt="image-20210719231724985" src="image-20210719231724985.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.补环境，更深，更隐蔽</h2>
 <p>当插完桩后，node douyin.js &gt; a.txt，在这个文件中我们会看到，类似箭头所指的这行都是环境检测，如webdriver，phantom，hook等等，也会发现很多我们之前没补过的环境PluginArray，toString等等。这里我就是从头对比本地执行和浏览器执行输出的日志差异一点一点补全的。</p>
-<p><img alt="image-20210719233012787" src="image-20210719233012787.png" /></p>
+<p><img alt="image-20210719233012787" src="image-20210719233012787.png" loading="lazy" decoding="async" /></p>
 <h2 id="3">3.需要注意的检测点(部分)</h2>
 <p>canvas</p>
-<p><img alt="image-20210719233652069" src="image-20210719233652069.png" /></p>
+<p><img alt="image-20210719233652069" src="image-20210719233652069.png" loading="lazy" decoding="async" /></p>
 <p>浏览器插件</p>
-<p><img alt="image-20210719233731956" src="image-20210719233731956.png" /></p>
+<p><img alt="image-20210719233731956" src="image-20210719233731956.png" loading="lazy" decoding="async" /></p>
 <p>XMLHttpRequest</p>
-<p><img alt="image-20210719233759408" src="image-20210719233759408.png" /></p>
+<p><img alt="image-20210719233759408" src="image-20210719233759408.png" loading="lazy" decoding="async" /></p>
 <p>toString</p>
-<p><img alt="image-20210719233838795" src="image-20210719233838795.png" /></p>
+<p><img alt="image-20210719233838795" src="image-20210719233838795.png" loading="lazy" decoding="async" /></p>
 <h2 id="4">4.看下效果</h2>
-<p><img alt="image-20210719234133939" src="image-20210719234133939.png" /></p>
-<p><img alt="image-20210719234109420" src="image-20210719234109420.png" /></p>
+<p><img alt="image-20210719234133939" src="image-20210719234133939.png" loading="lazy" decoding="async" /></p>
+<p><img alt="image-20210719234109420" src="image-20210719234109420.png" loading="lazy" decoding="async" /></p>
                   </div>
                   <!-- Blog Post End -->
                 </div>

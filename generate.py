@@ -4,6 +4,7 @@
 # @Time:        2022/9/28 15:00
 
 import os
+import re
 import json
 import markdown
 from jinja2 import Environment, FileSystemLoader
@@ -68,6 +69,23 @@ def build_toc_html(nodes):
     return render(nodes)
 
 
+def lazy_images(html):
+    # 正文输出后处理: 统一为 img 补懒加载与异步解码; 已显式声明的属性保持原样
+    def _add(m):
+        tag = m.group(0)
+        if re.search(r'\bloading\s*=', tag):
+            return tag
+        extra = ' loading="lazy"'
+        if not re.search(r'\bdecoding\s*=', tag):
+            extra += ' decoding="async"'
+        if tag.endswith('/>'):
+            return tag[:-2].rstrip() + extra + ' />'
+        return tag[:-1] + extra + '>'
+
+    # 前瞻替代 \b：连字符自定义元素（<img-loader>）不再误补；忽略大小写覆盖 <IMG>
+    return re.sub(r'<img(?=[\s/>])[^>]*>', _add, html, flags=re.I)
+
+
 def clear_index():
     for ht in os.listdir(default_config["index_dir"]):
         if ht.endswith(".html") and ht.startswith("index"):
@@ -95,7 +113,7 @@ def deal_blogs():
             # 读取.md
             with open(f'{default_config["blog_dir"]}/{blog}/{article}', 'r', encoding='utf-8') as f:
                 mdobj = markdown.Markdown(extensions=default_config["md_ext"])
-                html = mdobj.convert(f.read())
+                html = lazy_images(mdobj.convert(f.read()))
                 tags = mdobj.Meta.get('tags')
                 date = mdobj.Meta.get('date')[0]
                 title = mdobj.Meta.get('title')[0]

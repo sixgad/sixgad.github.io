@@ -182,7 +182,7 @@
                     <h1 id="webx-tx-sob">某红书web个人主页x-t&amp;x-s&amp;ob混淆</h1>
 <p>某红书web更新，加强了参数校验，x-t&amp;x-s变成必要参数，x-sign加密方式暂未改变</p>
 <h2 id="1">1.抓包&amp;定位</h2>
-<p><img alt="image-20210823195843733" src="image-20210823195843733.png" /></p>
+<p><img alt="image-20210823195843733" src="image-20210823195843733.png" loading="lazy" decoding="async" /></p>
 <p>其中x-sign上篇文章已经搞定，同样在header里的参数x-t&amp;x-s，应该和x-sign一起放在hedaer，直接去x-sign生成的位置看看，顺着代码顺着代码向下调试，箭头处对headers进行了赋值</p>
 <blockquote>
 <p>t.headers = P(P(P({}, t.headers), l), p)</p>
@@ -194,20 +194,20 @@
     "X-t": 1629720500512
 }</p>
 </blockquote>
-<p><img src="image-20210823200626718.png" alt="image-20210823200626718" style="zoom:80%;" /></p>
+<p><img src="image-20210823200626718.png" alt="image-20210823200626718" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>window.sign，就是我们最终要抠出来的加密方法了，参数f为api，t.data为undefined。追进去看看</p>
-<p><img alt="image-20210823201208754" src="image-20210823201208754.png" /></p>
+<p><img alt="image-20210823201208754" src="image-20210823201208754.png" loading="lazy" decoding="async" /></p>
 <p>被混淆了，从js的开头的特征看出来，应该是ob混淆的(大数组，定义的解密方法)</p>
-<p><img alt="image-20210823201308809" src="image-20210823201308809.png" /></p>
+<p><img alt="image-20210823201308809" src="image-20210823201308809.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.扣代码</h2>
 <p>鉴于混淆的不是特别严重，而且已知最后调用的sign方法，直接无脑扣下来即可(当然ast还原后看起来更加舒服)</p>
-<p><img src="image-20210823201719833.png" alt="image-20210823201719833" style="zoom:80%;" /></p>
+<p><img src="image-20210823201719833.png" alt="image-20210823201719833" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>直接运行会卡死，因为有格式化校验与环境检测，可以去这个网站把js压缩下再执行，<a href="http://www.esjson.com/jsformat.html">在线js压缩格式化工具</a></p>
 <p>使用js proxy检查检测了哪些环境，navigator对象，alert方法</p>
-<p><img alt="image-20210823203025591" src="image-20210823203025591.png" /></p>
-<p><img alt="image-20210823203038966" src="image-20210823203038966.png" /></p>
+<p><img alt="image-20210823203025591" src="image-20210823203025591.png" loading="lazy" decoding="async" /></p>
+<p><img alt="image-20210823203038966" src="image-20210823203038966.png" loading="lazy" decoding="async" /></p>
 <h2 id="3">3.运行效果</h2>
-<p><img alt="image-20210823203135348" src="image-20210823203135348.png" /></p>
+<p><img alt="image-20210823203135348" src="image-20210823203135348.png" loading="lazy" decoding="async" /></p>
                   </div>
                   <!-- Blog Post End -->
                 </div>

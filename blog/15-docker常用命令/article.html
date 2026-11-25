@@ -205,7 +205,7 @@
 <p>docker run hello-world</p>
 </blockquote>
 <p>运行上述命令，Docker 首先会检查本地是否有<code>hello-world</code>这个镜像，如果发现本地没有这个镜像，Docker 就会去 Docker Hub 官方仓库下载此镜像，然后运行它。最后我们看到该镜像输出 "Hello from Docker!" 并退出。</p>
-<p><img alt="image-20210824205220837" src="image-20210824205220837.png" /></p>
+<p><img alt="image-20210824205220837" src="image-20210824205220837.png" loading="lazy" decoding="async" /></p>
 <h2 id="_2">常用命令</h2>
 <p><strong>docker版本</strong></p>
 <blockquote>
@@ -215,17 +215,17 @@
 <blockquote>
 <p>docker images</p>
 </blockquote>
-<p><img alt="image-20210824205753292" src="image-20210824205753292.png" /></p>
+<p><img alt="image-20210824205753292" src="image-20210824205753292.png" loading="lazy" decoding="async" /></p>
 <p><strong>查看运行中的容器</strong></p>
 <blockquote>
 <p>docker ps</p>
 </blockquote>
-<p><img alt="image-20210824205922005" src="image-20210824205922005.png" /></p>
+<p><img alt="image-20210824205922005" src="image-20210824205922005.png" loading="lazy" decoding="async" /></p>
 <p><strong>查看所有容器</strong></p>
 <blockquote>
 <p>docker ps -a</p>
 </blockquote>
-<p><img alt="image-20210824210012710" src="image-20210824210012710.png" /></p>
+<p><img alt="image-20210824210012710" src="image-20210824210012710.png" loading="lazy" decoding="async" /></p>
 <p><strong>删除镜像</strong></p>
 <blockquote>
 <p>docker rmi centos          # 根据 REPOSITORY 来删除镜像</p>
@@ -306,7 +306,7 @@ CMD python3 test.py
 <li>使用<code>docker run</code>命令直接基于镜像新建一个容器并启动，相当于先执行<code>docker create</code>命令从镜像创建容器，然后再执行<code>docker start</code>命令启动容器。</li>
 </ol>
 <p>使用start启动</p>
-<p><img alt="image-20210824212253375" src="image-20210824212253375.png" /></p>
+<p><img alt="image-20210824212253375" src="image-20210824212253375.png" loading="lazy" decoding="async" /></p>
 <p>使用run命令</p>
 <blockquote>
 <p>OPTIONS说明：</p>
@@ -343,7 +343,7 @@ CMD python3 test.py
 <blockquote>
 <p>docker export sm1 &gt; small.tar</p>
 </blockquote>
-<p><img alt="image-20210824220041056" src="image-20210824220041056.png" /></p>
+<p><img alt="image-20210824220041056" src="image-20210824220041056.png" loading="lazy" decoding="async" /></p>
 <p><strong>导入容器</strong></p>
 <p>通过<code>docker export</code>命令导出的文件，可以使用<code>docker import</code>命令导入，执行完<code>docker import</code>后会变为本地镜像，最后再使用<code>docker run</code>命令启动该镜像，这样我们就实现了容器的迁移</p>
 <blockquote>
@@ -352,7 +352,7 @@ CMD python3 test.py
 <p><strong>使用公共镜像仓库分发和存储镜像</strong></p>
 <p>登录dockerhub，<a href="https://hub.docker.com/">dockerhu </a></p>
 <p>创建仓库</p>
-<p><img src="image-20210824222723119.png" alt="image-20210824222723119" style="zoom:80%;" /></p>
+<p><img src="image-20210824222723119.png" alt="image-20210824222723119" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>在推送镜像仓库前，我们需要使用<code>docker login</code>命令先登录一下镜像服务器，因为只有已经登录的用户才可以推送镜像到仓库。</p>
 <p><strong>在本地镜像推送到自定义仓库前，我们需要先把镜像“重命名”一下，才能正确推送到自己创建的镜像仓库中，使用<code>docker tag</code>命令将镜像“重命名”：</strong></p>
 <blockquote>

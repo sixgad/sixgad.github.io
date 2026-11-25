@@ -183,9 +183,9 @@
 <p>新手可能遇到的问题，在浏览器上使用插件xpath helper能够定位提取数据，为什么使用python中的xpath方法怎么也定位不到？本文列举一下可能的几种情况，怎么说呢，这种问题自己随便百度一下就能找到答案。em，有些同学以后就不用再问了。。。</p>
 <h2 id="1js">1.js惹的祸</h2>
 <p>示例网址：https://paker.net.cn/anti/xpath</p>
-<p><img src="image-20220302140451524.png" alt="image-20220302140451524" style="zoom:80%;" /></p>
+<p><img src="image-20220302140451524.png" alt="image-20220302140451524" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>在 div class="page box"里，使用xpath helper插件看一下，//div[@class='page box']正确定位高亮了</p>
-<p><img src="image-20220302140620132.png" alt="image-20220302140620132" style="zoom:80%;" /></p>
+<p><img src="image-20220302140620132.png" alt="image-20220302140620132" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>用python请求并解析看看，结果是输出为空，没有提取到序号和古诗名称</p>
 <pre class="codehilite"><code class="language-python">import requests
 from lxml import etree
@@ -197,20 +197,20 @@ print(html.xpath(&quot;//div[@class='page box']//text()&quot;))
 </code></pre>
 
 <p>此时，我们右键-查看网页源代码</p>
-<p><img alt="image-20220302141519379" src="image-20220302141519379.png" /></p>
+<p><img alt="image-20220302141519379" src="image-20220302141519379.png" loading="lazy" decoding="async" /></p>
 <p>好家伙，人家原来class=“page”，在script里经过addClass操作，展示出来时才变为class="page box"</p>
 <p>因为python requests包请求后响应response.text是不能渲染和执行js的等同于查看网页源代码看到的html内容，所以呢通过查看网页源代码找到正确的标签样式就搞定了</p>
 <h2 id="2">2.浏览器补全规范化</h2>
 <p>一样的示例网址：https://paker.net.cn/anti/xpath</p>
 <p><strong>一、 tbody标签</strong></p>
-<p><img alt="image-20220302142224453" src="image-20220302142224453.png" /></p>
+<p><img alt="image-20220302142224453" src="image-20220302142224453.png" loading="lazy" decoding="async" /></p>
 <p>解决了js惹的祸问题后，xpath这样写了//div[@class='page']/table/tbody/tr/td[2]，纳尼？还拿不到数据。</p>
 <p>还是看看那网页源代码，没有tbody标签的，这个是浏览器自己加上的</p>
-<p><img alt="image-20220302142448552" src="image-20220302142448552.png" /></p>
+<p><img alt="image-20220302142448552" src="image-20220302142448552.png" loading="lazy" decoding="async" /></p>
 <p>ok，tbody不存在，xpath这样写了//div[@class='page']/table/tr/td[2]</p>
 <p><strong>二、标签不闭合</strong></p>
 <p>报告，还是拿不到数据，再探网页源代码！</p>
-<p><img alt="image-20220302142748368" src="image-20220302142748368.png" /></p>
+<p><img alt="image-20220302142748368" src="image-20220302142748368.png" loading="lazy" decoding="async" /></p>
 <p>只有《/tr》，《tr》哪去了，被哪个小可爱吃掉了。想想办法，python如何把不闭合的标签补全？用它html5lib</p>
 <pre class="codehilite"><code class="language-python">import requests
 from lxml import etree
@@ -224,12 +224,12 @@ print(shtml.xpath(&quot;//div[@class='page']/table//tr/td[2]/text()&quot;))
 <p>最后输出 ['将进酒', '登高', '春江花月夜']，到此就是成功了</p>
 <h2 id="3iframe">3.iframe</h2>
 <p>示例网址：https://xxgk.mot.gov.cn/2020/jigou/?gk=5</p>
-<p><img src="image-20220302143545948.png" alt="image-20220302143545948" style="zoom: 80%;" /></p>
+<p><img src="image-20220302143545948.png" alt="image-20220302143545948" style="zoom: 80%;" loading="lazy" decoding="async" /></p>
 <p>浏览器上的xpath helper都无法定位了，怎么办？</p>
 <p>不慌，一不小心就翻到了，<strong>iframe</strong>提供了一个简单的方式把一个网站的内容嵌入到另一个网站中</p>
-<p><img alt="image-20220302143714046" src="image-20220302143714046.png" /></p>
+<p><img alt="image-20220302143714046" src="image-20220302143714046.png" loading="lazy" decoding="async" /></p>
 <p>所以我们真实该访问的链接是：https://xxgk.mot.gov.cn/2020/jigou/list.html，此时就可以正常定位了</p>
-<p><img alt="image-20220302144218452" src="image-20220302144218452.png" /></p>
+<p><img alt="image-20220302144218452" src="image-20220302144218452.png" loading="lazy" decoding="async" /></p>
                   </div>
                   <!-- Blog Post End -->
                 </div>

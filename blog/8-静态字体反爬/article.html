@@ -184,19 +184,19 @@
 <p>aHR0cHM6Ly93d3cueGlhb2hvbmdzaHUuY29tL3VzZXIvcHJvZmlsZS81YzZjMzA5OTAwMDAwMDAwMTAwMWQ3MGQ=</p>
 <h2 id="1">1.字体反爬长什么样</h2>
 <p>页面上看到的</p>
-<p><img alt="image-20210731221811789" src="image-20210731221811789.png" /></p>
+<p><img alt="image-20210731221811789" src="image-20210731221811789.png" loading="lazy" decoding="async" /></p>
 <p>接口返回的数据</p>
-<p><img alt="image-20210731221910820" src="image-20210731221910820.png" /></p>
+<p><img alt="image-20210731221910820" src="image-20210731221910820.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.解决方案</h2>
 <p>一般来说，我们会在网络请求里找到字体文件请求，如xxx.ttf文件。</p>
-<p><img alt="image-20210731222649310" src="image-20210731222649310.png" /></p>
+<p><img alt="image-20210731222649310" src="image-20210731222649310.png" loading="lazy" decoding="async" /></p>
 <p>由于是静态字体，可以理解为服务端与客户端规定了一套规则(eg. 你好=1，张三=2)。</p>
 <p>爬虫er只需要固定一套字体映射表就可以搞定，但是我们不能一个一个和网页上去比对直到凑齐0-9等数据的映射关系吧？</p>
 <p>这里推荐一个非常好用的网站，直接搞定。神器：https://font.qqe2.com/</p>
 <p>直接将找到的ttf字体文件拖上去就可以，结果如下：一下子我们就知道8=$E137  1=$E343</p>
-<p><img alt="image-20210731223035492" src="image-20210731223035492.png" /></p>
+<p><img alt="image-20210731223035492" src="image-20210731223035492.png" loading="lazy" decoding="async" /></p>
 <p>最后在本地构建好字体映射表(字典)</p>
-<p><img alt="image-20210731223219964" src="image-20210731223219964.png" /></p>
+<p><img alt="image-20210731223219964" src="image-20210731223219964.png" loading="lazy" decoding="async" /></p>
                   </div>
                   <!-- Blog Post End -->
                 </div>

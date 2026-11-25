@@ -262,6 +262,73 @@
     }
   }
 
+  /* —— v2.4 正文标题锚点 + 目录跟随（仅详情页；toc 扩展已在生成期给 h2/h3 挂 id） —— */
+  var ccEl = document.querySelector('.blog-cc');
+  if (ccEl) {
+    var ccHeads = Array.prototype.filter.call(
+      document.querySelectorAll('.blog-cc h2[id], .blog-cc h3[id]'),
+      function (h) { return !h.closest('.blog-cc__toc'); }
+    );
+    ccHeads.forEach(function (h) {
+      var link = document.createElement('a');
+      link.className = 'v2-hanchor';
+      link.href = '#' + h.id;
+      link.textContent = '#';
+      link.setAttribute('aria-label', '本节链接');
+      /* 注入锚不进无障碍名、不入 Tab 序列（标题名是 heading-a11y 关键路径；
+         标题锚的键盘可达价值低于名污染代价：鼠标点按保留，键盘用户用地址栏片段） */
+      link.setAttribute('aria-hidden', 'true');
+      link.setAttribute('tabindex', '-1');
+      /* 鼠标点击是该锚唯一路径，原生片段跳转会把焦点留在 aria-hidden 元素上（反模式）；跳转后主动交还 */
+      link.addEventListener('click', function () { this.blur(); });
+      h.insertBefore(link, h.firstChild);
+    });
+
+    /* 目录 scrollspy：与进度束带同机制（passive scroll + rAF），判定线取视口上三分之一；
+       目录面板缺席或无匹配项时不注入当前态类，自然降级 */
+    var tocPanel = document.querySelector('.blog-cc__toc');
+    if (tocPanel && ccHeads.length) {
+      var tocLinks = {};
+      Array.prototype.forEach.call(tocPanel.querySelectorAll('a[href^="#"]'), function (a) {
+        tocLinks[decodeURIComponent(a.getAttribute('href').slice(1))] = a;
+      });
+      var spyHeads = ccHeads.filter(function (h) { return tocLinks[h.id]; });
+      if (spyHeads.length) {
+        var spyCur = null;
+        var spyRaf = null;
+        var syncSpy = function () {
+          spyRaf = null;
+          var line = window.innerHeight / 3;
+          var active = null;
+          for (var i = 0; i < spyHeads.length; i++) {
+            if (spyHeads[i].getBoundingClientRect().top <= line) { active = spyHeads[i]; } else { break; }
+          }
+          /* 触底特判：尾部区段短于判定线时末标题永远越不过线，高亮会滞留前一节；
+             加可滚动前提守卫，免无滚动余量的短文档加载即误判触底、末条常驻高亮 */
+          if (document.documentElement.scrollHeight > window.innerHeight + 2 &&
+              window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+            active = spyHeads[spyHeads.length - 1];
+          }
+          if (active === spyCur) { return; }
+          if (spyCur) { tocLinks[spyCur.id].classList.remove('is-current'); }
+          spyCur = active;
+          if (spyCur) { tocLinks[spyCur.id].classList.add('is-current'); }
+        };
+        /* rAF 节流 + setTimeout 兜底：渲染帧被挂起/节流的引擎（后台页等）仍到达正确态，
+           与入场编排的兜底手法同源（见上方 revealCards 的 setTimeout 先例） */
+        var syncSoon = function () {
+          if (spyRaf !== null) { return; }
+          spyRaf = window.requestAnimationFrame(syncSpy);
+          window.setTimeout(function () {
+            if (spyRaf !== null) { window.cancelAnimationFrame(spyRaf); syncSpy(); }
+          }, 120);
+        };
+        window.addEventListener('scroll', syncSoon, { passive: true });
+        syncSpy();
+      }
+    }
+  }
+
   /* —— v2.3 作者头像鼠标微浮（±4px，仅 hover 设备；离开回弹） —— */
   var pic = document.querySelector('.my-pic');
   if (motionOn && pic && window.matchMedia && window.matchMedia('(hover: hover)').matches) {

@@ -187,16 +187,16 @@
 </blockquote>
 <h2 id="1">1.什么是文字点选验证码</h2>
 <p>当打开目标网站时，随便点击一条详情，它就来了</p>
-<p><img src="image-20220110150623217.png" alt="image-20220110150623217" style="zoom:80%;" /></p>
+<p><img src="image-20220110150623217.png" alt="image-20220110150623217" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>抓包看下验证码请求和校验了哪些信息，通过getimage接口请求获取到了targettext：需要点击的文字和data：图片的Base64编码</p>
-<p><img alt="image-20220110150816180" src="image-20220110150816180.png" /></p>
+<p><img alt="image-20220110150816180" src="image-20220110150816180.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.目标检测+文字识别</h2>
 <ol>
 <li>先对各文字进行目标检测，找到位置坐标</li>
 <li>对找到的目标区域进行文字识别</li>
 </ol>
 <p>以此图片为目标，2.png，需要依次找到“喉”“搓”“绸”</p>
-<p><img src="2.png" alt="2"/></p>
+<p><img src="2.png" alt="2" loading="lazy" decoding="async" /></p>
 <pre class="codehilite"><code class="language-python"># -*- coding: UTF-8 -*-
 
 import ddddocr
@@ -239,7 +239,7 @@ for i in ['喉', '搓', '绸']:
 </code></pre>
 
 <p>运行程序，生成result.png</p>
-<p><img src="result.png" alt="result"/></p>
+<p><img src="result.png" alt="result" loading="lazy" decoding="async" /></p>
 <p>同时输出“喉”“搓”“绸”待点击文字的坐标位置</p>
 <blockquote>
 <p>喉 [151, 56, 189, 91]<br />
@@ -247,7 +247,7 @@ for i in ['喉', '搓', '绸']:
 绸 [515, 148, 545, 176]</p>
 </blockquote>
 <h2 id="3">3.模拟验证码提交请求</h2>
-<p><img alt="image-20220110222739577" src="image-20220110222739577.png" /></p>
+<p><img alt="image-20220110222739577" src="image-20220110222739577.png" loading="lazy" decoding="async" /></p>
 <p>ClickText就是点击文字的坐标了，1:x1,y1-2:x2,y2-3:x3,y3，三个目标文字，三个坐标</p>
                   </div>
                   <!-- Blog Post End -->

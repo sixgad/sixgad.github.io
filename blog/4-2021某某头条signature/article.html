@@ -189,30 +189,30 @@
 <p>推荐页获取数据接口：https://**.toutiao.com/api/pc/list/feed</p>
 <p>请求方式：GET</p>
 <p>请求参数：其中_signature是密文</p>
-<p><img alt="image-20210717225548533" src="image-20210717225548533.png" /></p>
+<p><img alt="image-20210717225548533" src="image-20210717225548533.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.定位加密参数位置</h2>
 <p>全局搜索_signature，在indexjs里发现 _signature：a,而a=C(n,e)，很明显我们要追进C函数看看</p>
-<p><img alt="image-20210717230348786" src="image-20210717230348786.png" /></p>
+<p><img alt="image-20210717230348786" src="image-20210717230348786.png" loading="lazy" decoding="async" /></p>
 <p>C函数长这个样子箭头那行是JS条件运算符（?:）</p>
 <p>等价于window.byted_acrawler.sign({"url":"https://**.toutiao.com/toutiao/api/pc/**"})，返回的结果o就是我们想要的_signature</p>
-<p><img alt="image-20210717230614421" src="image-20210717230614421.png" /></p>
+<p><img alt="image-20210717230614421" src="image-20210717230614421.png" loading="lazy" decoding="async" /></p>
 <p>继续追进去就会跳到acrawler.js了，各种运算就在这里了。对于window.byted_acrawler存在疑问，这不是window对象自有的属性，肯定是头条的js在某处对其进行赋值，在html里我们发现这样一段代码window.byted_acrawler.init({aid:24,dfp:!0})，记录下来会有用</p>
 <h2 id="3">3.补环境，扣代码</h2>
 <p>将acrawler.js全部拷贝到本地，nodejs直接运行会报错，需要补环境</p>
-<p><img alt="image-20210717231857824" src="image-20210717231857824.png" /></p>
+<p><img alt="image-20210717231857824" src="image-20210717231857824.png" loading="lazy" decoding="async" /></p>
 <p>补环境，能想到的就是window,document,location,navigator,screen,history,chrome，这些都很通用(估计每个人都有自己的代码小仓库，这种通用的直接拷过来用就好)，或者可以在chrome控制台打印，比如screen</p>
-<p><img alt="image-20210717232430663" src="image-20210717232430663.png" /></p>
+<p><img alt="image-20210717232430663" src="image-20210717232430663.png" loading="lazy" decoding="async" /></p>
 <p>本地nodejs补全的环境<strong>部分</strong>示例如下</p>
-<p><img alt="image-20210717232705186" src="image-20210717232705186.png" /></p>
+<p><img alt="image-20210717232705186" src="image-20210717232705186.png" loading="lazy" decoding="async" /></p>
 <p>再次运行还是报错</p>
-<p><img alt="image-20210717232930195" src="image-20210717232930195.png" /></p>
+<p><img alt="image-20210717232930195" src="image-20210717232930195.png" loading="lazy" decoding="async" /></p>
 <p>我们排查下原因，发现在这行有很多条件运算，(glb = "undefined" == typeof window ? global : window)._$jsvmprt(***"undefined" != typeof exports ? exports : void 0, "undefined" != typeof module，这里其实是对是不是处于浏览器环境的检测，exports  module是在node环境下特有的与真实的浏览器环境不同，后边还有很多但是好像没有检测(那就不管,能跑就行)，应对方法很简单</p>
 <blockquote>
 <p>exports = undefined;</p>
 <p>module = undefined;</p>
 </blockquote>
 <p>最后运行以下代码就能输出_signature了：_02B4Z6wo00f01-.UTGQAAIDAECuzmEPSkzvv9kjAAJsRO***</p>
-<p><img alt="image-20210717234114022" src="image-20210717234114022.png" /></p>
+<p><img alt="image-20210717234114022" src="image-20210717234114022.png" loading="lazy" decoding="async" /></p>
                   </div>
                   <!-- Blog Post End -->
                 </div>

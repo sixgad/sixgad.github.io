@@ -186,14 +186,14 @@
 <p>aHR0cHM6Ly9mdXd1Lm5oc2EuZ292LmNuL25hdGlvbmFsSGFsbFN0LyMvc2VhcmNoL21lZGljYWw=</p>
 </blockquote>
 <h2 id="1">1.抓包&amp;定位</h2>
-<p><img src="image-20210828215120605.png" alt="image-20210828215120605" style="zoom:80%;" /></p>
+<p><img src="image-20210828215120605.png" alt="image-20210828215120605" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>好家伙，header，post data里面均有加密的参数，如<strong>x-tif-nonce</strong>，<strong>x-tif-signature</strong>，<strong>signData</strong>等</p>
 <p>看signData顺眼，全局搜索一下。很快，一下子定位到app js中，header和post data参数加密逻辑在一起，幸福啊！</p>
-<p><img alt="image-20210828215608939" src="image-20210828215608939.png" /></p>
+<p><img alt="image-20210828215608939" src="image-20210828215608939.png" loading="lazy" decoding="async" /></p>
 <h2 id="2webpack">2.先了解下webpack的基本结构</h2>
 <p>Webpack 是一个前端资源加载/<strong>打包</strong>工具。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。</p>
 <p>整体上看是一个自执行函数，传入的参数一般为object或者数组（内容都是function定义的一个一个方法）</p>
-<p><img alt="image-20210828220027316" src="image-20210828220027316.png" /></p>
+<p><img alt="image-20210828220027316" src="image-20210828220027316.png" loading="lazy" decoding="async" /></p>
 <p>必不可少的加载器，关键字exports，一般长这样</p>
 <pre class="codehilite"><code class="language-js">    function o(t) {
         if (n[t])
@@ -211,23 +211,23 @@
 
 <h2 id="3webpack">3.webpack扣取技巧</h2>
 <p>可以看下我们第一步定位的加密参数生成的app js有多大，7万多行，到时候比较一下抠出来后会有多少行（结论8千多行）</p>
-<p><img alt="image-20210828220639295" src="image-20210828220639295.png" /></p>
+<p><img alt="image-20210828220639295" src="image-20210828220639295.png" loading="lazy" decoding="async" /></p>
 <p>先去掉这个自执行函数的参数，复制到本地，大概这样</p>
-<p><img src="image-20210828221259855.png" alt="image-20210828221259855" style="zoom:80%;" /></p>
+<p><img src="image-20210828221259855.png" alt="image-20210828221259855" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>第一步定位到的加密参数生成位置 e.data.signData = p(e)，是在7d923方法里</p>
-<p><img alt="image-20210828221414794" src="image-20210828221414794.png" /></p>
+<p><img alt="image-20210828221414794" src="image-20210828221414794.png" loading="lazy" decoding="async" /></p>
 <p>把7d923复制到自执行方法的参数中去</p>
-<p><img src="image-20210828222002973.png" alt="image-20210828222002973" style="zoom:80%;" /></p>
+<p><img src="image-20210828222002973.png" alt="image-20210828222002973" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>不可能就这么简单，运行会报错，Cannot read property 'call' of undefined</p>
-<p><img alt="image-20210828222051265" src="image-20210828222051265.png" /></p>
+<p><img alt="image-20210828222051265" src="image-20210828222051265.png" loading="lazy" decoding="async" /></p>
 <p>我们在报错那行，打印下</p>
-<p><img src="image-20210828222134530.png" alt="image-20210828222134530" style="zoom:80%;" /></p>
+<p><img src="image-20210828222134530.png" alt="image-20210828222134530" style="zoom:80%;" loading="lazy" decoding="async" /></p>
 <p>输出b639，也就是这个方法为undefined，去app js里面复制下来</p>
-<p><img alt="image-20210828222313238" src="image-20210828222313238.png" /></p>
+<p><img alt="image-20210828222313238" src="image-20210828222313238.png" loading="lazy" decoding="async" /></p>
 <p>添加到自执行方法的参数里</p>
-<p><img alt="image-20210828222520508" src="image-20210828222520508.png" /></p>
+<p><img alt="image-20210828222520508" src="image-20210828222520508.png" loading="lazy" decoding="async" /></p>
 <p>重复操作即可，最后把自执行方法里，我们要调用的方法暴露给全局即可</p>
-<p><img alt="image-20210828222916301" src="image-20210828222916301.png" /></p>
+<p><img alt="image-20210828222916301" src="image-20210828222916301.png" loading="lazy" decoding="async" /></p>
 <p>这里的window.aaa和window.bbb分别为</p>
 <blockquote>
 <p>请求参数加密 ：</p>

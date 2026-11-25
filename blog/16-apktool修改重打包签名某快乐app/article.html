@@ -183,17 +183,17 @@
 <p>修改某快乐app（hxiuc）代码，重新打包签名，实现无限试看</p>
 <h2 id="1ds">1.ds需求</h2>
 <p>明明是快乐app，只能免费试看三次，瞬间不快乐了</p>
-<p><img alt="image-20210826203138977" src="image-20210826203138977.png" /></p>
+<p><img alt="image-20210826203138977" src="image-20210826203138977.png" loading="lazy" decoding="async" /></p>
 <h2 id="2">2.反编译、修改代码、重打包</h2>
 <p>运行命令</p>
 <blockquote>
 <p>apktook d hxc_ori.apk</p>
 </blockquote>
 <p>会在当前文件夹下生成hxc_ori这样一个文件夹，里面是解包后的资源文件与smali代码，内部是这个样子的</p>
-<p><img alt="image-20210826203607685" src="image-20210826203607685.png" /></p>
+<p><img alt="image-20210826203607685" src="image-20210826203607685.png" loading="lazy" decoding="async" /></p>
 <p>全局搜索 <strong>“试看次数”</strong>，搜索结果零条。明明有 “试看次数超限” 的提示，代码里为什么搜不到？</p>
 <p>再次尝试，将中文转为Unicode编码试一试，即 <strong>“\u8bd5\u770b\u6b21\u6570”</strong></p>
-<p><img alt="image-20210826204031903" src="image-20210826204031903.png" /></p>
+<p><img alt="image-20210826204031903" src="image-20210826204031903.png" loading="lazy" decoding="async" /></p>
 <p>很明显了，将3改成100000，保存即可。</p>
 <p>重新打包，运行命令</p>
 <blockquote>
@@ -206,14 +206,14 @@
 <blockquote>
 <p>keytool -genkey -keystore my-release-key.keystore -alias my_alias -keyalg RSA -keysize 4096 -validity 10000</p>
 </blockquote>
-<p><img alt="image-20210826205119945" src="image-20210826205119945.png" /></p>
+<p><img alt="image-20210826205119945" src="image-20210826205119945.png" loading="lazy" decoding="async" /></p>
 <p>口令随便输入个123456就行，最后会生成 my-release-key.keystore文件</p>
 <p><strong>用证书给apk签名</strong></p>
 <blockquote>
 <p>jarsigner -sigalg MD5withRSA -digestalg SHA1 -keystore my-release-key.keystore -signedjar hxc_ori_sign.apk hxc_ori.apk my_alias</p>
 </blockquote>
 <p>运行命令，输入上边的密钥口令123456</p>
-<p><img alt="image-20210826205545890" src="image-20210826205545890.png" /></p>
+<p><img alt="image-20210826205545890" src="image-20210826205545890.png" loading="lazy" decoding="async" /></p>
 <p>大功告成，生成的hxc_ori_sign.apk就是重打包并且已经签名的apk，可以在手机上安装，快乐去了!</p>
                   </div>
                   <!-- Blog Post End -->

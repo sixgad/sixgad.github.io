@@ -188,25 +188,25 @@
 </blockquote>
 <h2 id="1">1.抓包分析</h2>
 <p>使用fiddler抓包，(1)200-&gt;(2)302-&gt;(3)200，这里我们分成三步</p>
-<p><img alt="image-20210809211100298" src="image-20210809211100298.png" /></p>
+<p><img alt="image-20210809211100298" src="image-20210809211100298.png" loading="lazy" decoding="async" /></p>
 <p><strong>第一步</strong></p>
 <p>不带cookie访问首页时，响应set-cookie：wzws_cid=***，网页正文为一段混淆的js</p>
-<p><img alt="image-20210809211343298" src="image-20210809211343298.png" /></p>
+<p><img alt="image-20210809211343298" src="image-20210809211343298.png" loading="lazy" decoding="async" /></p>
 <p><strong>第二步</strong></p>
 <p>带着第一步的set-cookie，访问第一步js生成的重定向url（www.***.gov.cn/WZWSREL2dvdXRvbmdqaWFvbGl1LzQ1Ni8xMTMNjkvaW5kZXguaHRtbA==?wzwschallenge=V1pXU19DT05GSVJNX1BSR9MQUJFTDE5Njc4OTE=），得到响应新的set-cookie</p>
 <p><strong>第三步</strong></p>
 <p>带着第二步的set-cookie访问首页url，成功获取网页文本</p>
-<p><img alt="image-20210809211708490" src="image-20210809211708490.png" /></p>
+<p><img alt="image-20210809211708490" src="image-20210809211708490.png" loading="lazy" decoding="async" /></p>
 <h2 id="2astjs">2.AST简单还原混淆的js</h2>
 <p>第一步返回的js是sojsonv6混淆后的，直接复制到本地(不要格式化，sojson对格式化有检测，会让代码卡死)，核心的东西就在这了</p>
-<p><img alt="image-20210809212707735" src="image-20210809212707735.png" /></p>
+<p><img alt="image-20210809212707735" src="image-20210809212707735.png" loading="lazy" decoding="async" /></p>
 <p>通过AST，在调用了解密方法的地方，计算出值，节点替换，代码会变得易读很多（上面图片那段js在还原后可以删除）</p>
 <blockquote>
 <p>AST部分: '_0x4ce3' === path.node.callee.name</p>
 <p>​             _0x4ce3.apply(null, args)</p>
 </blockquote>
 <p>还原后的样子</p>
-<p><img alt="image-20210809213703257" src="image-20210809213703257.png" /></p>
+<p><img alt="image-20210809213703257" src="image-20210809213703257.png" loading="lazy" decoding="async" /></p>
 <p>只是简单的还原我们就能找到第二步重定向url生成的地方了，如果还觉得不够清爽我们可以进一步还原，比如对象还原，简单表达式计算，控制流还原。。。</p>
 <h2 id="3">3.让代码跑起来</h2>
 <p>很明显重定向的url生成的地方在window["location"] = ，但是你直接运行是没有结果的，改改删删就可以了，我好像没有打断点分析。</p>
@@ -216,9 +216,9 @@
 }</code></p>
 </blockquote>
 <p><strong>没用的代码删掉(死循环，内存爆破等)，注意注释掉的那部分</strong></p>
-<p><img alt="image-20210809214452177" src="image-20210809214452177.png" /></p>
+<p><img alt="image-20210809214452177" src="image-20210809214452177.png" loading="lazy" decoding="async" /></p>
 <p><strong>注意动态部分，需要自己用re正则截取</strong></p>
-<p><img alt="image-20210809214628363" src="image-20210809214628363.png" /></p>
+<p><img alt="image-20210809214628363" src="image-20210809214628363.png" loading="lazy" decoding="async" /></p>
 <h2 id="4">4.小技巧</h2>
 <p>虽然抓包看它是一个GET请求，需要三步才能完成</p>
 <p>把GET改成POST试一试，一步到位</p>

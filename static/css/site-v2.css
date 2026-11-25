@@ -23,9 +23,9 @@
   --v2-radius: 14px;
   --v2-radius-sm: 10px;
   --v2-radius-lg: 22px;
-  /* 黑体系系统栈：零远程字体、跨平台一致；标题层级由字重与字号建立 */
+  /* 双栈均零远程字体：sans 为正文与小标题；display 于 v2.5 起为本地衬线人格（见 v2.5 段分域裁决） */
   --v2-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif;
-  --v2-font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+  --v2-font-display: Georgia, "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", STSong, SimSun, serif;
   --v2-transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1766,3 +1766,215 @@ html[data-theme="dark"] body.site-v2 .blog-cc .gd { color: #e08080; }
 html[data-theme="dark"] body.site-v2 .blog-cc .gi { color: #9cc37a; }
 html[data-theme="dark"] body.site-v2 .blog-cc .gh { color: #e5c37e; font-weight: bold; }
 html[data-theme="dark"] body.site-v2 .blog-cc .gu { color: #c2a3da; }
+
+/* ================================================================
+   v2.4 细节打磨：透明度降级 / 滚动条 / 标题锚点 / 目录跟随 / 打印
+   ================================================================ */
+
+/* —— 减少透明度偏好：仅依赖半透明+模糊的两处表面换实色等效（--v2-surface 随主题自动翻转；
+   媒体查询置于文末，同特异度源序胜出，压过基顶栏与暗态覆盖两条既有声明） —— */
+@media (prefers-reduced-transparency: reduce) {
+  .site-topbar {
+    background: var(--v2-surface);
+    backdrop-filter: none;
+  }
+  html[data-theme="dark"] .site-topbar {
+    background: var(--v2-surface);
+  }
+  body.site-v2 .site-nav-belt__track {
+    background: var(--v2-surface);
+  }
+}
+
+/* —— 主题化滚动条：standard 属性双主题经 token 自动翻转，触屏无持久滚动条天然不受影响 —— */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--v2-muted) var(--v2-bg-deep);
+}
+
+/* —— 正文标题锚点：site.js 对 h2/h3[id] 注入 # 小链接，悬停/键盘聚焦才显现。
+   定位挂左缘外（标题所在 .blog-cc 内边距区，overflow 可见），不影响标题盒布局；
+   触屏无悬停态恒隐藏，等价于桌面专属辅助，移动端零观感变化 —— */
+body.site-v2 .blog-cc h2[id],
+body.site-v2 .blog-cc h3[id] {
+  position: relative;
+}
+
+body.site-v2 .blog-cc a.v2-hanchor {
+  position: absolute;
+  left: -1.25em;
+  top: 0;
+  padding-right: 0.35em;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--v2-transition);
+}
+
+body.site-v2 .blog-cc h2[id]:hover a.v2-hanchor,
+body.site-v2 .blog-cc h3[id]:hover a.v2-hanchor,
+body.site-v2 .blog-cc a.v2-hanchor:focus-visible {
+  opacity: 1;
+}
+
+/* —— 目录 scrollspy 当前章节：纯颜色/字重状态非动效，不挂 v2-motion；token 双主题自适应 —— */
+body.site-v2 .blog-cc__toc a.is-current {
+  color: var(--v2-ink);
+  font-weight: 600;
+}
+
+/* —— 打印（仅详情页，body:has(.blog-cc) 限定；不支持 :has 的引擎整段失效、维持 vendor 原行为）。
+   只压 chrome 与链接后缀，正文/元信息/代码白底黑字；特异度高于 plugin.css vendor 打印块 —— */
+@media print {
+  body.site-v2:has(.blog-cc) .site-topbar,
+  body.site-v2:has(.blog-cc) .col-md-3:has(.about-fixed),
+  body.site-v2:has(.blog-cc) .sub-title,
+  body.site-v2:has(.blog-cc) .blog-cc__toc,
+  body.site-v2:has(.blog-cc) .scroll-to-top,
+  body.site-v2:has(.blog-cc) .v2-copy-btn,
+  body.site-v2:has(.blog-cc) .v2-progress,
+  body.site-v2:has(.blog-cc) .v2-inspect,
+  body.site-v2:has(.blog-cc) .v2-hanchor,
+  body.site-v2:has(.blog-cc) .page-body.footer {
+    display: none !important;
+  }
+  body.site-v2:has(.blog-cc) {
+    /* 白底画布：基线 body 背景带 !important，vendor 打印块的 * 通配清不掉它，
+       暗色主题下会近黑背景叠 vendor 强制黑字；同特异度+源序压回白底（html 经 body 背景传播染白画布） */
+    background: #fff !important;
+  }
+  body.site-v2:has(.blog-cc) .col-md-9 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+  body.site-v2:has(.blog-cc) .blog-cc pre {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  /* vendor 打印块会给每个链接追加 ( href ) 后缀；详情页整体撤掉，锚点本就被 vendor 豁免 */
+  body.site-v2:has(.blog-cc) a[href]::after {
+    content: none !important;
+  }
+}
+
+/* —— display 挂点分域（spec 审查 F1 裁决）：正文小标题回退 sans——
+   技术长文 h2-h6 高频出现，小字号宋体伪粗模糊且打断阅读流；
+   衬线人格保留在题头（hero/首页题）、文章题、卡片题、侧栏昵称 —— */
+body.site-v2 .blog-cc h2,
+body.site-v2 .blog-cc h3,
+body.site-v2 .blog-cc h4,
+body.site-v2 .blog-cc h5,
+body.site-v2 .blog-cc h6,
+body.site-v2 .blog-cc h1:not(:first-of-type) {
+  font-family: var(--v2-font-sans);
+}
+
+/* ================================================================
+   v2.5 观感提升：display 衬线 / 卡片齐整 / 节奏令牌 / 语义色 / 暗态台阶 / 边缘轨道
+   ================================================================ */
+
+/* —— 新增令牌（追加式 :root 块，变量按引用点生效不受源序影响） —— */
+:root {
+  --v2-dur-micro: 0.14s;                                   /* 微交互档：回应指针的过渡 */
+  --v2-wrap: min(1200px, 100% - clamp(20px, 3vw, 48px));   /* 六类页统一外轨道 */
+  --v2-ok: #2e7d32;
+  --v2-ok-soft: rgba(46, 125, 50, 0.4);
+  --v2-fail: #a4495f;                                      /* 降饱和玫：与赤陶强调色相拉开的失败语义 */
+  --v2-fail-soft: rgba(164, 73, 95, 0.45);
+}
+html[data-theme="dark"] {
+  --v2-surface-3: #2f2820;                                 /* 暗态第三级表面（阴影弱，深度靠台阶） */
+  --v2-border-strong: rgba(236, 228, 214, 0.22);
+  --v2-ok: #9cc37a;
+  --v2-ok-soft: rgba(156, 195, 122, 0.4);
+  --v2-fail: #d990a4;
+  --v2-fail-soft: rgba(217, 144, 164, 0.45);
+}
+
+/* —— 卡片描述三行截断：行内卡高由网格拉伸对齐（ACG/图解共用 acg-card 系，Hub 为 p） —— */
+body.site-v2.site-tool .acg-card__desc,
+body.site-v2 .hub-card p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* —— 微交互提速：仅"回应指针"类过渡换 micro 档；入场/转场保持 standard 从容 —— */
+body.site-v2 .site-nav-belt a.site-nav-belt__link,
+body.site-v2 .site-nav-belt button.site-nav-belt__theme,
+body.site-v2 .social-icon li a,
+body.site-v2 .sub-title a[href*="index-list"],
+body.site-v2 .sub-title--detail a,
+body.site-v2 div.blog-post,
+body.site-v2 .pagination > li > a,
+body.site-v2 .blog-cc .v2-copy-btn,
+body.site-v2 .site-panel .table tbody tr,
+body.site-v2 .acg-card,
+body.site-v2 .hub-card,
+body.site-v2 .scroll-to-top,
+body.site-v2 .blog-cc a.v2-hanchor {
+  transition-duration: var(--v2-dur-micro);
+}
+
+/* —— 目录 scrollspy 高亮短过渡（动效相关，挂 v2-motion 作用域；无类环境即时切换即降级态） —— */
+html.v2-motion body.site-v2 .blog-cc__toc a {
+  transition: color var(--v2-dur-micro) ease;
+}
+
+/* —— 复制钮语义色：成功绿 / 失败玫，明暗各按 token 翻转；后源序压过 v2 早期声明与暗态 is-ok 覆盖 —— */
+body.site-v2 .blog-cc .v2-copy-btn.is-ok {
+  color: var(--v2-ok);
+  border-color: var(--v2-ok-soft);
+}
+body.site-v2 .blog-cc .v2-copy-btn.is-fail {
+  color: var(--v2-fail);
+  border-color: var(--v2-fail-soft);
+}
+html[data-theme="dark"] body.site-v2 .blog-cc .v2-copy-btn.is-ok {
+  color: var(--v2-ok);
+  border-color: var(--v2-ok-soft);
+}
+html[data-theme="dark"] body.site-v2 .blog-cc .v2-copy-btn.is-fail {
+  color: var(--v2-fail);
+  border-color: var(--v2-fail-soft);
+}
+
+/* —— 暗态 elevation：面板/目录板上台阶、卡片 hover 描边增强（全部暗态作用域，亮态零变化） —— */
+html[data-theme="dark"] body.site-v2 .blog-cc__toc {
+  background: var(--v2-surface-3);
+  border-color: var(--v2-border-strong);
+}
+html[data-theme="dark"] body.site-v2 .site-panel {
+  /* 底色保持 surface：z-index 台阶交给描边，改 surface-2 会与暗态斑马纹/表头同色致行分隔消失 */
+  border-color: var(--v2-border-strong);
+}
+html[data-theme="dark"] body.site-v2 div.blog-post:hover,
+html[data-theme="dark"] body.site-v2 .acg-card:hover,
+html[data-theme="dark"] body.site-v2 .hub-card:hover {
+  border-color: var(--v2-border-strong);
+}
+html[data-theme="dark"] body.site-v2 div.blog-post:hover {
+  border-left-color: var(--v2-accent);
+}
+html[data-theme="dark"] body.site-v2 .acg-card:hover {
+  /* border-color 简写会把 4px 类型脊条一并刷成中性灰；脊条是 ACG 页的类型区分线索 */
+  border-left-color: var(--acg-bar);
+}
+
+/* —— 统一外轨道：三类容器共用 --v2-wrap（bootstrap 容器以 id+body 特异度压过其媒体查询定宽） —— */
+body.site-v2 #main > .container {
+  width: 100%;
+  max-width: var(--v2-wrap);
+}
+body.site-v2 .site-tool-wrap {
+  max-width: var(--v2-wrap);
+}
+body.site-v2.site-tool .site-tool-wrap.site-tool-wrap--wide {
+  max-width: var(--v2-wrap);
+}
+body.site-v2 .hub-wrap {
+  width: var(--v2-wrap);
+  max-width: none;
+}
