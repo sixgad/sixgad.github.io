@@ -53,3 +53,4 @@
 - `frag_theme.html` 与 `frag_motion.html` 两个 head 内联片段必须保留在各页 `<head>`、CSS 链接之后 body 之前：移动或删除会导致主题首帧闪烁、动效降级失效，以及入场重放经由跨文档 View Transition 空快照回归为页间白闪（提交 4aa511c）。
 - 入场动画带会话门（sessionStorage `pk-intro`，每标签页仅首个文档播放）：测试时看不到入场动画先开新标签页验证，勿误判为失效。
 - 暗色与动效全部样式声明以 html 上的 `data-theme` / `v2-motion`（+`v2-intro`）为作用域：主题或动效相关新样式须挂对应前缀，裸选择器书写会绕过降级。
+- 标签与分页的非链接形态是刻意的 a11y 件（v2.6）：列表卡片与详情 meta 的标签为纯 `<span>`（标签过滤功能不存在，勿"修复"回 `<a>` 造假链接）；分页条的当前页 `li.active > span` 与首末页边界 `li.disabled > span`（«/» 是首末直达钮，无 rel=prev/next）同理由禁用/去链接化，勿当坏控件复原。

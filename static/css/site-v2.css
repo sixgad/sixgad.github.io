@@ -420,9 +420,7 @@ body.site-v2 .blog-post .post-info {
   line-height: 1.55;
 }
 
-body.site-v2 .blog-post .post-info a {
-  color: var(--v2-muted) !important;
-}
+/* 标签去链接化（a11y 修复）后的分隔观感：日期/图标/标签统一 muted，标签以「·」分隔 */
 
 /* 按钮点击穿透到整卡拉伸链接，避免双重可点区；视觉仍常显 */
 body.site-v2 .blog-post .button.button-style {
@@ -472,7 +470,8 @@ body.site-v2 .pagination {
   list-style: none;
 }
 
-body.site-v2 .pagination > li > a {
+body.site-v2 .pagination > li > a,
+body.site-v2 .pagination > li > span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -495,10 +494,18 @@ body.site-v2 .pagination > li > a:hover {
   border-color: rgba(185, 72, 31, 0.35) !important;
 }
 
-body.site-v2 .pagination > li > a.active {
+/* 当前页（a11y 修复后为非链接 span，赤陶高亮从 li>a.active 迁移至此） */
+body.site-v2 .pagination > li.active > span {
   background: var(--v2-accent) !important;
   color: #fff !important;
   border-color: var(--v2-accent) !important;
+}
+
+/* 首末直达钮的边界禁用态：盒样式保留、降透明并禁光标（挂 li.disabled 对齐 vendor 规则） */
+body.site-v2 .pagination > li.disabled > span {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--v2-surface) !important;
 }
 
 /* 详情正文（Markdown 输出）：覆盖 github.css 固定 15px 间距与 legacy 的 break-all；
@@ -542,10 +549,6 @@ body.site-v2 .blog-cc__meta .fa-tags {
 
 body.site-v2 .blog-cc__meta-tag {
   color: var(--v2-muted);
-}
-
-body.site-v2 .blog-cc__meta-tag a {
-  font-size: inherit;
 }
 
 body.site-v2 .blog-cc p {
@@ -1627,7 +1630,7 @@ html[data-theme="dark"] .site-nav-belt a.site-nav-belt__link--ext {
 
 /* 亮字压亮底不达标处（白字胶囊/按钮悬停），暗态改为深字 */
 html[data-theme="dark"] body.site-v2 .button.button-style:hover,
-html[data-theme="dark"] body.site-v2 .pagination > li > a.active,
+html[data-theme="dark"] body.site-v2 .pagination > li.active > span,
 html[data-theme="dark"] body.site-v2 .site-nav-belt a.site-nav-belt__link.is-active:hover {
   color: #17130e !important;
 }
@@ -1674,7 +1677,8 @@ html[data-theme="dark"] body.site-v2 .blog-cc pre {
 
 html[data-theme="dark"] body.site-v2 .blog-cc :not(pre) > code,
 html[data-theme="dark"] body.site-v2 .blog-cc :not(pre) > tt {
-  background: #2c251b;
+  /* v2.6 提档：块边界可辨（vs surface #201b14 = 1.31:1，字色 #e89a72 = 5.78:1） */
+  background: #3a2f22;
   border-color: rgba(236, 228, 214, 0.2);
   color: #e89a72;
 }
@@ -1977,4 +1981,19 @@ body.site-v2.site-tool .site-tool-wrap.site-tool-wrap--wide {
 body.site-v2 .hub-wrap {
   width: var(--v2-wrap);
   max-width: none;
+}
+
+/* ================================================================
+   v2.6 a11y 与细节：tagline / 标签去链接化分隔 / 分页 span 态 / 暗色行内 code 提档
+   （结构改动见各注释锚点；本段只收纯增量样式）
+   ================================================================ */
+
+/* 首页题头 tagline：muted 小字一行（双主题经 token 自动翻转） */
+body.site-v2 .sub-title .site-tagline {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--v2-muted);
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
 }

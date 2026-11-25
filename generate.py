@@ -191,9 +191,13 @@ def deal_index():
                     one["current"] = True
                 padding.append(one)
             return padding
+        # 分页语义（a11y 修复）：first/last 为首末直达钮，边界侧禁用；
+        # 当前页由 padding 条目 current 标记（模板渲染为非链接 + aria-current）
         res = {
-            "first":  'index.html',
+            "first": 'index.html',
+            "first_disabled": current_page == 1,
             "last": f'index{len(index_list)}.html' if len(index_list) > 1 else 'index.html',
+            "last_disabled": current_page == len(index_list),
             "padding": make_fenye()
         }
         index_html = f'index{current_page}.html'

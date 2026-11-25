@@ -17,7 +17,7 @@
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="./static/images/favicon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="./static/images/favicon/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="144x144" type="image/png" href="./static/images/favicon/apple-touch-icon.png">
 
   <!-- All CSS Plugins -->
   <link rel="stylesheet" type="text/css" href="./static/css/plugin.css">
@@ -50,7 +50,7 @@
           <div class="about-fixed">
 
             <div class="my-pic">
-              <img src="./static/images/top/270-229.png" alt="">
+              <img src="./static/images/top/270-229.png" alt="雪重的头像">
               <!-- <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i
                   class="icon-menu menu"></i></a> -->
               <!-- <div id="menu" class="collapse">
@@ -98,6 +98,7 @@
               <div class="sub-title">
                 <h1>爬客 · 文章</h1>
                 <a href="index-list.html" title="全部文章索引"><i class="icon-list"></i></a>
+                <p class="site-tagline">个人学习记录与分享 python、web、spider、爬虫、逆向、工具脚本等技术的博客</p>
               </div>
 
 
@@ -117,7 +118,7 @@
                   </div>
                   <div class="post-info">
                     <span>{{blog.date}}</span>&nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;{% for tag in blog.tags
-                    %}<span><a>{{tag}}</a></span>{% endfor %}
+                    %}<span class="post-info__tag">{{ tag }}{% if not loop.last %}&nbsp;·&nbsp;{% endif %}</span>{% endfor %}
                   </div>
                   <!-- <p>描述预留位置</p> -->
                   <a href="{{blog.href}}" class="button button-style" tabindex="-1" aria-hidden="true"><span>阅读全文</span></a>
@@ -129,11 +130,23 @@
 
                 <div class="text-center site-pagination">
                   <ul class="pagination pagination-lg">
-                    <li><a href="{{ pagedata.first }}" rel="prev">&laquo;</a></li>
+                    {% if pagedata.first_disabled %}
+                    <li class="disabled"><span aria-disabled="true">&laquo;</span></li>
+                    {% else %}
+                    <li><a href="{{ pagedata.first }}" title="第一页">&laquo;</a></li>
+                    {% endif %}
                     {% for paged in pagedata.padding %}
-                    <li><a href="{{ paged.url }}"{% if paged.current %} class="active"{% endif %}>{{ paged.num }}</a></li>
+                    {% if paged.current %}
+                    <li class="active"><span aria-current="page">{{ paged.num }}</span></li>
+                    {% else %}
+                    <li><a href="{{ paged.url }}">{{ paged.num }}</a></li>
+                    {% endif %}
                     {% endfor %}
-                    <li><a href="{{ pagedata.last }}" rel="next">&raquo;</a></li>
+                    {% if pagedata.last_disabled %}
+                    <li class="disabled"><span aria-disabled="true">&raquo;</span></li>
+                    {% else %}
+                    <li><a href="{{ pagedata.last }}" title="末页">&raquo;</a></li>
+                    {% endif %}
                   </ul>
                 </div>
 
@@ -186,7 +199,7 @@
 
 
   <!-- Back to Top Start -->
-  <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+  <a href="#" class="scroll-to-top" aria-label="回到顶部"><i class="fa fa-long-arrow-up"></i></a>
   <!-- Back to Top End -->
 
 
